@@ -287,91 +287,95 @@ h1, h2, h3, h4, h5, h6 {
 
 /* Custom styles for the title */
 h1.title {
-  font-weight: normal; /* Optional: Adjust the weight */
-  text-align: center; /* Centers the title */
-  margin-bottom: 20px; /* Optional: Add some margin */
+  font-weight: normal;
+  text-align: center;
+  margin-bottom: 20px;
 }
 
-.category {
-  padding: 15px;
+/* Styles for professional colored boxes with lines under headings/subheadings */
+.heading-box {
+  padding: 20px;
   margin-bottom: 20px;
-  border: 1px solid #ddd;
+  border: 2px solid #333;
   border-radius: 5px;
+  background-color: #f5f5f5;
 }
-.category h2 {
+.heading-box h2 {
   margin-top: 0;
-  margin-bottom: 5px;
+  margin-bottom: 10px;
+  border-bottom: 2px solid #333;
 }
-.category hr {
+
+.subheading-box {
+  padding: 15px;
+  margin-bottom: 15px;
+  border: 1px solid #555;
+  border-radius: 5px;
+  background-color: #fafafa;
+}
+.subheading-box h3 {
+  margin-top: 0;
+  margin-bottom: 8px;
+  border-bottom: 1px solid #555;
+}
+
+.subheading-box hr, .heading-box hr {
   border: 0;
   height: 1px;
   background: #ccc;
   margin-bottom: 15px;
 }
-.gsi { background-color: #f9f9f9; }
-.coi { background-color: #f0f8ff; }
-.guest { background-color: #f5f5f5; }
-.conference { background-color: #fffafa; }
-.other { background-color: #f0fff0; }
 </style>
-<div class="category gsi">
+<div class="heading-box">
 <h2>
 Courses Taught as Graduate Student Instructor
 </h2>
-<hr>
 <div style="margin-bottom:5px;">
 <strong>Introduction to American Politics</strong> (Political Science
 111), Fall 2024<br><span
-style="margin-left:20px; display:block;">Graduate Student Instructor,
-University of Michigan</span>
+style="margin-left:20px; display:block;">University of Michigan</span>
 </div>
 <div style="margin-bottom:5px;">
 <strong>Introduction to American Politics</strong> (Political Science
 111), Winter 2024<br><span
-style="margin-left:20px; display:block;">Graduate Student Instructor,
-University of Michigan</span>
+style="margin-left:20px; display:block;">University of Michigan</span>
 </div>
 <div style="margin-bottom:5px;">
 <strong>Introduction to American Politics</strong> (Political Science
 111), Fall 2023<br><span
-style="margin-left:20px; display:block;">Graduate Student Instructor,
-University of Michigan</span>
+style="margin-left:20px; display:block;">University of Michigan</span>
 </div>
 <div style="margin-bottom:5px;">
 <strong>Systematic Thinking: Problems of the Day</strong> (Public Policy
 201), Winter 2022<br><span
-style="margin-left:20px; display:block;">Graduate Student Instructor,
-University of Michigan</span>
+style="margin-left:20px; display:block;">University of Michigan</span>
 </div>
 <div style="margin-bottom:5px;">
 <strong>Systematic Thinking: Problems of the Day</strong> (Public Policy
 201), Fall 2021<br><span
-style="margin-left:20px; display:block;">Graduate Student Instructor,
-University of Michigan</span>
+style="margin-left:20px; display:block;">University of Michigan</span>
 </div>
 </div>
-<div class="category coi">
+<div class="heading-box">
 <h2>
 Courses Taught as Co-Instructor
 </h2>
-<hr>
 <div style="margin-bottom:5px;">
 <strong>Kansas Supreme Court Research Practicum</strong> (Law 840), Fall
-2016<br><span style="margin-left:20px; display:block;">Co-Instructor,
-University of Kansas</span>
-</div>
-<div style="margin-bottom:5px;">
-<strong>Advanced Legal Research</strong> (Law 856), Spring 2016<br><span
-style="margin-left:20px; display:block;">Co-Instructor, University of
+2016<br><span style="margin-left:20px; display:block;">University of
 Kansas</span>
 </div>
 <div style="margin-bottom:5px;">
+<strong>Advanced Legal Research</strong> (Law 856), Spring 2016<br><span
+style="margin-left:20px; display:block;">University of Kansas</span>
+</div>
+<div style="margin-bottom:5px;">
 <strong>Kansas Supreme Court Research Clinic</strong> (Law 840), Fall
-2015<br><span style="margin-left:20px; display:block;">Co-Instructor,
-University of Kansas</span>
+2015<br><span style="margin-left:20px; display:block;">University of
+Kansas</span>
 </div>
 </div>
-<div class="category guest">
+<div class="heading-box">
 <h2>
 Guest Lectures
 </h2>
@@ -379,57 +383,55 @@ Guest Lectures
 <div style="margin-bottom:5px;">
 <strong>U.S. Elections: Misinformation and Methods of Source
 Evaluation</strong>, October 2021<br><span
-style="margin-left:20px; display:block;">Guest Lecturer, University of
-Michigan, Systematic Thinking: Problems of the Day (Public Policy
-201)</span>
+style="margin-left:20px; display:block;">University of Michigan,
+Systematic Thinking: Problems of the Day (Public Policy 201)</span>
 </div>
 <div style="margin-bottom:5px;">
 <strong>Trending Topics in State Legislatures</strong>, October
-2019<br><span style="margin-left:20px; display:block;">Guest Lecturer,
-University of Kansas, Public Policy Practicum (Law 976)</span>
+2019<br><span style="margin-left:20px; display:block;">University of
+Kansas, Public Policy Practicum (Law 976)</span>
 </div>
 <div style="margin-bottom:5px;">
 <strong>Legislative Research</strong>, September 2018<br><span
-style="margin-left:20px; display:block;">Guest Lecturer, University of
-Kansas, Public Policy Practicum (Law 976)</span>
+style="margin-left:20px; display:block;">University of Kansas, Public
+Policy Practicum (Law 976)</span>
 </div>
 <div style="margin-bottom:5px;">
 <strong>The Research Process</strong>, September 2017<br><span
-style="margin-left:20px; display:block;">Guest Lecturer, University of
-Kansas, Public Policy Practicum (Law 976)</span>
+style="margin-left:20px; display:block;">University of Kansas, Public
+Policy Practicum (Law 976)</span>
 </div>
 <div style="margin-bottom:5px;">
 <strong>The Research Process</strong>, September 2016<br><span
-style="margin-left:20px; display:block;">Guest Lecturer, University of
-Kansas, Legislative Clinic (Law 976)</span>
+style="margin-left:20px; display:block;">University of Kansas,
+Legislative Clinic (Law 976)</span>
 </div>
 </div>
-<div class="category conference">
+<div class="heading-box">
 <h2>
 Other Presentations
 </h2>
-<hr>
 <div style="margin-bottom:5px;">
 <strong>Policy Primer for Local Government Officials - Landscape
 Analysis</strong>, July 2021<br><span
-style="margin-left:20px; display:block;">Presenter, University of
-Michigan P3E Summer 2021 Student Showcase</span>
+style="margin-left:20px; display:block;">University of Michigan P3E
+Summer 2021 Student Showcase</span>
 </div>
 <div style="margin-bottom:5px;">
 <strong>Creating Change: Advocacy as a Municipal Official</strong>, June
-2021<br><span style="margin-left:20px; display:block;">Presenter,
-Detroit Equity Council Meeting</span>
+2021<br><span style="margin-left:20px; display:block;">Detroit Equity
+Council Meeting</span>
 </div>
 <div style="margin-bottom:5px;">
 <strong>Understanding How Local Officials Evaluate Fiscal Health and
 Stress</strong>, April 2021<br><span
-style="margin-left:20px; display:block;">Speaker, Western Social
-Sciences Association 63rd Annual Conference</span>
+style="margin-left:20px; display:block;">Western Social Sciences
+Association 63rd Annual Conference</span>
 </div>
 <div style="margin-bottom:5px;">
 <strong>Transparency &amp; Accountability Laws in the U.S.</strong>,
-April 2018<br><span style="margin-left:20px; display:block;">Presenter,
-U.S. Department of State African Emerging Leaders Delegation</span>
+April 2018<br><span style="margin-left:20px; display:block;">U.S.
+Department of State African Emerging Leaders Delegation</span>
 </div>
 </div>
 
