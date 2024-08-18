@@ -1,0 +1,522 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+
+<meta charset="utf-8" />
+<meta name="generator" content="pandoc" />
+<meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
+
+
+
+
+<title>Publications</title>
+
+<script src="site_libs/header-attrs-2.28/header-attrs.js"></script>
+<script src="site_libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<link href="site_libs/bootstrap-3.3.5/css/bootstrap.min.css" rel="stylesheet" />
+<script src="site_libs/bootstrap-3.3.5/js/bootstrap.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/html5shiv.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/respond.min.js"></script>
+<style>h1 {font-size: 34px;}
+       h1.title {font-size: 38px;}
+       h2 {font-size: 30px;}
+       h3 {font-size: 24px;}
+       h4 {font-size: 18px;}
+       h5 {font-size: 16px;}
+       h6 {font-size: 12px;}
+       code {color: inherit; background-color: rgba(0, 0, 0, 0.04);}
+       pre:not([class]) { background-color: white }</style>
+<script src="site_libs/navigation-1.1/tabsets.js"></script>
+<link href="site_libs/highlightjs-9.12.0/default.css" rel="stylesheet" />
+<script src="site_libs/highlightjs-9.12.0/highlight.js"></script>
+
+<style type="text/css">
+  code{white-space: pre-wrap;}
+  span.smallcaps{font-variant: small-caps;}
+  span.underline{text-decoration: underline;}
+  div.column{display: inline-block; vertical-align: top; width: 50%;}
+  div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+  ul.task-list{list-style: none;}
+    </style>
+
+<style type="text/css">code{white-space: pre;}</style>
+<script type="text/javascript">
+if (window.hljs) {
+  hljs.configure({languages: []});
+  hljs.initHighlightingOnLoad();
+  if (document.readyState && document.readyState === "complete") {
+    window.setTimeout(function() { hljs.initHighlighting(); }, 0);
+  }
+}
+</script>
+
+
+
+
+
+
+
+
+
+<style type = "text/css">
+.main-container {
+  max-width: 940px;
+  margin-left: auto;
+  margin-right: auto;
+}
+img {
+  max-width:100%;
+}
+.tabbed-pane {
+  padding-top: 12px;
+}
+.html-widget {
+  margin-bottom: 20px;
+}
+button.code-folding-btn:focus {
+  outline: none;
+}
+summary {
+  display: list-item;
+}
+details > summary > p:only-child {
+  display: inline;
+}
+pre code {
+  padding: 0;
+}
+</style>
+
+
+<style type="text/css">
+.dropdown-submenu {
+  position: relative;
+}
+.dropdown-submenu>.dropdown-menu {
+  top: 0;
+  left: 100%;
+  margin-top: -6px;
+  margin-left: -1px;
+  border-radius: 0 6px 6px 6px;
+}
+.dropdown-submenu:hover>.dropdown-menu {
+  display: block;
+}
+.dropdown-submenu>a:after {
+  display: block;
+  content: " ";
+  float: right;
+  width: 0;
+  height: 0;
+  border-color: transparent;
+  border-style: solid;
+  border-width: 5px 0 5px 5px;
+  border-left-color: #cccccc;
+  margin-top: 5px;
+  margin-right: -10px;
+}
+.dropdown-submenu:hover>a:after {
+  border-left-color: #adb5bd;
+}
+.dropdown-submenu.pull-left {
+  float: none;
+}
+.dropdown-submenu.pull-left>.dropdown-menu {
+  left: -100%;
+  margin-left: 10px;
+  border-radius: 6px 0 6px 6px;
+}
+</style>
+
+<script type="text/javascript">
+// manage active state of menu based on current page
+$(document).ready(function () {
+  // active menu anchor
+  href = window.location.pathname
+  href = href.substr(href.lastIndexOf('/') + 1)
+  if (href === "")
+    href = "index.html";
+  var menuAnchor = $('a[href="' + href + '"]');
+
+  // mark the anchor link active (and if it's in a dropdown, also mark that active)
+  var dropdown = menuAnchor.closest('li.dropdown');
+  if (window.bootstrap) { // Bootstrap 4+
+    menuAnchor.addClass('active');
+    dropdown.find('> .dropdown-toggle').addClass('active');
+  } else { // Bootstrap 3
+    menuAnchor.parent().addClass('active');
+    dropdown.addClass('active');
+  }
+
+  // Navbar adjustments
+  var navHeight = $(".navbar").first().height() + 15;
+  var style = document.createElement('style');
+  var pt = "padding-top: " + navHeight + "px; ";
+  var mt = "margin-top: -" + navHeight + "px; ";
+  var css = "";
+  // offset scroll position for anchor links (for fixed navbar)
+  for (var i = 1; i <= 6; i++) {
+    css += ".section h" + i + "{ " + pt + mt + "}\n";
+  }
+  style.innerHTML = "body {" + pt + "padding-bottom: 40px; }\n" + css;
+  document.head.appendChild(style);
+});
+</script>
+
+<!-- tabsets -->
+
+<style type="text/css">
+.tabset-dropdown > .nav-tabs {
+  display: inline-table;
+  max-height: 500px;
+  min-height: 44px;
+  overflow-y: auto;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+}
+
+.tabset-dropdown > .nav-tabs > li.active:before, .tabset-dropdown > .nav-tabs.nav-tabs-open:before {
+  content: "\e259";
+  font-family: 'Glyphicons Halflings';
+  display: inline-block;
+  padding: 10px;
+  border-right: 1px solid #ddd;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li.active:before {
+  content: "\e258";
+  font-family: 'Glyphicons Halflings';
+  border: none;
+}
+
+.tabset-dropdown > .nav-tabs > li.active {
+  display: block;
+}
+
+.tabset-dropdown > .nav-tabs > li > a,
+.tabset-dropdown > .nav-tabs > li > a:focus,
+.tabset-dropdown > .nav-tabs > li > a:hover {
+  border: none;
+  display: inline-block;
+  border-radius: 4px;
+  background-color: transparent;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li {
+  display: block;
+  float: none;
+}
+
+.tabset-dropdown > .nav-tabs > li {
+  display: none;
+}
+</style>
+
+<!-- code folding -->
+
+
+
+
+</head>
+
+<body>
+
+
+<div class="container-fluid main-container">
+
+
+
+
+<div class="navbar navbar-default  navbar-fixed-top" role="navigation">
+  <div class="container">
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-bs-toggle="collapse" data-target="#navbar" data-bs-target="#navbar">
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <a class="navbar-brand" href="index.html">Nicholas Birdsong</a>
+    </div>
+    <div id="navbar" class="navbar-collapse collapse">
+      <ul class="nav navbar-nav">
+        <li>
+  <a href="index.html">About</a>
+</li>
+<li>
+  <a href="presentations.html">Teaching and Presentations</a>
+</li>
+<li>
+  <a href="pubs.html">Publications</a>
+</li>
+<li>
+  <a href="news.html">In the News</a>
+</li>
+<li>
+  <a href="contact.html">Contact</a>
+</li>
+      </ul>
+      <ul class="nav navbar-nav navbar-right">
+        
+      </ul>
+    </div><!--/.nav-collapse -->
+  </div><!--/.container -->
+</div><!--/.navbar -->
+
+<div id="header">
+
+
+
+<h1 class="title toc-ignore">Publications</h1>
+
+</div>
+
+
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Latin+Modern+Roman&display=swap');
+
+body {
+  font-family: 'Latin Modern Roman', serif;
+}
+
+h1, h2, h3, h4, h5, h6 {
+  font-family: 'Latin Modern Roman', serif;
+}
+
+/* Custom styles for the title */
+h1.title {
+  font-weight: normal;
+  text-align: center;
+  margin-bottom: 20px;
+}
+
+/* Styles for professional colored boxes with lines under headings/subheadings */
+.heading-box {
+  padding: 20px;
+  margin-bottom: 20px;
+  border: 2px solid #333;
+  border-radius: 5px;
+  background-color: #f5f5f5;
+}
+.heading-box h2 {
+  margin-top: 0;
+  margin-bottom: 10px;
+  border-bottom: 2px solid #333;
+}
+
+.subheading-box {
+  padding: 15px;
+  margin-bottom: 15px;
+  border: 1px solid #555;
+  border-radius: 5px;
+  background-color: #fafafa;
+}
+.subheading-box h3 {
+  margin-top: 0;
+  margin-bottom: 8px;
+  border-bottom: 1px solid #555;
+}
+
+.subheading-box hr, .heading-box hr {
+  border: 0;
+  height: 1px;
+  background: #ccc;
+  margin-bottom: 15px;
+}
+</style>
+<div class="heading-box">
+<h2>
+Academic Publications
+</h2>
+<div class="subheading-box">
+<h3>
+Law Journals
+</h3>
+Virginia Harper Ho, <i>Disclosure Overload? Lessons for Risk Disclosure
+&amp; ESG Reporting Reform from the Regulation S-K Concept Release</i>,
+65 <u>Villanova Law Review</u> (2020) (credited research or editing
+contributions only).<br><br>Corey Yung, <i>Rape Law Gatekeeping</i>, 58
+<u>Boston College Law Review</u> 205-256 (2017) (credited research or
+editing contributions only).<br><br>Caleb Hall, <i>A Right Most Dear:
+The Case for a Constitutional Environmental Right</i>, 30 <u>Tulane
+Environmental Law Journal</u> 85-109 (2016) (credited research or
+editing contributions only).<br><br>Uma Outka, <i>The Obama
+Administration’s Clean Air Act Legacy and the UNFCC</i>, 48 <u>Case
+Western Reserve Journal of International Law</u> 109-125 (2016)
+(credited research or editing contributions only).
+</div>
+<div class="subheading-box">
+<h3>
+Policy Journals
+</h3>
+Melissa Tier, <i>Overcoming Contemporary Reform Failure of the National
+Flood Insurance Program to Accelerate Just Climate Transitions</i>, 32
+<u>Princeton Journal of Public and International Affairs</u> (2021)
+(credited research or editing contributions only).
+</div>
+</div>
+<div class="heading-box">
+<h2>
+Grey Literature
+</h2>
+<div class="subheading-box">
+<h3>
+50-State Surveys
+</h3>
+<i>Legislative Oversight of Emergency Executive Powers</i>,
+<u>NCSL.org</u> (May 2020).<br><br><i>Coronavirus and State Legislatures
+in the News</i>, <u>NCSL.org</u> (April 2020).<br><br><i>Dual
+Office-Holding Restrictions</i>, <u>NCSL.org</u> (October
+2019).<br><br><i>Voting Recusal Provisions</i>, <u>NCSL.org</u> (April
+2019).<br><br><i>Conflict of Interest Definitions</i>, <u>NCSL.org</u>
+(March 2019).<br><br><i>Representing Others Before Government</i>,
+<u>NCSL.org</u> (February 2019).<br><br><i>State Ethics Oversight
+Agencies</i>, <u>NCSL.org</u> (February 2019).<br><br><i>Revolving Door
+Prohibitions</i>, <u>NCSL.org</u> (February 2019).<br><br><i>Recovery of
+Legal Fees: Frivolous or Unsuccessful Complaints</i>, <u>NCSL.org</u>
+(February 2019).<br><br><i>State Ethics Commissions: Powers and
+Duties</i>, <u>NCSL.org</u> (January 2019).<br><br><i>Legislators’
+Personal Financial Disclosures: Client Identification Requirements</i>,
+<u>NCSL.org</u> (December 2018).<br><br><i>Blind Trusts</i>,
+<u>NCSL.org</u> (December 2018).<br><br><i>Legislators’ Personal
+Financial Disclosures Income Requirements</i>, <u>NCSL.org</u> (November
+2018).<br><br><i>Legislator Gift Restrictions Overview</i>,
+<u>NCSL.org</u> (November 2018).<br><br><i>Legislators’ Personal
+Financial Disclosures: Household Member Information</i>, <u>NCSL.org</u>
+(November 2018).<br><br><i>Lobbyist Registration Requirements</i>,
+<u>NCSL.org</u> (October 2018).<br><br><i>State Ethics Commissions:
+Jurisdiction</i>, <u>NCSL.org</u> (October 2018).<br><br><i>Nepotism
+Restrictions for State Legislatures</i>, <u>NCSL.org</u> (October
+2018).<br><br><i>Honorarium Restrictions</i>, <u>NCSL.org</u> (October
+2018).<br><br><i>How States Define ‘Lobbying’ and ‘Lobbyist’</i>,
+<u>NCSL.org</u> (August 2018).<br><br><i>Limitations on Public Funds for
+Lobbying</i>, <u>NCSL.org</u> (August 2018).<br><br><i>Legislators’
+Personal Financial Disclosures: Agency Connections</i>, <u>NCSL.org</u>
+(July 2018).<br><br><i>Penalties for Violations of State Ethics and
+Public Corruption Laws</i>, <u>NCSL.org</u> (July 2018).
+</div>
+<div class="subheading-box">
+<h3>
+Magazine Articles
+</h3>
+<i>What’s (un)ethical about lobbying?</i>, <u>State Legislatures
+Magazine</u> (February 2020).<br><br><i>Should Payment for Legislative
+Testimony Be Disclosed?</i>, <u>State Legislatures Magazine</u>
+(November 2019).<br><br><i>How does separation of powers relate to
+ethics?</i>, <u>State Legislatures Magazine</u> (September
+2019).<br><br><i>Is there an ethical duty to be civil to our
+rivals?</i>, <u>State Legislatures Magazine</u> (July
+2019).<br><br><i>What does ‘due process’ really mean?</i>, <u>State
+Legislatures Magazine</u> (May 2019).<br><br><i>What can you do about
+social media trolls?</i>, <u>State Legislatures Magazine</u> (March
+2019).<br><br><i>Is it better to be ethical or appear ethical?</i>,
+<u>State Legislatures Magazine</u> (January 2019).<br><br><i>What about
+that second job?</i>, <u>State Legislatures Magazine</u> (November
+2019).<br><br><i>Is humility a vice or a virtue for elected
+leaders?</i>, <u>State Legislatures Magazine</u> (September
+2018).<br><br><i>Do legislators have a right to privacy?</i>, <u>State
+Legislatures Magazine</u> (July 2018).<br><br><i>Why do people do
+unethical things?</i>, <u>State Legislatures Magazine</u> (June
+2018).<br><br><i>Why do legislative ethics matter?</i>, <u>State
+Legislatures Magazine</u> (May 2018).<br><br><i>Can you spot ethical
+pitfalls?</i>, <u>State Legislatures Magazine</u> (April
+2018).<br><br><i>How does ethics oversight work?</i>, <u>State
+Legislatures Magazine</u> (March 2018).<br><br><i>When should a
+legislator use a blind trust?</i>, <u>State Legislatures Magazine</u>
+(February 2017).<br><br><i>Research in the era of ‘fake news.’</i>,
+<u>Hearsay Magazine</u> (Spring 2017).
+</div>
+<div class="subheading-box">
+<h3>
+Two-Page Issue Briefs
+</h3>
+<i>Balancing Legislative and Executive Powers in Emergencies</i>,
+<u>NCSL LegisBrief</u> (July 2020).<br><br><i>Limiting political
+activity for nonpartisan staff</i>, <u>NCSL LegisBrief</u> (February
+2020).<br><br><i>Reinforcing government ethics with layered
+oversight</i>, <u>NCSL LegisBrief</u> (August
+2019).<br><br><i>Preventing conflicts of interest with blind trusts</i>,
+<u>NCSL LegisBrief</u> (January 2019).
+</div>
+<div class="subheading-box">
+<h3>
+Podcasts
+</h3>
+Nicholas Birdsong and Megan McClure, <i>‘Building Democracy Episode 3:
+Westward Expansion’</i>, <u>NCSL Podcast</u> (September
+2020).<br><br>Nicholas Birdsong, Megan McClure and John Mahoney,
+<i>‘Building Democracy Episode 2: The Story of Legislatures Through the
+Revolution’</i>, <u>NCSL Podcast</u> (April 2020).<br><br>Nicholas
+Birdsong, Megan McClure and John Mahoney, <i>‘Building Democracy Episode
+1: The Story of Legislatures’</i>, <u>NCSL Podcast</u> (January 2020).
+</div>
+<div class="subheading-box">
+<h3>
+Blogs
+</h3>
+<i>‘Building Democracy Podcast Episode 2: The Story of Legislatures
+Through the Revolution’</i>, <u>The NCSL Blog</u> (April
+2020).<br><br><i>‘POTUS Can’t Block Critics on Twitter, Says Federal
+Appeals Court’</i>, <u>The NCSL Blog</u> (July 2019).<br><br><i>‘6th
+Circuit Finds Ethics Laws Constitutional’</i>, <u>The NCSL Blog</u>
+(July 2019).
+</div>
+<div class="subheading-box">
+<h3>
+Papers
+</h3>
+<i>‘The Consequences of Economic Inequality’</i>, <u>Seven Pillars
+Institute for Global Finance and Ethics</u> (February 2015) [featured in
+The Wealth Gap, Greenhaven Publishing (2017), ISBN: 1534500340].
+</div>
+</div>
+
+
+
+
+</div>
+
+<script>
+
+// add bootstrap table styles to pandoc tables
+function bootstrapStylePandocTables() {
+  $('tr.odd').parent('tbody').parent('table').addClass('table table-condensed');
+}
+$(document).ready(function () {
+  bootstrapStylePandocTables();
+});
+
+
+</script>
+
+<!-- tabsets -->
+
+<script>
+$(document).ready(function () {
+  window.buildTabsets("TOC");
+});
+
+$(document).ready(function () {
+  $('.tabset-dropdown > .nav-tabs > li').click(function () {
+    $(this).parent().toggleClass('nav-tabs-open');
+  });
+});
+</script>
+
+<!-- code folding -->
+
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+
+</body>
+</html>
