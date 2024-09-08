@@ -1,1 +1,1 @@
-This is my personal/professional website. I created the HTML code using RStudio/RMarkdown. The page is viewable at my custom domain address, nicholasbirdsong.com.
+This is my personal/professional website. I created the HTML code using RStudio/RMarkdown. The page is viewable online at my custom domain, nicholasbirdsong.com.
