@@ -13,10 +13,10 @@
 
 <title>Publications</title>
 
-<script src="site_libs/header-attrs-2.28/header-attrs.js"></script>
+<script src="site_libs/header-attrs-2.30/header-attrs.js"></script>
 <script src="site_libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
 <meta name="viewport" content="width=device-width, initial-scale=1" />
-<link href="site_libs/bootstrap-3.3.5/css/bootstrap.min.css" rel="stylesheet" />
+<link href="site_libs/bootstrap-3.3.5/css/flatly.min.css" rel="stylesheet" />
 <script src="site_libs/bootstrap-3.3.5/js/bootstrap.min.js"></script>
 <script src="site_libs/bootstrap-3.3.5/shim/html5shiv.min.js"></script>
 <script src="site_libs/bootstrap-3.3.5/shim/respond.min.js"></script>
@@ -58,6 +58,7 @@ if (window.hljs) {
 
 
 
+<link rel="stylesheet" href="styles.css" type="text/css" />
 
 
 
@@ -275,57 +276,145 @@ $(document).ready(function () {
 
 
 <style>
-@import url('https://fonts.googleapis.com/css2?family=Latin+Modern+Roman&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Latin+Modern+Roman&family=Source+Sans+3:wght@400;600;700&display=swap');
 
-body {
-  font-family: 'Latin Modern Roman', serif;
+:root{
+  --um-blue: #00274C;
+  --text: #111827;
+  --muted: #6b7280;
+  --border: rgba(17, 24, 39, 0.12);
+  --link: #0b57d0;
 }
 
-h1, h2, h3, h4, h5, h6 {
-  font-family: 'Latin Modern Roman', serif;
+.main-container{ max-width: 980px; }
+
+body{
+  font-family: 'Latin Modern Roman', Georgia, "Times New Roman", serif;
+  color: var(--text);
 }
 
-/* Custom styles for the title */
-h1.title {
-  font-weight: normal;
+h1.title{
+  font-family: "Source Sans 3", system-ui, -apple-system, "Segoe UI", Roboto, Arial, sans-serif;
+  font-weight: 700;
   text-align: center;
-  margin-bottom: 20px;
+  margin-bottom: 1.25rem;
 }
 
-/* Styles for professional colored boxes with lines under headings/subheadings */
-.heading-box {
-  padding: 20px;
-  margin-bottom: 20px;
-  border: 2px solid #333;
-  border-radius: 5px;
-  background-color: #f5f5f5;
-}
-.heading-box h2 {
-  margin-top: 0;
-  margin-bottom: 10px;
-  border-bottom: 2px solid #333;
+a{ color: var(--link); }
+a:hover{ text-decoration: underline; }
+
+/* Top-level section cards (replaces the heavy gray boxes) */
+.heading-box{
+  background: #fff;
+  border: 1px solid var(--border);
+  border-left: 6px solid var(--um-blue);
+  border-radius: 14px;
+  padding: 1.15rem 1.25rem;
+  margin: 1.25rem 0;
+  box-shadow: 0 8px 22px rgba(0,0,0,0.06);
 }
 
-.subheading-box {
-  padding: 15px;
-  margin-bottom: 15px;
-  border: 1px solid #555;
-  border-radius: 5px;
-  background-color: #fafafa;
-}
-.subheading-box h3 {
-  margin-top: 0;
-  margin-bottom: 8px;
-  border-bottom: 1px solid #555;
+.heading-box h2{
+  font-family: "Source Sans 3", system-ui, -apple-system, "Segoe UI", Roboto, Arial, sans-serif;
+  font-weight: 700;
+  font-size: 1.25rem;
+  margin: 0 0 0.85rem 0;
+  padding-bottom: 0.55rem;
+  border-bottom: 1px solid rgba(17,24,39,0.10);
 }
 
-.subheading-box hr, .heading-box hr {
-  border: 0;
-  height: 1px;
-  background: #ccc;
-  margin-bottom: 15px;
+/* Nested sub-sections */
+.subheading-box{
+  border: 1px solid rgba(17,24,39,0.10);
+  border-radius: 12px;
+  padding: 1rem 1rem;
+  background: #f9fafb;
+  margin: 1rem 0 0 0;
+}
+
+.subheading-box h3{
+  font-family: "Source Sans 3", system-ui, -apple-system, "Segoe UI", Roboto, Arial, sans-serif;
+  font-weight: 700;
+  font-size: 1.1rem;
+  margin: 0 0 0.75rem 0;
+  padding-bottom: 0.45rem;
+  border-bottom: 1px solid rgba(17,24,39,0.10);
+}
+
+/* Publication entry styling */
+.pub-entry{
+  padding: 0.75rem 0;
+  border-top: 1px solid rgba(17,24,39,0.10);
+}
+.pub-entry:first-child{ border-top: none; }
+
+/* Software cards */
+.software-grid{
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  gap: 1rem;
+  margin-top: 0.25rem;
+}
+
+.software-card{
+  border: 1px solid rgba(17,24,39,0.10);
+  border-radius: 12px;
+  padding: 1rem 1rem;
+  background: #fff;
+}
+
+.software-name{
+  font-family: "Source Sans 3", system-ui, -apple-system, "Segoe UI", Roboto, Arial, sans-serif;
+  font-weight: 700;
+  margin: 0;
+}
+
+.software-meta{
+  margin-top: 0.2rem;
+  color: var(--muted);
+  font-size: 0.95rem;
+  font-family: "Source Sans 3", system-ui, -apple-system, "Segoe UI", Roboto, Arial, sans-serif;
+}
+
+.software-desc{
+  margin-top: 0.6rem;
+}
+
+.software-links{
+  margin-top: 0.75rem;
+  font-family: "Source Sans 3", system-ui, -apple-system, "Segoe UI", Roboto, Arial, sans-serif;
+  font-size: 0.98rem;
 }
 </style>
+<div class="heading-box">
+<h2>Software</h2>
+<div class="software-grid">
+<div class="software-card">
+<div class="software-name">statelegislators</div>
+<div class="software-meta">R · 2026</div>
+<div class="software-desc">extracts state legislator names from text data</div>
+<div class="software-links">
+<a href="https://github.com/yourname/mypackage" target="_blank" rel="noopener noreferrer">GitHub</a>
+</div>
+</div>
+<div class="software-card">
+<div class="software-name">textextract</div>
+<div class="software-meta">R/Python · 2026</div>
+<div class="software-desc">extracts text data from images/pdfs using both OCR and local LLM/genAI visual model</div>
+<div class="software-links">
+<a href="https://github.com/nbrdsong/textextract" target="_blank" rel="noopener noreferrer">GitHub</a>
+</div>
+</div>
+<div class="software-card">
+<div class="software-name">rnotify</div>
+<div class="software-meta">R/Swift · 2025</div>
+<div class="software-desc">RStudio addin that sends MacOS notifications when code stops running</div>
+<div class="software-links">
+<a href="https://github.com/nbrdsong/rnotify" target="_blank" rel="noopener noreferrer">GitHub</a>
+</div>
+</div>
+</div>
+</div>
 <div class="heading-box">
 <h2>
 Academic
@@ -334,34 +423,46 @@ Academic
 <h3>
 Working Papers
 </h3>
+<div class="pub-entry">
 Lowande, Kenneth and Nicholas Birdsong. 2025. “Presidential Capacity.”
 Working Paper.
+</div>
 </div>
 <div class="subheading-box">
 <h3>
 Law Journals
 </h3>
-<p>Harper Ho, Virginia. 2020. “Disclosure Overload? Lessons For Risk
+<div class="pub-entry">
+Harper Ho, Virginia. 2020. “Disclosure Overload? Lessons For Risk
 Disclosure &amp; Esg Reporting Reform From The Regulation S-K Concept
 Release.” Villanova Law Review 65 (credited research or editing
-contributions only).</p>
-<p>Yung, Corey. 2017. “Rape Law Gatekeeping.” Boston College Law Review
-58: 205-256 (credited research or editing contributions only).</p>
-<p>Hall, Caleb. 2016. “A Right Most Dear: The Case For A Constitutional
+contributions only).
+</div>
+<div class="pub-entry">
+Yung, Corey. 2017. “Rape Law Gatekeeping.” Boston College Law Review 58:
+205-256 (credited research or editing contributions only).
+</div>
+<div class="pub-entry">
+Hall, Caleb. 2016. “A Right Most Dear: The Case For A Constitutional
 Environmental Right.” Tulane Environmental Law Journal 30: 85-109
-(credited research or editing contributions only).</p>
+(credited research or editing contributions only).
+</div>
+<div class="pub-entry">
 Outka, Uma. 2016. “The Obama Administration’s Clean Air Act Legacy And
 The Unfcc.” Case Western Reserve Journal of International Law 48:
 109-125 (credited research or editing contributions only).
+</div>
 </div>
 <div class="subheading-box">
 <h3>
 Policy Journals
 </h3>
+<div class="pub-entry">
 Tier, Melissa. 2021. “Overcoming Contemporary Reform Failure Of The
 National Flood Insurance Program To Accelerate Just Climate
 Transitions.” Princeton Journal of Public and International Affairs 32
 (credited research or editing contributions only).
+</div>
 </div>
 </div>
 <div class="heading-box">
@@ -372,134 +473,232 @@ Grey Literature
 <h3>
 50-State Surveys
 </h3>
-<p>Birdsong, Nicholas. May 2020. “Legislative Oversight Of Emergency
-Executive Powers.” NCSL.org.</p>
-<p>Birdsong, Nicholas. April 2020. “Coronavirus And State Legislatures
-In The News.” NCSL.org.</p>
-<p>Birdsong, Nicholas. October 2019. “Dual Office-Holding Restrictions.”
-NCSL.org.</p>
-<p>Birdsong, Nicholas. April 2019. “Voting Recusal Provisions.”
-NCSL.org.</p>
-<p>Birdsong, Nicholas. March 2019. “Conflict Of Interest Definitions.”
-NCSL.org.</p>
-<p>Birdsong, Nicholas. February 2019. “Representing Others Before
-Government.” NCSL.org.</p>
-<p>Birdsong, Nicholas. February 2019. “State Ethics Oversight Agencies.”
-NCSL.org.</p>
-<p>Birdsong, Nicholas. February 2019. “Revolving Door Prohibitions.”
-NCSL.org.</p>
-<p>Birdsong, Nicholas. February 2019. “Recovery Of Legal Fees: Frivolous
-Or Unsuccessful Complaints.” NCSL.org.</p>
-<p>Birdsong, Nicholas. January 2019. “State Ethics Commissions: Powers
-And Duties.” NCSL.org.</p>
-<p>Birdsong, Nicholas. December 2018. “Legislators’ Personal Financial
-Disclosures: Client Identification Requirements.” NCSL.org.</p>
-<p>Birdsong, Nicholas. December 2018. “Blind Trusts.” NCSL.org.</p>
-<p>Birdsong, Nicholas. November 2018. “Legislators’ Personal Financial
-Disclosures Income Requirements.” NCSL.org.</p>
-<p>Birdsong, Nicholas. November 2018. “Legislator Gift Restrictions
-Overview.” NCSL.org.</p>
-<p>Birdsong, Nicholas. November 2018. “Legislators’ Personal Financial
-Disclosures: Household Member Information.” NCSL.org.</p>
-<p>Birdsong, Nicholas. October 2018. “Lobbyist Registration
-Requirements.” NCSL.org.</p>
-<p>Birdsong, Nicholas. October 2018. “State Ethics Commissions:
-Jurisdiction.” NCSL.org.</p>
-<p>Birdsong, Nicholas. October 2018. “Nepotism Restrictions For State
-Legislatures.” NCSL.org.</p>
-<p>Birdsong, Nicholas. October 2018. “Honorarium Restrictions.”
-NCSL.org.</p>
-<p>Birdsong, Nicholas. August 2018. “How States Define ‘Lobbying’ And
-‘Lobbyist’.” NCSL.org.</p>
-<p>Birdsong, Nicholas. August 2018. “Limitations On Public Funds For
-Lobbying.” NCSL.org.</p>
-<p>Birdsong, Nicholas. July 2018. “Legislators’ Personal Financial
-Disclosures: Agency Connections.” NCSL.org.</p>
+<div class="pub-entry">
+Birdsong, Nicholas. May 2020. “Legislative Oversight Of Emergency
+Executive Powers.” NCSL.org.
+</div>
+<div class="pub-entry">
+Birdsong, Nicholas. April 2020. “Coronavirus And State Legislatures In
+The News.” NCSL.org.
+</div>
+<div class="pub-entry">
+Birdsong, Nicholas. October 2019. “Dual Office-Holding Restrictions.”
+NCSL.org.
+</div>
+<div class="pub-entry">
+Birdsong, Nicholas. April 2019. “Voting Recusal Provisions.” NCSL.org.
+</div>
+<div class="pub-entry">
+Birdsong, Nicholas. March 2019. “Conflict Of Interest Definitions.”
+NCSL.org.
+</div>
+<div class="pub-entry">
+Birdsong, Nicholas. February 2019. “Representing Others Before
+Government.” NCSL.org.
+</div>
+<div class="pub-entry">
+Birdsong, Nicholas. February 2019. “State Ethics Oversight Agencies.”
+NCSL.org.
+</div>
+<div class="pub-entry">
+Birdsong, Nicholas. February 2019. “Revolving Door Prohibitions.”
+NCSL.org.
+</div>
+<div class="pub-entry">
+Birdsong, Nicholas. February 2019. “Recovery Of Legal Fees: Frivolous Or
+Unsuccessful Complaints.” NCSL.org.
+</div>
+<div class="pub-entry">
+Birdsong, Nicholas. January 2019. “State Ethics Commissions: Powers And
+Duties.” NCSL.org.
+</div>
+<div class="pub-entry">
+Birdsong, Nicholas. December 2018. “Legislators’ Personal Financial
+Disclosures: Client Identification Requirements.” NCSL.org.
+</div>
+<div class="pub-entry">
+Birdsong, Nicholas. December 2018. “Blind Trusts.” NCSL.org.
+</div>
+<div class="pub-entry">
+Birdsong, Nicholas. November 2018. “Legislators’ Personal Financial
+Disclosures Income Requirements.” NCSL.org.
+</div>
+<div class="pub-entry">
+Birdsong, Nicholas. November 2018. “Legislator Gift Restrictions
+Overview.” NCSL.org.
+</div>
+<div class="pub-entry">
+Birdsong, Nicholas. November 2018. “Legislators’ Personal Financial
+Disclosures: Household Member Information.” NCSL.org.
+</div>
+<div class="pub-entry">
+Birdsong, Nicholas. October 2018. “Lobbyist Registration Requirements.”
+NCSL.org.
+</div>
+<div class="pub-entry">
+Birdsong, Nicholas. October 2018. “State Ethics Commissions:
+Jurisdiction.” NCSL.org.
+</div>
+<div class="pub-entry">
+Birdsong, Nicholas. October 2018. “Nepotism Restrictions For State
+Legislatures.” NCSL.org.
+</div>
+<div class="pub-entry">
+Birdsong, Nicholas. October 2018. “Honorarium Restrictions.” NCSL.org.
+</div>
+<div class="pub-entry">
+Birdsong, Nicholas. August 2018. “How States Define ‘Lobbying’ And
+‘Lobbyist’.” NCSL.org.
+</div>
+<div class="pub-entry">
+Birdsong, Nicholas. August 2018. “Limitations On Public Funds For
+Lobbying.” NCSL.org.
+</div>
+<div class="pub-entry">
+Birdsong, Nicholas. July 2018. “Legislators’ Personal Financial
+Disclosures: Agency Connections.” NCSL.org.
+</div>
+<div class="pub-entry">
 Birdsong, Nicholas. July 2018. “Penalties For Violations Of State Ethics
 And Public Corruption Laws.” NCSL.org.
+</div>
 </div>
 <div class="subheading-box">
 <h3>
 Magazine Articles
 </h3>
-<p>Birdsong, Nicholas. February 2020. “What’s (Un)Ethical About
-Lobbying?” State Legislatures Magazine.</p>
-<p>Birdsong, Nicholas. November 2019. “Should Payment For Legislative
-Testimony Be Disclosed?” State Legislatures Magazine.</p>
-<p>Birdsong, Nicholas. November 2019. “What About That Second Job?”
-State Legislatures Magazine.</p>
-<p>Birdsong, Nicholas. September 2019. “How Does Separation Of Powers
-Relate To Ethics?” State Legislatures Magazine.</p>
-<p>Birdsong, Nicholas. July 2019. “Is There An Ethical Duty To Be Civil
-To Our Rivals?” State Legislatures Magazine.</p>
-<p>Birdsong, Nicholas. May 2019. “What Does ‘Due Process’ Really Mean?”
-State Legislatures Magazine.</p>
-<p>Birdsong, Nicholas. March 2019. “What Can You Do About Social Media
-Trolls?” State Legislatures Magazine.</p>
-<p>Birdsong, Nicholas. January 2019. “Is It Better To Be Ethical Or
-Appear Ethical?” State Legislatures Magazine.</p>
-<p>Birdsong, Nicholas. September 2018. “Is Humility A Vice Or A Virtue
-For Elected Leaders?” State Legislatures Magazine.</p>
-<p>Birdsong, Nicholas. July 2018. “Do Legislators Have A Right To
-Privacy?” State Legislatures Magazine.</p>
-<p>Birdsong, Nicholas. June 2018. “Why Do People Do Unethical Things?”
-State Legislatures Magazine.</p>
-<p>Birdsong, Nicholas. May 2018. “Why Do Legislative Ethics Matter?”
-State Legislatures Magazine.</p>
-<p>Birdsong, Nicholas. April 2018. “Can You Spot Ethical Pitfalls?”
-State Legislatures Magazine.</p>
-<p>Birdsong, Nicholas. March 2018. “How Does Ethics Oversight Work?”
-State Legislatures Magazine.</p>
-<p>Birdsong, Nicholas. Spring 2017. “Research In The Era Of ‘Fake News’”
-Hearsay Magazine.</p>
+<div class="pub-entry">
+Birdsong, Nicholas. February 2020. “What’s (Un)Ethical About Lobbying?”
+State Legislatures Magazine.
+</div>
+<div class="pub-entry">
+Birdsong, Nicholas. November 2019. “Should Payment For Legislative
+Testimony Be Disclosed?” State Legislatures Magazine.
+</div>
+<div class="pub-entry">
+Birdsong, Nicholas. November 2019. “What About That Second Job?” State
+Legislatures Magazine.
+</div>
+<div class="pub-entry">
+Birdsong, Nicholas. September 2019. “How Does Separation Of Powers
+Relate To Ethics?” State Legislatures Magazine.
+</div>
+<div class="pub-entry">
+Birdsong, Nicholas. July 2019. “Is There An Ethical Duty To Be Civil To
+Our Rivals?” State Legislatures Magazine.
+</div>
+<div class="pub-entry">
+Birdsong, Nicholas. May 2019. “What Does ‘Due Process’ Really Mean?”
+State Legislatures Magazine.
+</div>
+<div class="pub-entry">
+Birdsong, Nicholas. March 2019. “What Can You Do About Social Media
+Trolls?” State Legislatures Magazine.
+</div>
+<div class="pub-entry">
+Birdsong, Nicholas. January 2019. “Is It Better To Be Ethical Or Appear
+Ethical?” State Legislatures Magazine.
+</div>
+<div class="pub-entry">
+Birdsong, Nicholas. September 2018. “Is Humility A Vice Or A Virtue For
+Elected Leaders?” State Legislatures Magazine.
+</div>
+<div class="pub-entry">
+Birdsong, Nicholas. July 2018. “Do Legislators Have A Right To Privacy?”
+State Legislatures Magazine.
+</div>
+<div class="pub-entry">
+Birdsong, Nicholas. June 2018. “Why Do People Do Unethical Things?”
+State Legislatures Magazine.
+</div>
+<div class="pub-entry">
+Birdsong, Nicholas. May 2018. “Why Do Legislative Ethics Matter?” State
+Legislatures Magazine.
+</div>
+<div class="pub-entry">
+Birdsong, Nicholas. April 2018. “Can You Spot Ethical Pitfalls?” State
+Legislatures Magazine.
+</div>
+<div class="pub-entry">
+Birdsong, Nicholas. March 2018. “How Does Ethics Oversight Work?” State
+Legislatures Magazine.
+</div>
+<div class="pub-entry">
+Birdsong, Nicholas. Spring 2017. “Research In The Era Of ‘Fake News’”
+Hearsay Magazine.
+</div>
+<div class="pub-entry">
 Birdsong, Nicholas. February 2017. “When Should A Legislator Use A Blind
 Trust?” State Legislatures Magazine.
+</div>
 </div>
 <div class="subheading-box">
 <h3>
 Two-Page Issue Briefs
 </h3>
-<p>Birdsong, Nicholas. July 2020. “Balancing Legislative And Executive
-Powers In Emergencies.” NCSL LegisBrief.</p>
-<p>Birdsong, Nicholas. February 2020. “Limiting Political Activity For
-Nonpartisan Staff.” NCSL LegisBrief.</p>
-<p>Birdsong, Nicholas. August 2019. “Reinforcing Government Ethics With
-Layered Oversight.” NCSL LegisBrief.</p>
+<div class="pub-entry">
+Birdsong, Nicholas. July 2020. “Balancing Legislative And Executive
+Powers In Emergencies.” NCSL LegisBrief.
+</div>
+<div class="pub-entry">
+Birdsong, Nicholas. February 2020. “Limiting Political Activity For
+Nonpartisan Staff.” NCSL LegisBrief.
+</div>
+<div class="pub-entry">
+Birdsong, Nicholas. August 2019. “Reinforcing Government Ethics With
+Layered Oversight.” NCSL LegisBrief.
+</div>
+<div class="pub-entry">
 Birdsong, Nicholas. January 2019. “Preventing Conflicts Of Interest With
 Blind Trusts.” NCSL LegisBrief.
+</div>
 </div>
 <div class="subheading-box">
 <h3>
 Podcasts
 </h3>
-<p>Birdsong, Nicholas and Megan McClure. September 2020. “Building
-Democracy Episode 3: Westward Expansion.” NCSL Podcast.</p>
-<p>Birdsong, Nicholas, Megan McClure and John Mahoney. April 2020.
+<div class="pub-entry">
+Birdsong, Nicholas and Megan McClure. September 2020. “Building
+Democracy Episode 3: Westward Expansion.” NCSL Podcast.
+</div>
+<div class="pub-entry">
+Birdsong, Nicholas, Megan McClure and John Mahoney. April 2020.
 “Building Democracy Episode 2: The Story of Legislatures Through the
-Revolution.” NCSL Podcast.</p>
+Revolution.” NCSL Podcast.
+</div>
+<div class="pub-entry">
 Birdsong, Nicholas, Megan McClure and John Mahoney. January 2020.
 “Building Democracy Episode 1: The Story of Legislatures.” NCSL Podcast.
+</div>
 </div>
 <div class="subheading-box">
 <h3>
 Blog Posts
 </h3>
-<p>Birdsong, Nicholas and Megan McClure. April 2020. “Building Democracy
+<div class="pub-entry">
+Birdsong, Nicholas and Megan McClure. April 2020. “Building Democracy
 Podcast Episode 2: The Story of Legislatures Through the Revolution.”
-The NCSL Blog.</p>
-<p>Birdsong, Nicholas. July 2019. “Potus Can’t Block Critics on Twitter,
-Says Federal Appeals Court.” The NCSL Blog.</p>
+The NCSL Blog.
+</div>
+<div class="pub-entry">
+Birdsong, Nicholas. July 2019. “Potus Can’t Block Critics on Twitter,
+Says Federal Appeals Court.” The NCSL Blog.
+</div>
+<div class="pub-entry">
 Birdsong, Nicholas. July 2019. “6th Circuit Finds Ethics Laws
 Constitutional.” The NCSL Blog.
+</div>
 </div>
 <div class="subheading-box">
 <h3>
 Papers
 </h3>
+<div class="pub-entry">
 Birdsong, Nicholas. February 2015. “The Consequences of Economic
 Inequality.” Seven Pillars Institute for Global Finance and Ethics
 (featured in The Wealth Gap, Greenhaven Publishing (2017), ISBN:
 1534500340).
+</div>
 </div>
 </div>
 

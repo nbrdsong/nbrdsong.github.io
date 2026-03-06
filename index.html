@@ -13,10 +13,10 @@
 
 <title>About me</title>
 
-<script src="site_libs/header-attrs-2.28/header-attrs.js"></script>
+<script src="site_libs/header-attrs-2.30/header-attrs.js"></script>
 <script src="site_libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
 <meta name="viewport" content="width=device-width, initial-scale=1" />
-<link href="site_libs/bootstrap-3.3.5/css/bootstrap.min.css" rel="stylesheet" />
+<link href="site_libs/bootstrap-3.3.5/css/flatly.min.css" rel="stylesheet" />
 <script src="site_libs/bootstrap-3.3.5/js/bootstrap.min.js"></script>
 <script src="site_libs/bootstrap-3.3.5/shim/html5shiv.min.js"></script>
 <script src="site_libs/bootstrap-3.3.5/shim/respond.min.js"></script>
@@ -58,6 +58,7 @@ if (window.hljs) {
 
 
 
+<link rel="stylesheet" href="styles.css" type="text/css" />
 
 
 
@@ -275,126 +276,157 @@ $(document).ready(function () {
 
 
 <style>
-@import url('https://fonts.googleapis.com/css2?family=Latin+Modern+Roman&display=swap');
+/* Fonts (keep your Latin Modern feel, but add a clean sans for headings) */
+@import url('https://fonts.googleapis.com/css2?family=Latin+Modern+Roman&family=Source+Sans+3:wght@400;600;700&display=swap');
 
-body {
-  font-family: 'Latin Modern Roman', serif;
+:root{
+  --text: #111827;
+  --muted: #6b7280;
+  --link: #0b57d0;
 }
 
-h1, h2, h3, h4, h5, h6 {
-  font-family: 'Latin Modern Roman', serif;
+/* Page width + base typography */
+.main-container{
+  max-width: 980px;
 }
 
-/* Custom styles for the title */
-h1.title {
-  font-weight: normal; /* Optional: Adjust the weight */
-  text-align: center; /* Centers the title */
-  margin-bottom: 20px; /* Optional: Add some margin */
+body{
+  font-family: "Latin Modern Roman", Georgia, "Times New Roman", serif;
+  font-size: 17px;
+  line-height: 1.7;
+  color: var(--text);
+}
+
+/* Headings */
+h1, h2, h3, h4, h5, h6{
+  font-family: "Source Sans 3", system-ui, -apple-system, "Segoe UI", Roboto, Arial, sans-serif;
+  letter-spacing: -0.01em;
+}
+
+h1.title{
+  text-align: left;      /* change to center if you prefer */
+  font-weight: 700;
+  margin-bottom: 1.25rem;
+}
+
+p{
+  margin: 0 0 1rem;
+}
+
+a{ color: var(--link); }
+a:hover{ text-decoration: underline; }
+
+/* Headshot block (responsive, no 50% float) */
+figure.headshot{
+  float: left;
+  width: 260px;
+  max-width: 40%;
+  margin: 0.25rem 1.5rem 0.75rem 0;
+}
+figure.headshot img{
+  display: block;
+  width: 100%;
+  height: auto;
+  border-radius: 14px;
+
+  /* this prevents weird edge/halo effects */
+  background: #fff;
+
+  /* crisp, professional edge */
+  border: 1px solid rgba(17, 24, 39, 0.12);
+
+  /* softer shadow (less “outlined”) */
+  box-shadow: 0 8px 18px rgba(17, 24, 39, 0.10);
+}
+
+figure.headshot figcaption{
+  margin-top: 0.5rem;
+  font-size: 0.9rem;
+  line-height: 1.35;
+  color: var(--muted);
+}
+
+@media (max-width: 768px){
+  figure.headshot{
+    float: none;
+    width: min(320px, 100%);
+    max-width: 100%;
+    margin: 0 auto 1rem auto;
+  }
 }
 </style>
-<style>
-  .float-left {
-    float: left;
-    margin-right: 20px;
-    width: 50%; /* Adjust this as needed */
-    max-width: 100%; /* Ensure it doesn't overflow */
-    height: auto; /* Maintain aspect ratio */
-  }
-  .float-right {
-    float: right;
-    margin-left: 20px;
-    width: 50%; /* Adjust this as needed */
-    max-width: 100%; /* Ensure it doesn't overflow */
-    height: auto; /* Maintain aspect ratio */
-  }
-  figure {
-    display: inline-block;
-    margin: 0;
-  }
-  figcaption {
-    text-align: center;
-    font-size: smaller;
-    color: gray;
-  }
-</style>
-<figure class="float-left">
-<img src="images/cropped.jpg" alt="Alternative text" />
+<figure class="headshot">
+<img src="images/cropped.jpg"
+       alt="Nicholas Birdsong speaking at a public event (photo credit: NPR Illinois, 2020)" />
 <figcaption>
-Image credit: BRIAN MACKEY / <a
-href="https://www.nprillinois.org/post/lawmakers-consider-new-measures-ethics-violations-government#stream/0">NPR
-ILLINOIS</a> (2020)
+Image credit: BRIAN MACKEY /
+<a href="https://www.nprillinois.org/post/lawmakers-consider-new-measures-ethics-violations-government#stream/0">NPR
+Illinois</a> (2020)
 </figcaption>
 </figure>
-<p>I am a joint <a href="https://lsa.umich.edu/polisci">Political
-Science</a> and <a href="https://fordschool.umich.edu">Public Policy</a>
-PhD candidate and <a
+<p>I am a joint PhD candidate in <a
+href="https://lsa.umich.edu/polisci">Political Science</a> and <a
+href="https://fordschool.umich.edu">Public Policy</a> and a <a
 href="https://rackham.umich.edu/funding/rackham-merit-fellowship-program/">Rackham
-Merit Fellow</a> at the <a href="https://umich.edu">University of
-Michigan</a> in Ann Arbor. My primary substantive areas of interest are
-broadly related to interest groups, political access, and the
-responsiveness of democratic institutions. Although currently on
-fellowship focusing on my dissertation, I recently served as a graduate
-student instructor for PolSci 432: Law and Public Policy. I was <a
-href="https://sites.google.com/umich.edu/gaps">Graduate Association of
-Political Scientists (GAPS)</a> co-President at the University of
-Michigan (2023-2024). I have also occasionally offered government
-affairs consulting services.</p>
-<p>In 2022, I completed my Master of Public Policy degree at the <a
+Merit Fellow</a> at the University of Michigan. My research interests
+center on interest groups, political access, and how democratic
+institutions respond to organized interests. Although currently on
+fellowship, I most recently served as a graduate student instructor for
+PolSci 432: Law and Public Policy. I have also occasionally worked as an
+independent consultant.</p>
+<p>In 2022, I earned my Master of Public Policy from the <a
 href="http://fordschool.umich.edu/">Gerald R. Ford School of Public
-Policy</a> at the University of Michigan in Ann Arbor with a <a
+Policy</a> with a <a
 href="https://fordschool.umich.edu/mpp-mpa/mpp/concentrations">concentration
-in analysis methods</a>. I served as Editor in Chief for the <a
-href="http://mjpa.umich.edu/">Michigan Journal of Public Affairs</a> and
-as a Graduate Student Instructor for <a
+in analysis methods</a>. During my time at Michigan, I served as Editor
+in Chief of the <a href="http://mjpa.umich.edu/">Michigan Journal of
+Public Affairs</a> and as a Graduate Student Instructor for <a
 href="pdfs/PP%20201%20-%20Systematic%20Thinking%20syllabus.pdf">PubPol
-201: Systematic Thinking</a>. As a student at Michigan, I worked as a
-Policy Analyst for the Fiscal Health Project at the <a
-href="http://closup.umich.edu/">Center for Local, State, and Urban
-Policy</a>, as a summer intern with <a
-href="https://www.care.org/">CARE</a>, and on a project through the <a
-href="http://practicalpolicy.umich.edu/">Program in Practical Policy
-Engagement</a> for the City of Detroit. I also served as Visiting Editor
-for the 32nd edition (2021) of the <a
+201: Systematic Thinking</a>. I also worked as a Policy Analyst for the
+Fiscal Health Project at the <a href="http://closup.umich.edu/">Center
+for Local, State, and Urban Policy</a>, interned with <a
+href="https://www.care.org/">CARE</a>, and participated in a project
+through the <a href="http://practicalpolicy.umich.edu/">Program in
+Practical Policy Engagement</a> for the City of Detroit. I additionally
+served as Visiting Editor for the 32nd edition (2021) of the <a
 href="https://jpia.princeton.edu/">Princeton Journal of Public and
 International Affairs</a>.</p>
-<p>Before my return to academic life, I served as a Policy Specialist
+<p>Before returning to academic life, I served as a Policy Specialist
 with the <a href="http://www.ncsl.org">National Conference of State
 Legislatures</a>, Center for Ethics in Government and Center for
-Legislative Strengthening. My research encompassed matters relating to
-the legislative institutions of all U.S. states and territories. Under
-Ethics, subject areas included conflicts of interest, financial
-disclosures, lobbyist regulation, and ethics oversight. My work related
-to the legislative institution included a wide range of subtopics,
-including separation of powers, legislative procedure, legislative HR
-policies, and issues relating to the First Amendment. I provided
-non-partisan trainings, testimony, or technical assistance upon the
-request of NCSL constituents—state legislators or legislative staff (see
-photo, above).</p>
+Legislative Strengthening. My research encompassed legislative
+institutions across all U.S. states and territories. In ethics, I
+covered conflicts of interest, financial disclosures, lobbyist
+regulation, and ethics oversight. My work on legislative institutions
+addressed a wide range of topics, including separation of powers,
+legislative procedure, legislative HR policies, and First Amendment
+issues. I provided non-partisan trainings, testimony, and technical
+assistance at the request of NCSL constituents—state legislators and
+legislative staff.</p>
 <p>My work often crossed disciplinary lines, driven by the needs of
 public officials, state employees, industry contacts, academics,
 journalists, and the public. I regularly coordinated with NCSL’s
-Elections and Redistricting team, as well as tackled questions related
-to sexual harassment and civility. A range of legal issues intersect
-with ethics, including privacy, speech, and due process. Research in
-moral philosophy and psychology were regularly incorporated into my
-publications. I administered Westlaw account access, as well as managed
+Elections and Redistricting team and addressed questions related to
+sexual harassment and civility. Many of these projects required engaging
+legal issues at the intersection of ethics, privacy, speech, and due
+process; my publications also incorporated research in moral philosophy
+and psychology. I administered Westlaw account access and managed
 Continuing Legal Education (CLE) course compliance and accreditation for
-NCSL’s annual conference that hosted thousands of state government
+NCSL’s annual conference, which hosted thousands of state government
 professionals.</p>
-<p>Prior to my time at NCSL, I served as Faculty Services Senior
-Researcher at the <a href="https://law.ku.edu">University of Kansas
-School of Law</a>. I taught courses on legal research and appellate
-advocacy while providing research assistance to faculty and university
-administration. Research areas included environmental law, international
-law, academic admissions policy, transactional law, business
-organizations, campus assault, diverse student success initiatives,
-legal pedagogy, criminal law, and more.</p>
-<p>I received an Masters in Public Policy from the University of
-Michigan in Ann Arbor with a concentration in analysis methods (2022), a
-Juris Doctor with an advocacy certificate from the University of Kansas
-(2015), and a B.A. in Political Science from <a
-href="https://www.washburn.edu/index.html">Washburn University</a> in
-Topeka, Kansas (2012).</p>
+<p>Prior to NCSL, I served as Faculty Services Senior Researcher at the
+<a href="https://law.ku.edu">University of Kansas School of Law</a>,
+where I taught courses on legal research and appellate advocacy while
+providing research assistance to faculty and university administration.
+My work spanned environmental law, international law, academic
+admissions policy, transactional law, business organizations, campus
+assault, diverse student success initiatives, legal pedagogy, criminal
+law, and more.</p>
+<p>I hold a Master of Public Policy (University of Michigan, 2022), a
+Juris Doctor with an advocacy certificate (University of Kansas, 2015),
+and a B.A. in Political Science (<a
+href="https://www.washburn.edu/index.html">Washburn University</a>,
+2012).</p>
 <p>Thank you for visiting my website.</p>
 
 

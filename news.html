@@ -13,10 +13,10 @@
 
 <title>In the News</title>
 
-<script src="site_libs/header-attrs-2.28/header-attrs.js"></script>
+<script src="site_libs/header-attrs-2.30/header-attrs.js"></script>
 <script src="site_libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
 <meta name="viewport" content="width=device-width, initial-scale=1" />
-<link href="site_libs/bootstrap-3.3.5/css/bootstrap.min.css" rel="stylesheet" />
+<link href="site_libs/bootstrap-3.3.5/css/flatly.min.css" rel="stylesheet" />
 <script src="site_libs/bootstrap-3.3.5/js/bootstrap.min.js"></script>
 <script src="site_libs/bootstrap-3.3.5/shim/html5shiv.min.js"></script>
 <script src="site_libs/bootstrap-3.3.5/shim/respond.min.js"></script>
@@ -58,6 +58,7 @@ if (window.hljs) {
 
 
 
+<link rel="stylesheet" href="styles.css" type="text/css" />
 
 
 
@@ -275,230 +276,280 @@ $(document).ready(function () {
 
 
 <style>
-@import url('https://fonts.googleapis.com/css2?family=Latin+Modern+Roman&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Latin+Modern+Roman&family=Source+Sans+3:wght@400;600;700&display=swap');
 
-body {
-  font-family: 'Latin Modern Roman', serif;
+:root{
+  --um-blue: #00274C;
+  --text: #111827;
+  --muted: #6b7280;
+  --border: rgba(17, 24, 39, 0.12);
+  --link: #0b57d0;
 }
 
-h1, h2, h3, h4, h5, h6 {
-  font-family: 'Latin Modern Roman', serif;
+.main-container{ max-width: 980px; }
+
+body{
+  font-family: 'Latin Modern Roman', Georgia, "Times New Roman", serif;
+  color: var(--text);
 }
 
-/* Custom styles for the title */
-h1.title {
-  font-weight: normal;
+h1.title{
+  font-family: "Source Sans 3", system-ui, -apple-system, "Segoe UI", Roboto, Arial, sans-serif;
+  font-weight: 700;
   text-align: center;
-  margin-bottom: 20px;
+  margin-bottom: 1.25rem;
 }
 
-/* Styles for professional colored boxes with lines under headings/subheadings */
-.heading-box {
-  padding: 20px;
-  margin-bottom: 20px;
-  border: 2px solid #333;
-  border-radius: 5px;
-  background-color: #f5f5f5;
-}
-.heading-box h2 {
-  margin-top: 0;
-  margin-bottom: 10px;
-  border-bottom: 2px solid #333;
+/* Section cards */
+.section-card{
+  background: #fff;
+  border: 1px solid var(--border);
+  border-left: 6px solid var(--um-blue);
+  border-radius: 14px;
+  padding: 1.15rem 1.25rem;
+  margin: 1.25rem 0;
+  box-shadow: 0 8px 22px rgba(0,0,0,0.06);
 }
 
-.subheading-box {
-  padding: 15px;
-  margin-bottom: 15px;
-  border: 1px solid #555;
-  border-radius: 5px;
-  background-color: #fafafa;
-}
-.subheading-box h3 {
-  margin-top: 0;
-  margin-bottom: 8px;
-  border-bottom: 1px solid #555;
+.section-card h2{
+  font-family: "Source Sans 3", system-ui, -apple-system, "Segoe UI", Roboto, Arial, sans-serif;
+  font-weight: 700;
+  font-size: 1.25rem;
+  margin: 0 0 0.85rem 0;
+  padding-bottom: 0.55rem;
+  border-bottom: 1px solid rgba(17,24,39,0.10);
 }
 
-.subheading-box hr, .heading-box hr {
-  border: 0;
-  height: 1px;
-  background: #ccc;
-  margin-bottom: 15px;
+/* Entries */
+.entry{
+  padding: 0.9rem 0;
+  border-top: 1px solid rgba(17,24,39,0.08);
+}
+.entry:first-child{ border-top: none; }
+
+.entry a{
+  color: var(--link);
+  text-decoration: none;
+}
+.entry a:hover{ text-decoration: underline; }
+
+.entry .meta{
+  margin-top: 0.25rem;
+  color: var(--muted);
+  font-size: 0.95rem;
+  font-family: "Source Sans 3", system-ui, -apple-system, "Segoe UI", Roboto, Arial, sans-serif;
 }
 </style>
-<div class="heading-box">
-<h2>
-Directly Quoted
-</h2>
-Press Release, <i>Learning and serving - P3E students report on research
-projects across Michigan</i>,
-<u><a href='https://fordschool.umich.edu/news/2021/learning-and-serving-p3e-students-report-research-projects-across-michigan'>Ford
-School News</a></u> (July 16, 2021).<br><br>Greg Bishop, <i>Should IL AG
-Have More Power to Investigate Corruption?</i>, <u>Illinois Radio
-Network</u> (February 5, 2020).<br><br>Greg Bishop, <i>More Talk About
-Conflicts of Interest</i>, <u>WBGZ Radio</u> (February 1,
-2020).<br><br>Peter Hancock, <i>Advocates urge stricter rules on
-conflicts of interest, financial disclosure</i>,
-<u><a href='https://www.thetelegraph.com/news/article/Advocates-urge-stricter-rules-on-conflicts-of-15020605.php'>The
-Telegraph</a></u> (January 31, 2020).<br><br>Peter Hancock, <i>Illinois
-ethics laws among the weakest in the nation</i>, <u>NewsTribune</u>
-(January 31, 2020).<br><br>Greg Bishop, <i>Illinois lawmakers hear more
-about how to address conflicts of interest in state government</i>,
-<u><a href='https://www.thecentersquare.com/illinois/illinois-lawmakers-hear-more-about-how-to-address-conflicts-of/article_38c50584-43a8-11ea-859d-f7a38267e41e.html'>The
-Center Square</a></u> (January 31, 2020).<br><br>Dave Dahl,
-<i>Commission says the problems are not confined to Springfield</i>,
-<u><a href='https://www.wjbc.com/2020/01/31/commission-says-the-problems-are-not-confined-to-springfield/'>WJBC</a></u>
-(January 31, 2020).<br><br>Rich Miller, <i>Not as easy as it looks</i>,
-<u><a href='https://capitolfax.com/2020/01/31/not-as-easy-as-it-looks-2/'>Capitol
-Fax</a></u> (January 31, 2020).<br><br>Mike Miletich, <i>Illinois ethics
-commission addresses conflicts of interest, closing the ‘revolving
-door’</i>, <u>WGEM</u> (January 30, 2020).<br><br>Eric Cortellessa,
-<i>It’s not just Trump. Governors are keeping their businesses while in
-office, too</i>,
-<u><a href='https://www.washingtonpost.com/outlook/its-not-just-trump-governors-are-keeping-their-businesses-while-in-office-too/2020/01/16/66ffdb46-3808-11ea-bb7b-265f4554af6d_story.html#click=https://t.co/M1lrrfczQX'>Washington
-Post</a></u> (January 17, 2020).<br><br>Ken Ward Jr., <i>Lawmakers Call
-for Ethics Reform to Deal With Billionaire Resort-Owning Governor</i>,
-<u><a href='https://www.propublica.org/article/lawmakers-call-for-ethics-reform-to-deal-with-billionaire-resort-owning-governor'>ProPublica</a></u>
-(August 21, 2019).<br><br>Melissa Santos, <i>WA lawmaker just quit to
-lobby for Amazon. Most states wouldn’t allow that</i>,
-<u><a href='https://www.cascadepbs.org/politics/2019/05/wa-lawmaker-just-quit-lobby-amazon-most-states-wouldnt-allow'>Crosscut</a></u>
-(May 28, 2019).<br><br>Jonathan Oosting, <i>Outgoing state officials
-turn to lobbying under lax Michigan rules</i>,
-<u><a href='https://www.detroitnews.com/story/news/politics/2019/01/23/outgoing-state-officials-turn-lobbying-under-lax-michigan-rules/2616196002/'>The
-Detroit News</a></u> (January 23, 2019).<br><br>Michael R. Wickline,
-<i>Arkansas legislators report loans among peers</i>,
-<u><a href='https://www.nwaonline.com/news/2018/sep/23/legislators-report-loans-among-peers-20/'>Northwest
-Arkansas Democrat Gazette</a></u> (September 23, 2018).<br><br>Madeline
-Will, <i>In These Few States Teachers Are Not Allowed to Serve in the
-State Legislature</i>,
-<u><a href='https://www.edweek.org/leadership/in-these-few-states-teachers-are-not-allowed-to-serve-in-the-state-legislature/2018/08'>Education
-Week</a></u> (August 10, 2018).<br><br>Dalton Kingery, <i>Traffic Court
-modernizes, offers chance to appeal tickets</i>,
-<u><a href='https://www.kansan.com/news/ku-traffic-court-modernizes-offers-chance-to-appeal-tickets/article_fd3656ba-2e79-11e4-beef-001a4bcf887a.html'>The
-University Daily Kansan</a></u> (August 28, 2014).
+<section class="section-card">
+<h2>Directly Quoted</h2>
+<div class="entry">
+<div>Press Release, <em>Learning and serving - P3E students report on research projects across Michigan</em>, <a href="https://fordschool.umich.edu/news/2021/learning-and-serving-p3e-students-report-research-projects-across-michigan" target="_blank" rel="noopener noreferrer">Ford School News</a></div>
+<div class="meta">(July 16, 2021).</div>
 </div>
-<div class="heading-box">
-<h2>
-Work Referenced
-</h2>
-Marie C. Dillon and Joann Wong, <i>The BGA’s Ethics Agenda: Let’s Get
-Serious About Ending Corruption in Illinois.</i>, <u>Better Government
-Association</u> (September 8, 2020).<br><br>Austin Jenkins, <i>In
-Washington, the revolving door between government service and lobbying
-is well-greased.</i>,
-<u><a href='https://www.opb.org/article/2020/09/02/washington-state-government-officials-lobbying-revolving-door/'>Oregon
-Public Broadcasting</a></u> (September 2, 2020).<br><br>Staff, <i>Voters
-might decide emergency checks, balances</i>,
-<u><a href='https://www.dailyitem.com/opinion/voters-might-decide-emergency-checks-balances/article_83d3db3a-4dbb-554d-85a0-845b77e54c2a.html'>The
-Daily Item</a></u> (July 17, 2020).<br><br>John Frank, <i>Colorado
-lawmakers won’t be required to wear masks at Capitol when legislative
-session resumes</i>,
-<u><a href='https://coloradosun.com/2020/05/19/colorado-lawmakers-mask-coronavirus/'>The
-Colorado Sun</a></u> (May 19, 2020).<br><br>Malachi Barrett, <i>Ballot
-language approved for proposal to ‘change the culture’ of lobbying in
-Michigan</i>,
-<u><a href='https://www.mlive.com/public-interest/2020/02/ballot-language-approved-for-proposal-to-change-the-culture-of-lobbying-in-michigan.html'>MLive</a></u>
-(February 19, 2020).<br><br>Michael Gormley, <i>Gov. Andrew M. Cuomo:
-Top state, local elected officials should release tax returns</i>,
-<u>Newsday</u> (February 12, 2020).<br><br>Bruce Rushton, <i>Lawmakers
-hear calls for ethics reform</i>,
-<u><a href='https://www.illinoistimes.com/news-opinion/lawmakers-hear-calls-for-ethics-reform-11785557'>Illinois
-Times</a></u> (February 6, 2020).<br><br>State Sen. Justin Chenette,
-<i>Beyond the Headlines: Closing the lobbying revolving door</i>,
-<u><a href='https://www.pressherald.com/2020/01/23/beyond-the-headlines-closing-the-lobbying-revolving-door/'>Biddeford-Saco-OOB
-Courier</a></u> (January 3, 2020).<br><br>Austin Berg, <i>FBI Wiretapped
-Cellphone of Close Madigan Confidant</i>,
-<u><a href='https://www.illinoispolicy.org/fbi-wiretapped-cellphone-of-close-madigan-confidant/'>Illinois
-Policy</a></u> (November 13, 2019).<br><br>Jonathan Oosting, <i>Beyond
-term limits: 5 ‘good government’ ideas eyed by Michigan reformers</i>,
-<u><a href='https://www.bridgemi.com/michigan-government/beyond-term-limits-5-good-government-ideas-eyed-michigan-reformers'>Bridge</a></u>
-(October 28, 2019).<br><br>Austin Berg, <i>Federal agents looking for
-Madigan documents in ComEd probe</i>,
-<u><a href='https://www.illinoispolicy.org/federal-agents-looking-for-madigan-documents-in-comed-probe/'>Illinois
-Policy</a></u> (October 24, 2019).<br><br>Editorial Board, <i>In NJ,
-holding two public jobs not better than one</i>,
-<u><a href='https://www.northjersey.com/story/opinion/editorials/2019/10/23/editorial-nj-holding-two-public-jobs-not-better-than-one/4070933002/'>North
-Jersey</a></u> (October 23, 2019).<br><br>Ashley Balcerzak and Stacey
-Barchenger, <i>NJ lawmakers cost you millions by holding a second public
-job. Who are they really working for?</i>,
-<u><a href='https://subscribe.northjersey.com/restricted?return=https%3A%2F%2Fwww.northjersey.com%2Fstory%2Fnews%2Fnew-jersey%2F2019%2F10%2F22%2Fnj-taxes-one-three-lawmakers-get-second-paycheck-taxpayers%2F1965416001%2F&gps-source=CPROADBLOCKDH&gca-cat=p&gnt-eid=control'>North
-Jersey</a></u> (October 22, 2019).<br><br>Kathleen Gray, <i>Former
-lawmakers are cashing in on Michigan’s lucrative marijuana industry</i>,
-<u><a href='https://www.freep.com/story/news/marijuana/2019/10/18/lawmakers-michigan-marijuana-industry/4014976002/'>Detroit
-Free Press</a></u> (October 18, 2019).<br><br>Paul Egan, <i>Lights turn
-green for traffic signal company that hired MDOT director</i>,
-<u><a href='https://www.freep.com/story/news/local/michigan/2019/10/14/kirk-steudle-econolite-traffic-signal-contract/3906292002/'>Detroit
-Free Press</a></u> (October 14, 2019).<br><br>David Montgomery, <i>To
-Reign in Cities, Texas Tries to Ban Their Lobbying</i>,
-<u><a href='https://stateline.org/2019/09/17/to-rein-in-cities-texas-tries-to-ban-their-lobbying/'>Pew
-Stateline</a></u> (September 17, 2019).<br><br>Caroline Halter,
-<i>Ethics Commission Passes ‘Revolving Door’ Rule Again</i>,
-<u><a href='https://www.kgou.org/news/2018-09-17/ethics-commission-passes-revolving-door-rule-again'>KGOU</a></u>
-(September 17, 2019).<br><br>Ken Jr. Ward, <i>Lawmakers Call for Ethics
-Reform to Deal With Billionaire Resort-Owning Governor</i>,
-<u><a href='https://www.propublica.org/article/lawmakers-call-for-ethics-reform-to-deal-with-billionaire-resort-owning-governor'>ProPublica</a></u>
-(August 21, 2019).<br><br>Tivas Gupta, <i>Illinois one of 11 states that
-lets departing lawmakers immediately become lobbyists</i>,
-<u><a href='https://madisonrecord.com/stories/513128905-illinois-one-of-11-states-that-lets-departing-lawmakers-immediately-become-lobbyists'>Madison-St. Clair
-Record</a></u> (August 20, 2019).<br><br>John Hageman, <i>Panel picks
-members of North Dakota ethics commission</i>,
-<u><a href='https://www.grandforksherald.com/news/panel-picks-members-of-north-dakota-ethics-commission'>Grand
-Forks Herald</a></u> (August 8, 2019).<br><br>Bruce Schreiner, <i>Andy
-Beshear proposes term limits and a lifetime lobbying ban for
-lawmakers</i>,
-<u><a href='https://www.courier-journal.com/story/news/politics/elections/kentucky/2019/07/30/beshear-proposes-term-limits-lobbying-ban-lawmakers/1868758001/'>Louisville
-Courier Journal</a></u> (July 30, 2019).<br><br>John Hageman,
-<i>Legislator as landlord: Financial disclosures don’t highlight state
-agency leases with North Dakota elected officials</i>,
-<u><a href='https://www.grandforksherald.com/news/legislator-as-landlord-financial-disclosures-dont-highlight-state-agency-leases-with-north-dakota-elected-officials'>Grand
-Forks Herald</a></u> (June 30, 2019).<br><br>Mark Scolforo,
-<i>Pennsylvania Lawmakers Report $38K in Travel on Annual Ethics
-Disclosures</i>,
-<u><a href='https://www.inquirer.com/politics/pennsylvania/lawmakers-report-travel-and-gifts-on-annual-ethics-disclosures-20190527.html'>The
-Philadelphia Inquirer</a></u> (May 27, 2019).<br><br>John Hageman,
-<i>“From nothing”: North Dakota officials prepare to appoint ethics
-commission</i>,
-<u><a href='https://bismarcktribune.com/news/local/govt-and-politics/from-nothing-north-dakota-officials-prepare-to-appoint-ethics-commission/article_e39cd838-34b4-5392-ac02-793afb241935.html'>Bismarck
-Tribune</a></u> (May 17, 2019).<br><br>Trevor Brown, <i>Donations to
-Lawmakers Keep Flowing Even As They Vote on Bills</i>,
-<u><a href='https://oklahomawatch.org/2019/05/06/cash-flow-continues-despite-officeholders-fundraising-restrictions/'>Oklahoma
-Watch</a></u> (May 6, 2019).<br><br>Luke Ramseth and Geoff Pender, <i>No
-limits: Other states ban gifts to lawmakers. Why doesn’t
-Mississippi?</i>,
-<u><a href='https://www.clarionledger.com/story/news/politics/2019/04/10/mississippi-lobbying-laws-why-not-ban-gifts-lawmakers/3066519002/'>Mississippi
-Clarion Ledger</a></u> (April 10, 2019).<br><br>Claire Withycombe and
-Aubrey Wieber, <i>From state to local: how government puts lobbyists to
-work</i>,
-<u><a href='https://www.salemreporter.com/2019/04/10/from-state-to-local-how-government-puts-lobbyists-to-work/'>Salem
-Reporter</a></u> (April 10, 2019).<br><br>Claire Withycombe and Aubrey
-Wieber, <i>Spending tax dollars for more tax dollars</i>, <u>Mail
-Tribune</u> (April 10, 2019).<br><br>Andrew Oxford, <i>Governor signs
-bill for ethics commission</i>,
-<u><a href='https://www.santafenewmexican.com/news/local_news/governor-signs-bill-for-ethics-commission/article_e2d1d1cd-dedd-5b79-8e52-8aef37d4e87c.html'>Santa
-Fe New Mexican</a></u> (March 28, 2019).<br><br>Lindsay VanHulle,
-<i>Michigan senator seeks to end ‘revolving door’ of lawmakers turned
-lobbyists</i>,
-<u><a href='https://www.bridgemi.com/michigan-government/michigan-senator-seeks-end-revolving-door-lawmakers-turned-lobbyists'>Michigan
-Bridge</a></u> (February 18, 2019).<br><br>Editorial Board, <i>Not so
-fast on transition from legislator to lobbyist</i>,
-<u><a href='https://www.seattletimes.com/opinion/editorials/not-so-fast-on-transition-from-legislator-to-lobbyist/'>The
-Seattle Times</a></u> (December 26, 2018).<br><br>Associated Press,
-<i>New Mexico voters approve constitutional amendment to form state
-ethics commission</i>,
-<u><a href='https://www.lcsun-news.com/story/news/politics/elections/2018/11/06/new-mexico-voters-approve-constitutional-amendment-ethics-commission/1914218002/'>Las
-Cruces Sun News</a></u> (November 6, 2018).<br><br>Kevin Sack and
-Patricia Mazzei, <i>To Avoid Conflicts, Rick Scott Created a Blind Trust
-in Name Only</i>,
-<u><a href='https://www.nytimes.com/2018/10/17/us/rick-scott-conflicts-blind-trust.html'>New
-York Times</a></u> (October 17, 2018).<br><br>Darren Fishell, <i>As
-governor, Moody would keep hold of rapidly growing business
-interests</i>,
-<u><a href='https://www.bangordailynews.com/2018/10/15/mainefocus/as-governor-moody-would-keep-hold-of-rapidly-growing-business-interests/'>Bangor
-Daily News</a></u> (October 15, 2018).<br><br>Katie Bernard, <i>Kansas
-bill would limit lobbying by former state officials</i>,
-<u><a href='https://www.cjonline.com/story/news/politics/state/2018/01/29/kansas-bill-would-limit-lobbying-by-former-state-officials/15379213007/'>The
-Topeka Capital-Journal</a></u> (January 29, 2018).
+<div class="entry">
+<div>Greg Bishop, <em>Should IL AG Have More Power to Investigate Corruption?</em>, <span>Illinois Radio Network</span></div>
+<div class="meta">(February 5, 2020).</div>
 </div>
+<div class="entry">
+<div>Greg Bishop, <em>More Talk About Conflicts of Interest</em>, <span>WBGZ Radio</span></div>
+<div class="meta">(February 1, 2020).</div>
+</div>
+<div class="entry">
+<div>Peter Hancock, <em>Advocates urge stricter rules on conflicts of interest, financial disclosure</em>, <a href="https://www.thetelegraph.com/news/article/Advocates-urge-stricter-rules-on-conflicts-of-15020605.php" target="_blank" rel="noopener noreferrer">The Telegraph</a></div>
+<div class="meta">(January 31, 2020).</div>
+</div>
+<div class="entry">
+<div>Peter Hancock, <em>Illinois ethics laws among the weakest in the nation</em>, <span>NewsTribune</span></div>
+<div class="meta">(January 31, 2020).</div>
+</div>
+<div class="entry">
+<div>Greg Bishop, <em>Illinois lawmakers hear more about how to address conflicts of interest in state government</em>, <a href="https://www.thecentersquare.com/illinois/illinois-lawmakers-hear-more-about-how-to-address-conflicts-of/article_38c50584-43a8-11ea-859d-f7a38267e41e.html" target="_blank" rel="noopener noreferrer">The Center Square</a></div>
+<div class="meta">(January 31, 2020).</div>
+</div>
+<div class="entry">
+<div>Dave Dahl, <em>Commission says the problems are not confined to Springfield</em>, <a href="https://www.wjbc.com/2020/01/31/commission-says-the-problems-are-not-confined-to-springfield/" target="_blank" rel="noopener noreferrer">WJBC</a></div>
+<div class="meta">(January 31, 2020).</div>
+</div>
+<div class="entry">
+<div>Rich Miller, <em>Not as easy as it looks</em>, <a href="https://capitolfax.com/2020/01/31/not-as-easy-as-it-looks-2/" target="_blank" rel="noopener noreferrer">Capitol Fax</a></div>
+<div class="meta">(January 31, 2020).</div>
+</div>
+<div class="entry">
+<div>Mike Miletich, <em>Illinois ethics commission addresses conflicts of interest, closing the 'revolving door'</em>, <span>WGEM</span></div>
+<div class="meta">(January 30, 2020).</div>
+</div>
+<div class="entry">
+<div>Eric Cortellessa, <em>It's not just Trump. Governors are keeping their businesses while in office, too</em>, <a href="https://www.washingtonpost.com/outlook/its-not-just-trump-governors-are-keeping-their-businesses-while-in-office-too/2020/01/16/66ffdb46-3808-11ea-bb7b-265f4554af6d_story.html#click=https://t.co/M1lrrfczQX" target="_blank" rel="noopener noreferrer">Washington Post</a></div>
+<div class="meta">(January 17, 2020).</div>
+</div>
+<div class="entry">
+<div>Ken Ward Jr., <em>Lawmakers Call for Ethics Reform to Deal With Billionaire Resort-Owning Governor</em>, <a href="https://www.propublica.org/article/lawmakers-call-for-ethics-reform-to-deal-with-billionaire-resort-owning-governor" target="_blank" rel="noopener noreferrer">ProPublica</a></div>
+<div class="meta">(August 21, 2019).</div>
+</div>
+<div class="entry">
+<div>Melissa Santos, <em>WA lawmaker just quit to lobby for Amazon. Most states wouldn't allow that</em>, <a href="https://www.cascadepbs.org/politics/2019/05/wa-lawmaker-just-quit-lobby-amazon-most-states-wouldnt-allow" target="_blank" rel="noopener noreferrer">Crosscut</a></div>
+<div class="meta">(May 28, 2019).</div>
+</div>
+<div class="entry">
+<div>Jonathan Oosting, <em>Outgoing state officials turn to lobbying under lax Michigan rules</em>, <a href="https://www.detroitnews.com/story/news/politics/2019/01/23/outgoing-state-officials-turn-lobbying-under-lax-michigan-rules/2616196002/" target="_blank" rel="noopener noreferrer">The Detroit News</a></div>
+<div class="meta">(January 23, 2019).</div>
+</div>
+<div class="entry">
+<div>Michael R. Wickline, <em>Arkansas legislators report loans among peers</em>, <a href="https://www.nwaonline.com/news/2018/sep/23/legislators-report-loans-among-peers-20/" target="_blank" rel="noopener noreferrer">Northwest Arkansas Democrat Gazette</a></div>
+<div class="meta">(September 23, 2018).</div>
+</div>
+<div class="entry">
+<div>Madeline Will, <em>In These Few States Teachers Are Not Allowed to Serve in the State Legislature</em>, <a href="https://www.edweek.org/leadership/in-these-few-states-teachers-are-not-allowed-to-serve-in-the-state-legislature/2018/08" target="_blank" rel="noopener noreferrer">Education Week</a></div>
+<div class="meta">(August 10, 2018).</div>
+</div>
+<div class="entry">
+<div>Dalton Kingery, <em>Traffic Court modernizes, offers chance to appeal tickets</em>, <a href="https://www.kansan.com/news/ku-traffic-court-modernizes-offers-chance-to-appeal-tickets/article_fd3656ba-2e79-11e4-beef-001a4bcf887a.html" target="_blank" rel="noopener noreferrer">The University Daily Kansan</a></div>
+<div class="meta">(August 28, 2014).</div>
+</div>
+</section>
+<section class="section-card">
+<h2>Work Referenced</h2>
+<div class="entry">
+<div>Marie C. Dillon and Joann Wong, <em>The BGA's Ethics Agenda: Let's Get Serious About Ending Corruption in Illinois.</em>, <span>Better Government Association</span></div>
+<div class="meta">(September 8, 2020).</div>
+</div>
+<div class="entry">
+<div>Austin Jenkins, <em>In Washington, the revolving door between government service and lobbying is well-greased.</em>, <a href="https://www.opb.org/article/2020/09/02/washington-state-government-officials-lobbying-revolving-door/" target="_blank" rel="noopener noreferrer">Oregon Public Broadcasting</a></div>
+<div class="meta">(September 2, 2020).</div>
+</div>
+<div class="entry">
+<div>Staff, <em>Voters might decide emergency checks, balances</em>, <a href="https://www.dailyitem.com/opinion/voters-might-decide-emergency-checks-balances/article_83d3db3a-4dbb-554d-85a0-845b77e54c2a.html" target="_blank" rel="noopener noreferrer">The Daily Item</a></div>
+<div class="meta">(July 17, 2020).</div>
+</div>
+<div class="entry">
+<div>John Frank, <em>Colorado lawmakers won't be required to wear masks at Capitol when legislative session resumes</em>, <a href="https://coloradosun.com/2020/05/19/colorado-lawmakers-mask-coronavirus/" target="_blank" rel="noopener noreferrer">The Colorado Sun</a></div>
+<div class="meta">(May 19, 2020).</div>
+</div>
+<div class="entry">
+<div>Malachi Barrett, <em>Ballot language approved for proposal to 'change the culture' of lobbying in Michigan</em>, <a href="https://www.mlive.com/public-interest/2020/02/ballot-language-approved-for-proposal-to-change-the-culture-of-lobbying-in-michigan.html" target="_blank" rel="noopener noreferrer">MLive</a></div>
+<div class="meta">(February 19, 2020).</div>
+</div>
+<div class="entry">
+<div>Michael Gormley, <em>Gov. Andrew M. Cuomo: Top state, local elected officials should release tax returns</em>, <span>Newsday</span></div>
+<div class="meta">(February 12, 2020).</div>
+</div>
+<div class="entry">
+<div>Bruce Rushton, <em>Lawmakers hear calls for ethics reform</em>, <a href="https://www.illinoistimes.com/news-opinion/lawmakers-hear-calls-for-ethics-reform-11785557" target="_blank" rel="noopener noreferrer">Illinois Times</a></div>
+<div class="meta">(February 6, 2020).</div>
+</div>
+<div class="entry">
+<div>State Sen. Justin Chenette, <em>Beyond the Headlines: Closing the lobbying revolving door</em>, <a href="https://www.pressherald.com/2020/01/23/beyond-the-headlines-closing-the-lobbying-revolving-door/" target="_blank" rel="noopener noreferrer">Biddeford-Saco-OOB Courier</a></div>
+<div class="meta">(January 3, 2020).</div>
+</div>
+<div class="entry">
+<div>Austin Berg, <em>FBI Wiretapped Cellphone of Close Madigan Confidant</em>, <a href="https://www.illinoispolicy.org/fbi-wiretapped-cellphone-of-close-madigan-confidant/" target="_blank" rel="noopener noreferrer">Illinois Policy</a></div>
+<div class="meta">(November 13, 2019).</div>
+</div>
+<div class="entry">
+<div>Jonathan Oosting, <em>Beyond term limits: 5 'good government' ideas eyed by Michigan reformers</em>, <a href="https://www.bridgemi.com/michigan-government/beyond-term-limits-5-good-government-ideas-eyed-michigan-reformers" target="_blank" rel="noopener noreferrer">Bridge</a></div>
+<div class="meta">(October 28, 2019).</div>
+</div>
+<div class="entry">
+<div>Austin Berg, <em>Federal agents looking for Madigan documents in ComEd probe</em>, <a href="https://www.illinoispolicy.org/federal-agents-looking-for-madigan-documents-in-comed-probe/" target="_blank" rel="noopener noreferrer">Illinois Policy</a></div>
+<div class="meta">(October 24, 2019).</div>
+</div>
+<div class="entry">
+<div>Editorial Board, <em>In NJ, holding two public jobs not better than one</em>, <a href="https://www.northjersey.com/story/opinion/editorials/2019/10/23/editorial-nj-holding-two-public-jobs-not-better-than-one/4070933002/" target="_blank" rel="noopener noreferrer">North Jersey</a></div>
+<div class="meta">(October 23, 2019).</div>
+</div>
+<div class="entry">
+<div>Ashley Balcerzak and Stacey Barchenger, <em>NJ lawmakers cost you millions by holding a second public job. Who are they really working for?</em>, <a href="https://subscribe.northjersey.com/restricted?return=https%3A%2F%2Fwww.northjersey.com%2Fstory%2Fnews%2Fnew-jersey%2F2019%2F10%2F22%2Fnj-taxes-one-three-lawmakers-get-second-paycheck-taxpayers%2F1965416001%2F&amp;gps-source=CPROADBLOCKDH&amp;gca-cat=p&amp;gnt-eid=control" target="_blank" rel="noopener noreferrer">North Jersey</a></div>
+<div class="meta">(October 22, 2019).</div>
+</div>
+<div class="entry">
+<div>Kathleen Gray, <em>Former lawmakers are cashing in on Michigan's lucrative marijuana industry</em>, <a href="https://www.freep.com/story/news/marijuana/2019/10/18/lawmakers-michigan-marijuana-industry/4014976002/" target="_blank" rel="noopener noreferrer">Detroit Free Press</a></div>
+<div class="meta">(October 18, 2019).</div>
+</div>
+<div class="entry">
+<div>Paul Egan, <em>Lights turn green for traffic signal company that hired MDOT director</em>, <a href="https://www.freep.com/story/news/local/michigan/2019/10/14/kirk-steudle-econolite-traffic-signal-contract/3906292002/" target="_blank" rel="noopener noreferrer">Detroit Free Press</a></div>
+<div class="meta">(October 14, 2019).</div>
+</div>
+<div class="entry">
+<div>David Montgomery, <em>To Reign in Cities, Texas Tries to Ban Their Lobbying</em>, <a href="https://stateline.org/2019/09/17/to-rein-in-cities-texas-tries-to-ban-their-lobbying/" target="_blank" rel="noopener noreferrer">Pew Stateline</a></div>
+<div class="meta">(September 17, 2019).</div>
+</div>
+<div class="entry">
+<div>Caroline Halter, <em>Ethics Commission Passes 'Revolving Door' Rule Again</em>, <a href="https://www.kgou.org/news/2018-09-17/ethics-commission-passes-revolving-door-rule-again" target="_blank" rel="noopener noreferrer">KGOU</a></div>
+<div class="meta">(September 17, 2019).</div>
+</div>
+<div class="entry">
+<div>Ken Jr. Ward, <em>Lawmakers Call for Ethics Reform to Deal With Billionaire Resort-Owning Governor</em>, <a href="https://www.propublica.org/article/lawmakers-call-for-ethics-reform-to-deal-with-billionaire-resort-owning-governor" target="_blank" rel="noopener noreferrer">ProPublica</a></div>
+<div class="meta">(August 21, 2019).</div>
+</div>
+<div class="entry">
+<div>Tivas Gupta, <em>Illinois one of 11 states that lets departing lawmakers immediately become lobbyists</em>, <a href="https://madisonrecord.com/stories/513128905-illinois-one-of-11-states-that-lets-departing-lawmakers-immediately-become-lobbyists" target="_blank" rel="noopener noreferrer">Madison-St. Clair Record</a></div>
+<div class="meta">(August 20, 2019).</div>
+</div>
+<div class="entry">
+<div>John Hageman, <em>Panel picks members of North Dakota ethics commission</em>, <a href="https://www.grandforksherald.com/news/panel-picks-members-of-north-dakota-ethics-commission" target="_blank" rel="noopener noreferrer">Grand Forks Herald</a></div>
+<div class="meta">(August 8, 2019).</div>
+</div>
+<div class="entry">
+<div>Bruce Schreiner, <em>Andy Beshear proposes term limits and a lifetime lobbying ban for lawmakers</em>, <a href="https://www.courier-journal.com/story/news/politics/elections/kentucky/2019/07/30/beshear-proposes-term-limits-lobbying-ban-lawmakers/1868758001/" target="_blank" rel="noopener noreferrer">Louisville Courier Journal</a></div>
+<div class="meta">(July 30, 2019).</div>
+</div>
+<div class="entry">
+<div>John Hageman, <em>Legislator as landlord: Financial disclosures don't highlight state agency leases with North Dakota elected officials</em>, <a href="https://www.grandforksherald.com/news/legislator-as-landlord-financial-disclosures-dont-highlight-state-agency-leases-with-north-dakota-elected-officials" target="_blank" rel="noopener noreferrer">Grand Forks Herald</a></div>
+<div class="meta">(June 30, 2019).</div>
+</div>
+<div class="entry">
+<div>Mark Scolforo, <em>Pennsylvania Lawmakers Report $38K in Travel on Annual Ethics Disclosures</em>, <a href="https://www.inquirer.com/politics/pennsylvania/lawmakers-report-travel-and-gifts-on-annual-ethics-disclosures-20190527.html" target="_blank" rel="noopener noreferrer">The Philadelphia Inquirer</a></div>
+<div class="meta">(May 27, 2019).</div>
+</div>
+<div class="entry">
+<div>John Hageman, <em>"From nothing": North Dakota officials prepare to appoint ethics commission</em>, <a href="https://bismarcktribune.com/news/local/govt-and-politics/from-nothing-north-dakota-officials-prepare-to-appoint-ethics-commission/article_e39cd838-34b4-5392-ac02-793afb241935.html" target="_blank" rel="noopener noreferrer">Bismarck Tribune</a></div>
+<div class="meta">(May 17, 2019).</div>
+</div>
+<div class="entry">
+<div>Trevor Brown, <em>Donations to Lawmakers Keep Flowing Even As They Vote on Bills</em>, <a href="https://oklahomawatch.org/2019/05/06/cash-flow-continues-despite-officeholders-fundraising-restrictions/" target="_blank" rel="noopener noreferrer">Oklahoma Watch</a></div>
+<div class="meta">(May 6, 2019).</div>
+</div>
+<div class="entry">
+<div>Luke Ramseth and Geoff Pender, <em>No limits: Other states ban gifts to lawmakers. Why doesn’t Mississippi?</em>, <a href="https://www.clarionledger.com/story/news/politics/2019/04/10/mississippi-lobbying-laws-why-not-ban-gifts-lawmakers/3066519002/" target="_blank" rel="noopener noreferrer">Mississippi Clarion Ledger</a></div>
+<div class="meta">(April 10, 2019).</div>
+</div>
+<div class="entry">
+<div>Claire Withycombe and Aubrey Wieber, <em>From state to local: how government puts lobbyists to work</em>, <a href="https://www.salemreporter.com/2019/04/10/from-state-to-local-how-government-puts-lobbyists-to-work/" target="_blank" rel="noopener noreferrer">Salem Reporter</a></div>
+<div class="meta">(April 10, 2019).</div>
+</div>
+<div class="entry">
+<div>Claire Withycombe and Aubrey Wieber, <em>Spending tax dollars for more tax dollars</em>, <span>Mail Tribune</span></div>
+<div class="meta">(April 10, 2019).</div>
+</div>
+<div class="entry">
+<div>Andrew Oxford, <em>Governor signs bill for ethics commission</em>, <a href="https://www.santafenewmexican.com/news/local_news/governor-signs-bill-for-ethics-commission/article_e2d1d1cd-dedd-5b79-8e52-8aef37d4e87c.html" target="_blank" rel="noopener noreferrer">Santa Fe New Mexican</a></div>
+<div class="meta">(March 28, 2019).</div>
+</div>
+<div class="entry">
+<div>Lindsay VanHulle, <em>Michigan senator seeks to end 'revolving door' of lawmakers turned lobbyists</em>, <a href="https://www.bridgemi.com/michigan-government/michigan-senator-seeks-end-revolving-door-lawmakers-turned-lobbyists" target="_blank" rel="noopener noreferrer">Michigan Bridge</a></div>
+<div class="meta">(February 18, 2019).</div>
+</div>
+<div class="entry">
+<div>Editorial Board, <em>Not so fast on transition from legislator to lobbyist</em>, <a href="https://www.seattletimes.com/opinion/editorials/not-so-fast-on-transition-from-legislator-to-lobbyist/" target="_blank" rel="noopener noreferrer">The Seattle Times</a></div>
+<div class="meta">(December 26, 2018).</div>
+</div>
+<div class="entry">
+<div>Associated Press, <em>New Mexico voters approve constitutional amendment to form state ethics commission</em>, <a href="https://www.lcsun-news.com/story/news/politics/elections/2018/11/06/new-mexico-voters-approve-constitutional-amendment-ethics-commission/1914218002/" target="_blank" rel="noopener noreferrer">Las Cruces Sun News</a></div>
+<div class="meta">(November 6, 2018).</div>
+</div>
+<div class="entry">
+<div>Kevin Sack and Patricia Mazzei, <em>To Avoid Conflicts, Rick Scott Created a Blind Trust in Name Only</em>, <a href="https://www.nytimes.com/2018/10/17/us/rick-scott-conflicts-blind-trust.html" target="_blank" rel="noopener noreferrer">New York Times</a></div>
+<div class="meta">(October 17, 2018).</div>
+</div>
+<div class="entry">
+<div>Darren Fishell, <em>As governor, Moody would keep hold of rapidly growing business interests</em>, <a href="https://www.bangordailynews.com/2018/10/15/mainefocus/as-governor-moody-would-keep-hold-of-rapidly-growing-business-interests/" target="_blank" rel="noopener noreferrer">Bangor Daily News</a></div>
+<div class="meta">(October 15, 2018).</div>
+</div>
+<div class="entry">
+<div>Katie Bernard, <em>Kansas bill would limit lobbying by former state officials</em>, <a href="https://www.cjonline.com/story/news/politics/state/2018/01/29/kansas-bill-would-limit-lobbying-by-former-state-officials/15379213007/" target="_blank" rel="noopener noreferrer">The Topeka Capital-Journal</a></div>
+<div class="meta">(January 29, 2018).</div>
+</div>
+</section>
 
 
 

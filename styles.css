@@ -1,0 +1,79 @@
+
+@import url('https://fonts.googleapis.com/css2?family=Source+Sans+3:wght@400;600;700&family=Source+Serif+4:wght@400;600&display=swap');
+
+/* Page width + base typography */
+body{
+  font-family: "Source Serif 4", Georgia, serif;
+  font-size: 17px;
+  line-height: 1.65;
+  color: #1f2937;
+}
+
+.main-container{
+  max-width: 980px;
+}
+
+/* Headings */
+h1, h2, h3{
+  font-family: "Source Sans 3", system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+  letter-spacing: -0.01em;
+}
+
+h2{
+  margin-top: 1.75rem;
+  padding-top: 0.25rem;
+}
+
+/* Links */
+a{ color:#0b57d0; }
+a:hover{ text-decoration: underline; }
+
+/* Hero layout */
+.hero{
+  display: flex;
+  gap: 2rem;
+  align-items: flex-start;
+  margin: 1rem 0 1.5rem 0;
+}
+
+.headshot{
+  width: 240px;
+  height: auto;
+  border-radius: 14px;
+  box-shadow: 0 10px 24px rgba(0,0,0,0.12);
+}
+
+.caption{
+  font-size: 0.9rem;
+  color: #6b7280;
+  margin-top: 0.5rem;
+}
+
+.quicklinks{
+  margin-top: 0.75rem;
+  font-family: "Source Sans 3", system-ui, sans-serif;
+  font-size: 0.98rem;
+  color: #374151;
+}
+
+.quicklinks a{
+  font-weight: 600;
+}
+
+.tagline{
+  font-family: "Source Sans 3", system-ui, sans-serif;
+  font-weight: 600;
+  color: #4b5563;
+  margin-top: 0.25rem;
+}
+
+.lead{
+  font-size: 1.05rem;
+  margin-top: 0.75rem;
+}
+
+/* Mobile */
+@media (max-width: 768px){
+  .hero{ flex-direction: column; }
+  .headshot{ width: min(280px, 100%); }
+}

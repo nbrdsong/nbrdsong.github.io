@@ -13,10 +13,10 @@
 
 <title>Teaching and Presentations</title>
 
-<script src="site_libs/header-attrs-2.28/header-attrs.js"></script>
+<script src="site_libs/header-attrs-2.30/header-attrs.js"></script>
 <script src="site_libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
 <meta name="viewport" content="width=device-width, initial-scale=1" />
-<link href="site_libs/bootstrap-3.3.5/css/bootstrap.min.css" rel="stylesheet" />
+<link href="site_libs/bootstrap-3.3.5/css/flatly.min.css" rel="stylesheet" />
 <script src="site_libs/bootstrap-3.3.5/js/bootstrap.min.js"></script>
 <script src="site_libs/bootstrap-3.3.5/shim/html5shiv.min.js"></script>
 <script src="site_libs/bootstrap-3.3.5/shim/respond.min.js"></script>
@@ -58,6 +58,7 @@ if (window.hljs) {
 
 
 
+<link rel="stylesheet" href="styles.css" type="text/css" />
 
 
 
@@ -275,174 +276,332 @@ $(document).ready(function () {
 
 
 <style>
-@import url('https://fonts.googleapis.com/css2?family=Latin+Modern+Roman&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Latin+Modern+Roman&family=Source+Sans+3:wght@400;600;700&display=swap');
 
-body {
-  font-family: 'Latin Modern Roman', serif;
+:root{
+  --um-blue: #00274C;
+  --text: #111827;
+  --muted: #6b7280;
+  --border: rgba(17, 24, 39, 0.12);
 }
 
-h1, h2, h3, h4, h5, h6 {
-  font-family: 'Latin Modern Roman', serif;
+.main-container{
+  max-width: 980px;
 }
 
-/* Custom styles for the title */
-h1.title {
-  font-weight: normal;
+body{
+  font-family: 'Latin Modern Roman', Georgia, "Times New Roman", serif;
+  color: var(--text);
+}
+
+/* Title */
+h1.title{
+  font-family: "Source Sans 3", system-ui, -apple-system, "Segoe UI", Roboto, Arial, sans-serif;
+  font-weight: 700;
   text-align: center;
-  margin-bottom: 20px;
+  margin-bottom: 1.25rem;
 }
 
-/* Styles for professional colored boxes with lines under headings/subheadings */
-.heading-box {
-  padding: 20px;
-  margin-bottom: 20px;
-  border: 2px solid #333;
-  border-radius: 5px;
-  background-color: #f5f5f5;
-}
-.heading-box h2 {
-  margin-top: 0;
-  margin-bottom: 10px;
-  border-bottom: 2px solid #333;
+/* Section “cards” */
+.section-card{
+  background: #fff;
+  border: 1px solid var(--border);
+  border-left: 6px solid var(--um-blue);
+  border-radius: 14px;
+  padding: 1.15rem 1.25rem;
+  margin: 1.25rem 0;
+  box-shadow: 0 8px 22px rgba(0,0,0,0.06);
 }
 
-.subheading-box {
-  padding: 15px;
-  margin-bottom: 15px;
-  border: 1px solid #555;
-  border-radius: 5px;
-  background-color: #fafafa;
-}
-.subheading-box h3 {
-  margin-top: 0;
-  margin-bottom: 8px;
-  border-bottom: 1px solid #555;
+.section-card h2{
+  font-family: "Source Sans 3", system-ui, -apple-system, "Segoe UI", Roboto, Arial, sans-serif;
+  font-weight: 700;
+  font-size: 1.25rem;
+  margin: 0 0 0.85rem 0;
+  padding-bottom: 0.55rem;
+  border-bottom: 1px solid rgba(17,24,39,0.10);
 }
 
-.subheading-box hr, .heading-box hr {
-  border: 0;
-  height: 1px;
-  background: #ccc;
-  margin-bottom: 15px;
+/* Entries */
+.entry{
+  padding: 0.85rem 0;
+  border-top: 1px solid rgba(17,24,39,0.08);
+}
+.entry:first-child{
+  border-top: none;
+}
+
+.entry-header{
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.25rem 1rem;
+  align-items: baseline;
+}
+
+.entry-title{
+  font-family: "Source Sans 3", system-ui, -apple-system, "Segoe UI", Roboto, Arial, sans-serif;
+  font-weight: 600;
+}
+
+.entry-date{
+  margin-left: auto;
+  font-family: "Source Sans 3", system-ui, -apple-system, "Segoe UI", Roboto, Arial, sans-serif;
+  color: var(--muted);
+  font-size: 0.95rem;
+  white-space: nowrap;
+}
+
+.entry-meta{
+  color: var(--muted);
+  margin-top: 0.25rem;
+}
+
+.entry a{
+  color: #0b57d0;
+  text-decoration: none;
+}
+.entry a:hover{
+  text-decoration: underline;
 }
 </style>
-<div class="heading-box">
-<h2>
-Courses Taught as Graduate Student Instructor
-</h2>
-<div style="margin-bottom:5px;">
-<strong>Law and Policy</strong> (Political Science 432), Winter
-2025<br><span style="margin-left:20px; display:block;">University of
-Michigan</span>
+<section class="section-card">
+<h2>Courses Taught as Graduate Student Instructor</h2>
+<div class="entry">
+<div class="entry-header">
+<div class="entry-title">
+<strong>Law and Policy</strong>
+ (Political Science 432)
 </div>
-<div style="margin-bottom:5px;">
-<strong>Introduction to American Politics</strong> (Political Science
-111), Fall 2024<br><span
-style="margin-left:20px; display:block;">University of Michigan</span>
+<div class="entry-date">Winter 2025</div>
 </div>
-<div style="margin-bottom:5px;">
-<strong>Introduction to American Politics</strong> (Political Science
-111), Winter 2024<br><span
-style="margin-left:20px; display:block;">University of Michigan</span>
+<div class="entry-meta">University of Michigan</div>
 </div>
-<div style="margin-bottom:5px;">
-<strong>Introduction to American Politics</strong> (Political Science
-111), Fall 2023<br><span
-style="margin-left:20px; display:block;">University of Michigan</span>
+<div class="entry">
+<div class="entry-header">
+<div class="entry-title">
+<strong>Introduction to American Politics</strong>
+ (Political Science 111)
 </div>
-<div style="margin-bottom:5px;">
-<strong>Systematic Thinking: Problems of the Day</strong> (Public Policy
-201), Winter 2022<br><span
-style="margin-left:20px; display:block;">University of Michigan</span>
+<div class="entry-date">Fall 2024</div>
 </div>
-<div style="margin-bottom:5px;">
-<strong>Systematic Thinking: Problems of the Day</strong> (Public Policy
-201), Fall 2021<br><span
-style="margin-left:20px; display:block;">University of Michigan</span>
+<div class="entry-meta">University of Michigan</div>
 </div>
+<div class="entry">
+<div class="entry-header">
+<div class="entry-title">
+<strong>Introduction to American Politics</strong>
+ (Political Science 111)
 </div>
-<div class="heading-box">
-<h2>
-Courses Taught as Co-Instructor
-</h2>
-<div style="margin-bottom:5px;">
-<strong>Kansas Supreme Court Research Practicum</strong> (Law 840), Fall
-2016<br><span style="margin-left:20px; display:block;">University of
-Kansas</span>
+<div class="entry-date">Winter 2024</div>
 </div>
-<div style="margin-bottom:5px;">
-<strong>Advanced Legal Research</strong> (Law 856), Spring 2016<br><span
-style="margin-left:20px; display:block;">University of Kansas</span>
+<div class="entry-meta">University of Michigan</div>
 </div>
-<div style="margin-bottom:5px;">
-<strong>Kansas Supreme Court Research Clinic</strong> (Law 840), Fall
-2015<br><span style="margin-left:20px; display:block;">University of
-Kansas</span>
+<div class="entry">
+<div class="entry-header">
+<div class="entry-title">
+<strong>Introduction to American Politics</strong>
+ (Political Science 111)
 </div>
+<div class="entry-date">Fall 2023</div>
 </div>
-<div class="heading-box">
-<h2>
-Guest Lectures
-</h2>
-<div style="margin-bottom:5px;">
-<strong>U.S. Elections: Misinformation and Methods of Source
-Evaluation</strong>, October 2021
-(<a href='https://youtu.be/ouz6bPALJsA' target='_blank'>link to
-recording</a>)<br><span
-style="margin-left:20px; display:block;">University of Michigan,
-Systematic Thinking: Problems of the Day (Public Policy 201)</span>
+<div class="entry-meta">University of Michigan</div>
 </div>
-<div style="margin-bottom:5px;">
-<strong>Trending Topics in State Legislatures</strong>, October
-2019<br><span style="margin-left:20px; display:block;">University of
-Kansas, Public Policy Practicum (Law 976)</span>
+<div class="entry">
+<div class="entry-header">
+<div class="entry-title">
+<strong>Systematic Thinking: Problems of the Day</strong>
+ (Public Policy 201)
 </div>
-<div style="margin-bottom:5px;">
-<strong>Legislative Research</strong>, September 2018<br><span
-style="margin-left:20px; display:block;">University of Kansas, Public
-Policy Practicum (Law 976)</span>
+<div class="entry-date">Winter 2022</div>
 </div>
-<div style="margin-bottom:5px;">
-<strong>The Research Process</strong>, September 2017<br><span
-style="margin-left:20px; display:block;">University of Kansas, Public
-Policy Practicum (Law 976)</span>
+<div class="entry-meta">University of Michigan</div>
 </div>
-<div style="margin-bottom:5px;">
-<strong>The Research Process</strong>, September 2016<br><span
-style="margin-left:20px; display:block;">University of Kansas,
-Legislative Clinic (Law 976)</span>
+<div class="entry">
+<div class="entry-header">
+<div class="entry-title">
+<strong>Systematic Thinking: Problems of the Day</strong>
+ (Public Policy 201)
 </div>
+<div class="entry-date">Fall 2021</div>
 </div>
-<div class="heading-box">
-<h2>
-Conferences and Other Presentations
-</h2>
-<p><strong>Discussant</strong>. January 2025. <i>Presidential and
-Executive Politics: Leadership in the Presidency and the Vice
-Presidency</i>. Southern Political Science Association Annual
-Conference.</p>
-<p><strong>Participant</strong>. January 2025. <i>Presidential and
-Executive Politics: Presidential Appointments and the Unilateral
-Presidency</i>. Southern Political Science Association Annual
-Conference.</p>
-<p><strong>Presenter</strong>. July 2021. <i>Policy Primer for Local
-Government Officials - Landscape Analysis</i>. University of Michigan
-P3E Summer 2021 Student Showcase.</p>
-<p><strong>Presenter</strong>. June 2021. <i>Creating Change: Advocacy
-as a Municipal Official</i>. Detroit Equity Council Meeting.</p>
-<p><strong>Speaker</strong>. April 2021. <i>Understanding How Local
-Officials Evaluate Fiscal Health and Stress</i>. Western Social Sciences
-Association 63rd Annual Conference.</p>
-<p><strong>Expert Witness</strong>. January 2020. Illinois State
-Legislature Hearing of the Joint Commission on Ethics and Lobbying
-Reform.</p>
-<p><strong>Organizer and Presenter</strong>. August 2019. <i>Emerging
-Ethics Reforms</i>. National Conference of State Legislatures
-Legislative Summit.</p>
-<p><strong>Presenter</strong>. April 2018. <i>Transparency &amp;
-Accountability Laws in the U.S.</i>. U.S. Department of State African
-Emerging Leaders Delegation.</p>
+<div class="entry-meta">University of Michigan</div>
 </div>
+</section>
+<section class="section-card">
+<h2>Courses Taught as Co-Instructor</h2>
+<div class="entry">
+<div class="entry-header">
+<div class="entry-title">
+<strong>Kansas Supreme Court Research Practicum</strong>
+ (Law 840)
+</div>
+<div class="entry-date">Fall 2016</div>
+</div>
+<div class="entry-meta">University of Kansas</div>
+</div>
+<div class="entry">
+<div class="entry-header">
+<div class="entry-title">
+<strong>Advanced Legal Research</strong>
+ (Law 856)
+</div>
+<div class="entry-date">Spring 2016</div>
+</div>
+<div class="entry-meta">University of Kansas</div>
+</div>
+<div class="entry">
+<div class="entry-header">
+<div class="entry-title">
+<strong>Kansas Supreme Court Research Clinic</strong>
+ (Law 840)
+</div>
+<div class="entry-date">Fall 2015</div>
+</div>
+<div class="entry-meta">University of Kansas</div>
+</div>
+</section>
+<section class="section-card">
+<h2>Guest Lectures</h2>
+<div class="entry">
+<div class="entry-header">
+<div class="entry-title">
+<strong>U.S. Elections: Misinformation and Methods of Source Evaluation</strong>
+ (
+<a href="https://youtu.be/ouz6bPALJsA" target="_blank" rel="noopener noreferrer">recording</a>
+)
+</div>
+<div class="entry-date">October 2021</div>
+</div>
+<div class="entry-meta">University of Michigan, Systematic Thinking: Problems of the Day (Public Policy 201)</div>
+</div>
+<div class="entry">
+<div class="entry-header">
+<div class="entry-title">
+<strong>Trending Topics in State Legislatures</strong>
+</div>
+<div class="entry-date">October 2019</div>
+</div>
+<div class="entry-meta">University of Kansas, Public Policy Practicum (Law 976)</div>
+</div>
+<div class="entry">
+<div class="entry-header">
+<div class="entry-title">
+<strong>Legislative Research</strong>
+</div>
+<div class="entry-date">September 2018</div>
+</div>
+<div class="entry-meta">University of Kansas, Public Policy Practicum (Law 976)</div>
+</div>
+<div class="entry">
+<div class="entry-header">
+<div class="entry-title">
+<strong>The Research Process</strong>
+</div>
+<div class="entry-date">September 2017</div>
+</div>
+<div class="entry-meta">University of Kansas, Public Policy Practicum (Law 976)</div>
+</div>
+<div class="entry">
+<div class="entry-header">
+<div class="entry-title">
+<strong>The Research Process</strong>
+</div>
+<div class="entry-date">September 2016</div>
+</div>
+<div class="entry-meta">University of Kansas, Legislative Clinic (Law 976)</div>
+</div>
+</section>
+<section class="section-card">
+<h2>Conferences and Other Presentations</h2>
+<div class="entry">
+<div class="entry-header">
+<div class="entry-title">
+<strong>Discussant</strong>
+: 
+<em>Presidential and Executive Politics: Leadership in the Presidency and the Vice Presidency</em>
+</div>
+<div class="entry-date">January 2025</div>
+</div>
+<div class="entry-meta">Southern Political Science Association — Annual Conference</div>
+</div>
+<div class="entry">
+<div class="entry-header">
+<div class="entry-title">
+<strong>Participant</strong>
+: 
+<em>Presidential and Executive Politics: Presidential Appointments and the Unilateral Presidency</em>
+</div>
+<div class="entry-date">January 2025</div>
+</div>
+<div class="entry-meta">Southern Political Science Association — Annual Conference</div>
+</div>
+<div class="entry">
+<div class="entry-header">
+<div class="entry-title">
+<strong>Presenter</strong>
+: 
+<em>Policy Primer for Local Government Officials - Landscape Analysis</em>
+</div>
+<div class="entry-date">July 2021</div>
+</div>
+<div class="entry-meta">University of Michigan — P3E Summer 2021 Student Showcase</div>
+</div>
+<div class="entry">
+<div class="entry-header">
+<div class="entry-title">
+<strong>Presenter</strong>
+: 
+<em>Creating Change: Advocacy as a Municipal Official</em>
+</div>
+<div class="entry-date">June 2021</div>
+</div>
+<div class="entry-meta">Detroit Equity Council — Meeting</div>
+</div>
+<div class="entry">
+<div class="entry-header">
+<div class="entry-title">
+<strong>Speaker</strong>
+: 
+<em>Understanding How Local Officials Evaluate Fiscal Health and Stress</em>
+</div>
+<div class="entry-date">April 2021</div>
+</div>
+<div class="entry-meta">Western Social Sciences Association — 63rd Annual Conference</div>
+</div>
+<div class="entry">
+<div class="entry-header">
+<div class="entry-title">
+<strong>Expert Witness</strong>
+: 
+<span>Hearing of the Joint Commission on Ethics and Lobbying Reform</span>
+</div>
+<div class="entry-date">January 2020</div>
+</div>
+<div class="entry-meta">Illinois State Legislature</div>
+</div>
+<div class="entry">
+<div class="entry-header">
+<div class="entry-title">
+<strong>Organizer and Presenter</strong>
+: 
+<em>Emerging Ethics Reforms</em>
+</div>
+<div class="entry-date">August 2019</div>
+</div>
+<div class="entry-meta">National Conference of State Legislatures — Legislative Summit</div>
+</div>
+<div class="entry">
+<div class="entry-header">
+<div class="entry-title">
+<strong>Presenter</strong>
+: 
+<em>Transparency &amp; Accountability Laws in the U.S.</em>
+</div>
+<div class="entry-date">April 2018</div>
+</div>
+<div class="entry-meta">U.S. Department of State — African Emerging Leaders Delegation</div>
+</div>
+</section>
 
 
 
