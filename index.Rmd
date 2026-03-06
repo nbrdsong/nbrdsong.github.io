@@ -1,0 +1,108 @@
+---
+title: "About me"
+---
+
+<style>
+/* Fonts (keep your Latin Modern feel, but add a clean sans for headings) */
+@import url('https://fonts.googleapis.com/css2?family=Latin+Modern+Roman&family=Source+Sans+3:wght@400;600;700&display=swap');
+
+:root{
+  --text: #111827;
+  --muted: #6b7280;
+  --link: #0b57d0;
+}
+
+/* Page width + base typography */
+.main-container{
+  max-width: 980px;
+}
+
+body{
+  font-family: "Latin Modern Roman", Georgia, "Times New Roman", serif;
+  font-size: 17px;
+  line-height: 1.7;
+  color: var(--text);
+}
+
+/* Headings */
+h1, h2, h3, h4, h5, h6{
+  font-family: "Source Sans 3", system-ui, -apple-system, "Segoe UI", Roboto, Arial, sans-serif;
+  letter-spacing: -0.01em;
+}
+
+h1.title{
+  text-align: left;      /* change to center if you prefer */
+  font-weight: 700;
+  margin-bottom: 1.25rem;
+}
+
+p{
+  margin: 0 0 1rem;
+}
+
+a{ color: var(--link); }
+a:hover{ text-decoration: underline; }
+
+/* Headshot block (responsive, no 50% float) */
+figure.headshot{
+  float: left;
+  width: 260px;
+  max-width: 40%;
+  margin: 0.25rem 1.5rem 0.75rem 0;
+}
+figure.headshot img{
+  display: block;
+  width: 100%;
+  height: auto;
+  border-radius: 14px;
+
+  /* this prevents weird edge/halo effects */
+  background: #fff;
+
+  /* crisp, professional edge */
+  border: 1px solid rgba(17, 24, 39, 0.12);
+
+  /* softer shadow (less “outlined”) */
+  box-shadow: 0 8px 18px rgba(17, 24, 39, 0.10);
+}
+
+figure.headshot figcaption{
+  margin-top: 0.5rem;
+  font-size: 0.9rem;
+  line-height: 1.35;
+  color: var(--muted);
+}
+
+@media (max-width: 768px){
+  figure.headshot{
+    float: none;
+    width: min(320px, 100%);
+    max-width: 100%;
+    margin: 0 auto 1rem auto;
+  }
+}
+</style>
+
+<figure class="headshot">
+  <img src="images/cropped.jpg"
+       alt="Nicholas Birdsong speaking at a public event (photo credit: NPR Illinois, 2020)" />
+  <figcaption>
+    Image credit: BRIAN MACKEY /
+    <a href="https://www.nprillinois.org/post/lawmakers-consider-new-measures-ethics-violations-government#stream/0">NPR Illinois</a>
+    (2020)
+  </figcaption>
+</figure>
+
+I am a joint PhD candidate in [Political Science](https://lsa.umich.edu/polisci) and [Public Policy](https://fordschool.umich.edu) and a [Rackham Merit Fellow](https://rackham.umich.edu/funding/rackham-merit-fellowship-program/) at the University of Michigan. My research interests center on interest groups, political access, and how democratic institutions respond to organized interests. Although currently on fellowship, I most recently served as a graduate student instructor for PolSci 432: Law and Public Policy. I have also occasionally worked as an independent consultant.  
+
+In 2022, I earned my Master of Public Policy from the [Gerald R. Ford School of Public Policy](http://fordschool.umich.edu/) with a [concentration in analysis methods](https://fordschool.umich.edu/mpp-mpa/mpp/concentrations). During my time at Michigan, I served as Editor in Chief of the [Michigan Journal of Public Affairs](http://mjpa.umich.edu/) and as a Graduate Student Instructor for [PubPol 201: Systematic Thinking](pdfs/PP 201 - Systematic Thinking syllabus.pdf). I also worked as a Policy Analyst for the Fiscal Health Project at the [Center for Local, State, and Urban Policy](http://closup.umich.edu/), interned with [CARE](https://www.care.org/), and participated in a project through the [Program in Practical Policy Engagement](http://practicalpolicy.umich.edu/) for the City of Detroit. I additionally served as Visiting Editor for the 32nd edition (2021) of the [Princeton Journal of Public and International Affairs](https://jpia.princeton.edu/).  
+
+Before returning to academic life, I served as a Policy Specialist with the [National Conference of State Legislatures](http://www.ncsl.org), Center for Ethics in Government and Center for Legislative Strengthening. My research encompassed legislative institutions across all U.S. states and territories. In ethics, I covered conflicts of interest, financial disclosures, lobbyist regulation, and ethics oversight. My work on legislative institutions addressed a wide range of topics, including separation of powers, legislative procedure, legislative HR policies, and First Amendment issues. I provided non-partisan trainings, testimony, and technical assistance at the request of NCSL constituents—state legislators and legislative staff.  
+
+My work often crossed disciplinary lines, driven by the needs of public officials, state employees, industry contacts, academics, journalists, and the public. I regularly coordinated with NCSL’s Elections and Redistricting team and addressed questions related to sexual harassment and civility. Many of these projects required engaging legal issues at the intersection of ethics, privacy, speech, and due process; my publications also incorporated research in moral philosophy and psychology. I administered Westlaw account access and managed Continuing Legal Education (CLE) course compliance and accreditation for NCSL’s annual conference, which hosted thousands of state government professionals.  
+
+Prior to NCSL, I served as Faculty Services Senior Researcher at the [University of Kansas School of Law](https://law.ku.edu), where I taught courses on legal research and appellate advocacy while providing research assistance to faculty and university administration. My work spanned environmental law, international law, academic admissions policy, transactional law, business organizations, campus assault, diverse student success initiatives, legal pedagogy, criminal law, and more.  
+
+I hold a Master of Public Policy (University of Michigan, 2022), a Juris Doctor with an advocacy certificate (University of Kansas, 2015), and a B.A. in Political Science ([Washburn University](https://www.washburn.edu/index.html), 2012). 
+
+Thank you for visiting my website.
