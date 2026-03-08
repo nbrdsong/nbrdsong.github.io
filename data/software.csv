@@ -1,4 +1,5 @@
 ﻿name,year,description,language,github,website,docs,doi
 statelegislators,2026,extracts state legislator names from text data,R,https://github.com/yourname/mypackage,,,
 rnotify,2025,RStudio addin that sends MacOS notifications when code stops running,R/Swift,https://github.com/nbrdsong/rnotify,,,
-textextract,2026,extracts text data from images/pdfs using both OCR and local LLM/genAI visual model,R/Python,https://github.com/nbrdsong/textextract,,,
+
+LLMTextExtract,2026,extracts text data from images/pdfs using both OCR and local LLM/genAI visual model,R/Python,https://github.com/nbrdsong/textextract,,,
