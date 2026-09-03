@@ -1,8 +1,10 @@
-﻿role,occasion,speak.titl,yr,date.season,month,day,host.inst,is.course,is.grad,course.no,dept,is.crosslist,alt.course.no,alt.dept,is.undergrad,record.link,info.link
+role,occasion,speak.titl,yr,date.season,month,day,host.inst,is.course,is.grad,course.no,dept,is.crosslist,alt.course.no,alt.dept,is.undergrad,record.link,info.link
 Graduate Student Instructor,Introduction to American Politics,,2024,Winter,,,University of Michigan,1,0,111,Political Science,0,,,1,,
 Graduate Student Instructor,Introduction to American Politics,,2023,Fall,,,University of Michigan,1,0,111,Political Science,0,,,1,,
 Graduate Student Instructor,Introduction to American Politics,,2024,Fall,,,University of Michigan,1,0,111,Political Science,0,,,1,,
+Graduate Student Instructor,Systematic Thinking: Problems of the Day,,2026,Fall,,,University of Michigan,1,0,201,Public Policy,1,325,Political Science,1,,
 Graduate Student Instructor,Systematic Thinking: Problems of the Day,,2022,Winter,,,University of Michigan,1,0,201,Public Policy,1,325,Political Science,1,,
+Graduate Student Instructor,Systematic Thinking: Problems of the Day,,2024,Fall,,,University of Michigan,1,0,201,Public Policy,1,325,Political Science,1,,
 Graduate Student Instructor,Systematic Thinking: Problems of the Day,,2021,Fall,,,University of Michigan,1,0,201,Public Policy,1,325,Political Science,1,,
 Guest Lecturer,Systematic Thinking: Problems of the Day,U.S. Elections: Misinformation and Methods of Source Evaluation,2021,,October,13,University of Michigan,1,0,201,Public Policy,1,325,Political Science,1,https://youtu.be/ouz6bPALJsA,
 Presenter,P3E Summer 2021 Student Showcase,Policy Primer for Local Government Officials - Landscape Analysis,2021,,July,7,University of Michigan,0,,,,,,,,,
