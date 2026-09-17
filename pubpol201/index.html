@@ -1,0 +1,884 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Central Bank of Weillland</title>
+<style>
+  :root{--bg:#0B1622;--fg:#E6EDF3;--dim:#BCCAD8;--faint:#8296A8;--gold:#FFCB05;
+        --blue:#6FB3F2;--green:#4FB477;--red:#E0745C;--amber:#E8A33D;
+        --panel:#121F2E;--line:#22374d}
+  *{box-sizing:border-box}
+  body{margin:0 auto;max-width:780px;padding:18px;background:var(--bg);color:var(--fg);
+       font:16px/1.55 -apple-system,BlinkMacSystemFont,"Segoe UI",Helvetica,Arial,sans-serif}
+  h1{font-size:1.3rem;color:var(--gold);border-bottom:4px solid var(--gold);
+     display:inline-block;padding-bottom:.1em;margin:0 0 .5em}
+  h2{font-size:1.08rem;color:var(--gold);margin:0 0 .4em}
+  h3{font-size:.97rem;color:var(--gold);margin:1.4em 0 .35em}
+  .panel{background:var(--panel);border:1px solid var(--line);border-radius:10px;
+         padding:16px;margin:12px 0}
+  .hidden{display:none !important}
+  .note{color:var(--dim);font-size:.85rem}
+  .tiny{color:var(--faint);font-size:.78rem}
+  .body{color:#D4DFEA;font-size:.94rem}
+  .warn{color:var(--amber)}
+  .prompt{border-left:3px solid var(--blue);padding:10px 13px;margin:14px 0;
+          color:#D4DFEA;font-size:.9rem;background:#0d1a27}
+  input[type=text]{padding:9px;background:#08111b;border:1px solid var(--line);
+       border-radius:6px;color:var(--fg);font-family:inherit;font-size:.95rem}
+  button{font-family:inherit;cursor:pointer}
+  .go{background:var(--gold);color:#0B1622;border:none;border-radius:8px;
+      padding:11px 20px;font-size:1rem;font-weight:700}
+  .go:disabled{opacity:.3;cursor:default}
+  .alt{background:transparent;color:var(--blue);border:1px solid var(--line)}
+  .big{display:block;width:100%;text-align:left;background:transparent;color:var(--fg);
+       border:1px solid var(--line);border-radius:8px;padding:12px 14px;margin:8px 0;font-size:.97rem}
+  .big:hover{border-color:var(--gold)}
+  .big b{color:var(--fg)} .big .sub{display:block;color:var(--dim);font-size:.87rem;margin-top:3px}
+  .big.inforce{border-color:var(--gold)}
+  .big.inforce b:after{content:" \00b7 in force";color:var(--gold);font-size:.78rem;font-weight:600}
+
+  .dash{display:flex;gap:16px;flex-wrap:wrap}
+  .stat{flex:1;min-width:104px}
+  .stat .label{color:var(--faint);font-size:.66rem;letter-spacing:.09em;text-transform:uppercase}
+  .stat .val{font-size:1.4rem;font-weight:700;font-variant-numeric:tabular-nums}
+  .gdp{color:var(--gold)} .up{color:var(--green)} .down{color:var(--red)}
+
+  ol.opts{margin:.4em 0 0;padding-left:1.4em}
+  ol.opts li{margin:.55em 0}
+  ol.opts .lab{font-weight:700}
+  ol.opts .cur{color:var(--gold);font-size:.78rem;font-weight:600}
+  ol.opts .sub{display:block;color:var(--dim);font-size:.87rem}
+
+  table.vote{width:100%;border-collapse:collapse;margin-top:10px;font-size:.86rem}
+  table.vote th,table.vote td{border-bottom:1px solid var(--line);padding:7px 5px;text-align:center}
+  table.vote th:first-child,table.vote td:first-child{text-align:left;color:var(--dim)}
+  table.vote th{color:var(--faint);font-size:.7rem;text-transform:uppercase;letter-spacing:.05em}
+  table.vote input{width:19px;height:19px;accent-color:var(--gold)}
+
+  .result{margin-top:14px;padding-top:12px;border-top:1px solid var(--line)}
+  .enacted{font-size:1.05rem;font-weight:700;color:var(--gold)}
+
+  #dieWrap{text-align:center;padding:4px 0}
+  #die{font-size:3.4rem;font-weight:700;color:var(--gold);font-variant-numeric:tabular-nums}
+  #dieLabel{color:var(--faint);font-size:.68rem;letter-spacing:.09em;text-transform:uppercase}
+  .verdict{font-size:1.15rem;font-weight:700;margin-top:.2em}
+  .narr{color:var(--dim);margin-top:.4em}
+
+  table.rec{width:100%;border-collapse:collapse;font-size:.82rem}
+  table.rec th,table.rec td{text-align:left;padding:5px 7px;border-bottom:1px solid var(--line)}
+  table.rec th{color:var(--faint);font-size:.66rem;text-transform:uppercase}
+  table.rec td.num{text-align:right;font-variant-numeric:tabular-nums}
+  code#runcode{display:block;background:#08111b;border:1px solid var(--line);border-radius:6px;
+    padding:10px;color:var(--blue);font-size:.72rem;word-break:break-all;margin:8px 0;
+    max-height:180px;overflow:auto}
+</style>
+</head>
+<body>
+<h1>Central Bank of Weillland</h1>
+
+<!-- NAMES -->
+<section id="scNames" class="panel">
+  <h2>Board of Governors</h2>
+  <p>You set the rules for the housing and banking system of a $14 trillion economy.</p>
+
+  <div class="prompt" style="margin:16px 0">
+    <b style="color:var(--gold)">Learning objectives</b>
+    <ul class="tight" style="margin-top:.5em">
+      <li>Judging whether a market is failing, and in what way</li>
+      <li>Deciding when government should intervene, and weighing what intervention costs
+          against what it prevents</li>
+      <li>Making policy without knowing how it will turn out, and living with the result</li>
+    </ul>
+  </div>
+
+  <h3 style="margin-top:1.3em">Who is on the Board?</h3>
+  <div id="nameRows" style="margin:10px 0 14px"></div>
+  <button class="go alt" onclick="addNameRow()" style="padding:7px 14px;font-size:.85rem">Add another</button>
+  <div style="margin-top:18px"><button class="go" onclick="toChair()">Continue</button></div>
+</section>
+
+<!-- CHAIR -->
+<section id="scChair" class="panel hidden">
+  <h2>Choose a Chair</h2>
+  <p class="note">Every policy is decided by a vote of the Board. If a vote is tied, the Chair decides.</p>
+  <div id="chairBtns" style="margin-top:12px"></div>
+</section>
+
+<!-- BRIEFING -->
+<section id="scBrief" class="panel hidden">
+  <h2>Where things stand</h2>
+  <p class="body">The economy is strong. Home prices have risen every quarter for a decade.
+  Record home ownership, booming construction, low unemployment.</p>
+  <p class="body">Despite this, a few economists have raised concerns about potential market
+  failures.</p>
+  <p class="body">You have to choose whether to intervene, and if so, how.</p>
+  <p class="body">The Bank's mandate is <b>2% real growth per year</b>. You will be judged
+  against it.</p>
+
+  <div class="prompt" style="margin-top:20px">
+    Each quarter the Board votes on four policies. Changing a policy imposes an economic cost of
+    <b>$50B</b> per policy changed. Then the quarter plays out probabilistically, on a d20.
+  </div>
+  <button class="go" onclick="beginQuarter()">Take office</button>
+</section>
+
+<!-- DASH -->
+<div id="dash" class="panel hidden">
+  <div class="dash">
+    <div class="stat"><div class="label">Quarter</div><div class="val" id="dQ">1</div></div>
+    <div class="stat"><div class="label">GDP ($B)</div><div class="val gdp" id="dGdp">14,000</div></div>
+    <div class="stat"><div class="label">Last quarter</div><div class="val" id="dDelta" style="font-size:1.05rem">&mdash;</div></div>
+    <div class="stat"><div class="label">Vs mandate</div><div class="val" id="dMandate" style="font-size:1.05rem">&mdash;</div></div>
+    <div class="stat"><div class="label">Policy cost</div><div class="val" id="dCost" style="font-size:1.05rem">$0B</div></div>
+  </div>
+  <div id="dDamage" class="note warn hidden" style="margin-top:8px"></div>
+</div>
+
+<!-- AGENDA (quarters 2+) -->
+<section id="scAgenda" class="panel hidden">
+  <h2 id="agTitle"></h2>
+  <div id="agCurrent" class="note"></div>
+  <div style="margin-top:16px">
+    <button class="go" onclick="resolveQuarter()">Enact and roll the quarter</button>
+    <button class="go alt" onclick="showPicker()" style="margin-left:6px">Change another policy</button>
+  </div>
+  <div id="agPicker" class="hidden" style="margin-top:16px"></div>
+</section>
+
+<!-- POLICY VOTE -->
+<section id="scPolicy" class="panel hidden">
+  <div id="pStrip" class="hidden" style="font-size:.85rem;color:var(--gold);
+       border-bottom:1px solid var(--line);padding-bottom:8px;margin-bottom:12px"></div>
+  <h2 id="pTitle"></h2>
+  <p id="pDesc" class="body"></p>
+  <ol class="opts" id="pOpts"></ol>
+  <div class="prompt" id="pPrompt"></div>
+
+  <div id="pVoteBox">
+    <div id="pGrid"></div>
+    <div style="margin-top:14px">
+      <button class="go" id="pRecord" onclick="recordVote()" disabled>Record the vote</button>
+    </div>
+  </div>
+
+</section>
+
+<!-- RESOLVE -->
+<section id="scResolve" class="panel hidden">
+  <div id="dieWrap">
+    <div id="dieLabel">d20</div><div id="die">&mdash;</div>
+    <div class="verdict" id="verdict"></div><div class="narr" id="narrative"></div>
+  </div>
+  <div id="crashWrap" class="hidden" style="margin-top:16px">
+    <h2>The banks are failing</h2>
+    <p class="note">Two of Weillland's largest banks cannot open on Monday without your help.
+    Credit has frozen for everyone, including firms that never touched a mortgage. The Board must vote.</p>
+    <ol class="opts" id="cOpts"></ol>
+    <div id="cGrid"></div>
+    <div style="margin-top:14px">
+      <button class="go" id="cRecord" onclick="recordCrashVote()" disabled>Record the vote</button>
+    </div>
+  </div>
+  <div id="resNext" style="margin-top:14px">
+    <button class="go" onclick="maintainAndRoll()">Maintain all policy</button>
+    <button class="go alt" onclick="changeAndPick()" style="margin-left:6px">Change a policy</button>
+  </div>
+  <div id="resFinal" class="hidden" style="margin-top:14px">
+    <button class="go" onclick="finish()">Final report</button>
+  </div>
+</section>
+
+<!-- RECORD -->
+<div id="scRecord" class="panel hidden">
+  <h2>Record</h2>
+  <table class="rec"><thead><tr><th>Qtr</th><th>Changed</th><th class="num">Roll</th>
+    <th>Outcome</th><th class="num">GDP</th></tr></thead><tbody id="recBody"></tbody></table>
+</div>
+
+<!-- END -->
+<section id="scEnd" class="hidden">
+  <div class="panel">
+    <h2>Final report</h2>
+    <div class="dash">
+      <div class="stat"><div class="label">Final GDP ($B)</div><div class="val gdp" id="fGdp"></div></div>
+      <div class="stat"><div class="label">Change from start</div><div class="val" id="fDelta" style="font-size:1.25rem"></div></div>
+    </div>
+    <div id="fNotes" style="margin-top:14px;font-size:.92rem"></div>
+  </div>
+
+  <div class="panel">
+    <h2>The next ten years</h2>
+    <p class="body">If Weillland kept the policies you left in place, here is what the next
+    forty quarters look like across a thousand runs of the same die.</p>
+    <div class="dash" style="margin-top:12px">
+      <div class="stat"><div class="label">Crashes over the decade</div><div class="val" id="pCount"></div></div>
+      <div class="stat"><div class="label">Corrections, no bank failures</div><div class="val" id="pCorr"></div></div>
+      <div class="stat"><div class="label">GDP in ten years, typical</div><div class="val gdp" id="pMedian"></div></div>
+    </div>
+    <div class="note" id="pCrash" style="margin-top:8px"></div>
+    <div class="note" id="pRange" style="margin-top:8px"></div>
+    <div class="note" id="pVsMandate" style="margin-top:4px"></div>
+  </div>
+
+  <div class="panel">
+    <h2>What people will say</h2>
+    <div id="fPolitics" class="body"></div>
+  </div>
+
+  <div class="panel">
+    <h2>Beyond the number</h2>
+    <div class="body">
+      The mandate measured growth. It did not measure who received it, who carried the losses
+      when things broke, or whether the rules you set were fair to the people they applied to.
+      <br><br>
+      A utilitarian adds it all up and asks whether the total went up. A Rawlsian asks how the
+      worst-off did, and whether they would have agreed to these rules without knowing they would
+      be the worst-off. A Nozickian asks whether anyone's rights were violated along the way, and
+      would count your regulations among the violations.
+      <br><br>
+      Some of those positions say a slower economy can be the right answer. Some say the crash is
+      not the worst thing that can happen. The number above is one input to that argument, not
+      the argument.
+    </div>
+  </div>
+
+  <div class="panel" style="text-align:center">
+    <a id="formLink" target="_blank" rel="noopener" class="go"
+       style="display:inline-block;text-decoration:none;padding:13px 32px;border-radius:8px;
+              font-size:1.05rem">Submit</a>
+    <div id="formHint" class="tiny hidden" style="margin-top:10px"></div>
+    <code id="runcode" class="hidden"></code>
+  </div>
+</section>
+
+<script>
+/* ================= CONFIG ================= */
+const CONFIG = {
+  QUARTERS:10, START_GDP:14000, CHANGE_COST:50,
+  MANDATE_Q:0.00495,          // 2% real growth per year
+
+  // --- Google Form submission (see instructions at the bottom of this file) ---
+  FORM_URL:   "https://docs.google.com/forms/d/e/1FAIpQLSchqsb2MRhPjwGsXsiKYSm2YI5ne0Lnk2h2nSL-18xgnXV-nQ/viewform",
+  FIELD_CODE: "entry.853704494",
+  FIELD_NAMES:""              // optional second field
+};
+
+const LEVERS = [
+ {key:"LOAN", name:"Loan retention",
+  desc:"Banks issue mortgages (home loans) and sell them to investment firms. These firms combine thousands of mortgages into a bundle and sell shares of the bundle to pension funds, insurers and other banks. The bank that wrote the loan (the originator) collects a fee at closing and has no further connection to it. This policy decides whether an originating bank must keep part of the loans it issues.",
+  prompt:"Discuss. Is this a market failure? How? Even if it is, is government intervention justified? If so, what type of intervention balances freedom of exchange and market efficiency against securing against failure?",
+  start:1,
+  rungs:[
+   {label:"No requirement, and states may not add one",
+    sub:"Banks sell the entire loan. National rules override state governments, so no state may impose stricter lending standards.",
+    risk:50, mag:0, growth:0.24},
+   {label:"No requirement",
+    sub:"Banks may sell the entire loan within weeks of writing it.",
+    risk:45, mag:0, growth:0.20},
+   {label:"Banks keep 5%",
+    sub:"A bank must retain one twentieth of every loan it sells.",
+    risk:12, mag:0, growth:0.17},
+   {label:"Banks keep 20%",
+    sub:"A bank must retain one fifth. Fewer loans get written, particularly to weaker borrowers.",
+    risk:8,  mag:0, growth:0.12},
+   {label:"Loans may not be sold at all",
+    sub:"Every bank holds every mortgage it writes for the full term. The bundle market closes.",
+    risk:5,  mag:0, growth:0.05}
+  ]},
+ {key:"RATE", name:"Bundle ratings",
+  desc:"Buyers of these bundles of mortgage debts receive summary statistics about the debts within them. Examining the individual loans is possible in principle. Nobody does it. Buyers rely on safety grades issued by three private rating firms, which are paid by the companies assembling the bundles. A firm that grades a bundle harshly can lose that client to a competitor. Nearly every bundle currently carries the top grade.",
+  prompt:"Discuss. Is this a market failure? How? Even if it is, is government intervention justified? If so, what type of intervention balances freedom of exchange and market efficiency against securing against failure?",
+  start:1,
+  rungs:[
+   {label:"Issuers grade their own bundles",
+    sub:"The firm assembling a bundle states its own safety grade. No outside assessment.",
+    risk:50, mag:0, growth:0.24},
+   {label:"Sellers pay the rating firms",
+    sub:"The firm assembling a bundle chooses and pays a rating agency.",
+    risk:45, mag:0, growth:0.20},
+   {label:"Buyers and sellers split the fee",
+    sub:"Both sides contribute to the rating fee. The seller still chooses the rater.",
+    risk:35, mag:0, growth:0.18},
+   {label:"A shared fund pays the raters",
+    sub:"Every bundle sold pays into a common fund. Raters are paid from that fund, so no rater is paid by the firm whose bundle it is grading.",
+    risk:12, mag:0, growth:0.15},
+   {label:"A public agency issues all grades",
+    sub:"The government grades every bundle. Slower, and the private rating firms close.",
+    risk:8,  mag:0, growth:0.09}
+  ]},
+ {key:"LEV", name:"Bank borrowing limits",
+  desc:"When a bank buys something, it pays with a mix of its own money and money it has borrowed. A bank buys mortgage bundles, pledges those same bundles as collateral to borrow against, and uses what it borrows to buy more bundles. For every dollar of their own money, large banks in Weillland now carry about $30 of borrowed money, and they are not required to disclose how much of it sits in bundles.",
+  prompt:"Discuss. Is this a market failure? How? Even if it is, is government intervention justified? If so, what type of intervention balances freedom of exchange and market efficiency against securing against failure?",
+  start:0,
+  rungs:[
+   {label:"No limit",
+    sub:"No ceiling is set. Large banks currently sit near 30:1, and may go higher.",
+    risk:0, mag:45, growth:0.20},
+   {label:"Capped at 20:1",
+    sub:"Large banks must bring borrowing down from where they sit now. A real constraint, but a loose one.",
+    risk:0, mag:32, growth:0.19},
+   {label:"Capped at 10:1",
+    sub:"Banks must borrow less, or put in more of their own money. Credit tightens.",
+    risk:0, mag:18, growth:0.16},
+   {label:"Capped at 6:1",
+    sub:"Lending shrinks noticeably across the whole economy.",
+    risk:0, mag:10, growth:0.11},
+   {label:"Capped at 1:1",
+    sub:"Banks may only lend money they actually hold. Borrowing in order to lend ends.",
+    risk:0, mag:4,  growth:0.05}
+  ]},
+ {key:"CAP", name:"Capital requirements",
+  desc:"A borrowing limit caps how much a bank may borrow in total. Capital requirements work differently. They set how much of each asset a bank must pay for with its own money, and that amount depends on how risky the asset is. A safe asset needs little of the bank's own money behind it. A risky one needs a lot. The question is who decides which assets are safe.",
+  prompt:"Discuss. Is this a market failure? How? Even if it is, is government intervention justified? If so, what type of intervention balances freedom of exchange and market efficiency against securing against failure?",
+  start:1,
+  rungs:[
+   {label:"The bank decides for itself",
+    sub:"Each bank estimates how risky its own assets are and sets its own requirements.",
+    risk:0, mag:45, growth:0.24},
+   {label:"The rating firms decide",
+    sub:"The grade on the asset sets the requirement. A top-graded bundle needs almost none of the bank's own money behind it.",
+    risk:0, mag:32, growth:0.20},
+   {label:"The rating firms decide, but you can overrule them",
+    sub:"Grades set the default. The Central Bank may demand more for any asset it thinks is graded too generously.",
+    risk:0, mag:28, growth:0.18},
+   {label:"You decide",
+    sub:"The Central Bank sets the requirement for every kind of asset. The grades are ignored.",
+    risk:0, mag:14, growth:0.14},
+   {label:"You decide, and bundles get the maximum",
+    sub:"As above, and any mortgage bundle must be paid for entirely with the bank's own money.",
+    risk:0, mag:6,  growth:0.08}
+  ]}
+];
+
+const CRASH_OPTIONS = [
+ {key:"BAIL", label:"Bail out the banks",
+  sub:"Public money covers the losses. Recovery is fast and there is no recession. Costs the public about half of what was lost, more each time, and every bank now knows what happens next time.",
+  recover:0.75, damage:0, fiscalShare:0.50, riskAdd:28, magAdd:0},
+ {key:"FAIL", label:"Let them fail",
+  sub:"No public money. The full loss stands and the recession runs its course. The banks that survive will be more careful, for a while.",
+  recover:0, damage:null, fiscal:0, riskAdd:0, magAdd:0, cautious:4},
+ {key:"MERGE", label:"Force mergers",
+  sub:"Broker the sale of failing banks to healthy ones. Cheaper than a bailout. Weillland ends up with fewer, larger banks.",
+  recover:0.40, damage:null, fiscal:40, riskAdd:0, magAdd:18},
+ {key:"GUAR", label:"Guarantee deposits only",
+  sub:"Savers are protected, shareholders are not. Cheap and popular. Does nothing about the credit freeze.",
+  recover:0.15, damage:null, fiscal:30, riskAdd:5, magAdd:0}
+];
+
+const mandateAt = q => CONFIG.START_GDP * Math.pow(1+CONFIG.MANDATE_Q, q);
+// downturn faces on the d20, by [loan retention rung][ratings rung].
+// specified directly so every move has the same effect wherever you start.
+const FACES = [
+  //  R1  R2  R3  R4  R5
+  [   6,  4,  4,  3,  3 ],   // loan 1: no requirement + preemption
+  [   4,  3,  3,  2,  2 ],   // loan 2: no requirement (status quo)
+  [   3,  2,  2,  1,  1 ],   // loan 3: keep 5%
+  [   3,  2,  2,  1,  1 ],   // loan 4: keep 20%
+  [   3,  2,  2,  1,  1 ]    // loan 5: no sales
+];
+const cautious = () => S.cautiousUntil && S.q < S.cautiousUntil;
+const cutoff = () => Math.max(1, Math.min(6,
+  FACES[S.pos[0]][S.pos[1]] + (S.riskMod||0) + (cautious() ? -1 : 0)));
+function effect(m){
+  // continuous in magnitude: a roll of 1 at full magnitude (90) is -2.5%
+  const pct    = -0.028 * (m/100);
+  const damage = Math.round(m/25);
+  const name   = m>=40 ? "Crash" : m>=20 ? "Correction" : "Dip";
+  return {pct, damage, name, crash: m>=40};
+}
+
+/* ================= STATE ================= */
+let S = {};
+const $  = id => document.getElementById(id);
+const show = (id,on=true) => $(id).classList.toggle("hidden", !on);
+const fmt = n => Math.round(n).toLocaleString("en-US");
+
+function addNameRow(){
+  const r = document.createElement("div");
+  r.style.cssText = "display:flex;gap:8px;margin-bottom:8px";
+  r.innerHTML = `<input type="text" class="fn" placeholder="First name" style="flex:1">
+                 <input type="text" class="ln" placeholder="Last name" style="flex:1">`;
+  $("nameRows").appendChild(r);
+}
+window.addEventListener("DOMContentLoaded", ()=>{ for(let i=0;i<4;i++) addNameRow(); });
+
+function toChair(){
+  const names=[];
+  document.querySelectorAll("#nameRows > div").forEach(r=>{
+    const f=r.querySelector(".fn").value.trim(), l=r.querySelector(".ln").value.trim();
+    if(f||l) names.push((f+" "+l).trim());
+  });
+  if(!names.length){ alert("Enter at least one name."); return; }
+  S={names, chair:0, q:1, gdp:CONFIG.START_GDP, pos:LEVERS.map(l=>l.start),
+     damage:0, riskMod:0, magMod:0, history:[], votes:[], bailed:false};
+  const box=$("chairBtns"); box.innerHTML="";
+  names.forEach((n,i)=>{
+    const b=document.createElement("button");
+    b.className="big"; b.innerHTML=`<b>${n}</b>`;
+    b.onclick=()=>{ S.chair=i; show("scChair",false); show("scBrief",true); };
+    box.appendChild(b);
+  });
+  show("scNames",false); show("scChair",true);
+}
+
+const riskTotal = () => Math.max(0, S.riskMod +
+  LEVERS.reduce((a,l,i)=>a + l.rungs[S.pos[i]].risk, 0));
+// capital requirements are only as good as the judgment they run on:
+// banks judge honestly if they keep the loans; grades are honest if a fund pays the raters.
+function capMag(){
+  const c=S.pos[3], retention=S.pos[0]>=2, honestGrades=S.pos[1]>=3;
+  if (c===0) return retention    ? 28 : 42;   // bank decides
+  if (c===1) return honestGrades ? 16 : 34;   // grades decide
+  if (c===2) return honestGrades ? 14 : 30;   // grades decide, you overrule
+  if (c===3) return 14;                        // you decide
+  return 6;                                    // you decide, bundles max
+}
+const magTotal = () => Math.max(0,
+  S.magMod + LEVERS[2].rungs[S.pos[2]].mag + capMag() + (cautious() ? -12 : 0));
+const growthRate= () => LEVERS.reduce((a,l,i)=>a + l.rungs[S.pos[i]].growth, 0);
+
+/* ================= QUARTER FLOW ================= */
+function beginQuarter(){
+  show("scBrief",false); show("dash",true); show("scRecord",true);
+  S.picks = S.pos.slice(); S.qVotes = []; S.lastEnacted = null;
+  updateDash();
+  if (S.q === 1){ S.queue = [0,1,2,3]; nextPolicy(); }
+  else openAgenda();
+}
+
+function openAgenda(){
+  $("agTitle").textContent = "Quarter " + S.q;
+  $("agCurrent").innerHTML = "Current policy:" +
+    LEVERS.map((l,i)=>`<br>&nbsp;&nbsp;${l.name}: <b style="color:var(--fg)">${l.rungs[S.pos[i]].label}</b>`).join("");
+  $("agPicker").innerHTML=""; show("agPicker",false);
+  show("scAgenda",true);
+}
+function showPicker(){
+  const box=$("agPicker"); box.innerHTML="<div class='note'>Which policy does the Board wish to revisit?</div>";
+  LEVERS.forEach((l,i)=>{
+    const b=document.createElement("button");
+    b.className="big"; b.innerHTML=`<b>${l.name}</b><span class="sub">${l.rungs[S.pos[i]].label}</span>`;
+    b.onclick=()=>{ show("scAgenda",false); S.queue=[i]; nextPolicy(); };
+    box.appendChild(b);
+  });
+  show("agPicker",true);
+}
+
+function nextPolicy(){
+  if (!S.queue.length){
+    if (S.q === 1) resolveQuarter();
+    else openAgenda();
+    return;
+  }
+  S.cur = S.queue.shift();
+  renderPolicy();
+}
+
+function renderPolicy(){
+  const lev = LEVERS[S.cur];
+  const st = $("pStrip");
+  if (S.lastEnacted){
+    const e = S.lastEnacted;
+    st.innerHTML = `${e.name} \u2192 <b>${e.label}</b>` +
+      (e.changed ? ` <span class="tiny">($${CONFIG.CHANGE_COST}B)</span>` : ` <span class="tiny">(no change)</span>`) +
+      ` <span class="tiny">\u00b7 ${e.split}</span>` +
+      (e.tieNote ? ` <span class="tiny">\u00b7 ${e.tieNote}</span>` : "");
+    st.classList.remove("hidden");
+  } else st.classList.add("hidden");
+  $("pTitle").textContent = lev.name;
+  $("pDesc").textContent  = lev.desc;
+  $("pPrompt").textContent = lev.prompt;
+  $("pOpts").innerHTML = lev.rungs.map((r,i)=>
+    `<li><span class="lab">${r.label}</span>${i===S.pos[S.cur]?' <span class="cur">IN FORCE</span>':''}
+     <span class="sub">${r.sub}</span></li>`).join("");
+  buildGrid("pGrid", lev.rungs.map((r,ri)=>`${ri+1}. ${r.label}`), "pRecord");
+  show("pVoteBox",true); show("scPolicy",true);
+}
+
+/* generic voting grid: one column per member, plus an "All" column */
+function buildGrid(target, optionLabels, recordBtnId){
+  let h = "<table class='vote'><thead><tr><th></th>";
+  S.names.forEach(n => h += `<th>${n.split(" ")[0]}</th>`);
+  h += "<th style='color:var(--gold)'>All</th></tr></thead><tbody>";
+  optionLabels.forEach((lab,oi) => {
+    h += `<tr><td>${lab}</td>`;
+    S.names.forEach((_,p) =>
+      h += `<td><input type="radio" name="v${p}" value="${oi}" onchange="checkComplete('${recordBtnId}')"></td>`);
+    h += `<td><input type="radio" name="vAll" value="${oi}"
+           onchange="setAll(${oi},'${recordBtnId}')" style="accent-color:var(--gold)"></td>`;
+    h += "</tr>";
+  });
+  h += "</tbody></table><div class='tiny' style='margin-top:6px'>Use the All column when the Board agrees.</div>";
+  $(target).innerHTML = h;
+  $(recordBtnId).disabled = true;
+}
+function setAll(oi, btnId){
+  S.names.forEach((_,p) => {
+    const el = document.querySelector(`input[name=v${p}][value="${oi}"]`);
+    if (el) el.checked = true;
+  });
+  syncAll(); checkComplete(btnId);
+}
+/* keep the All column honest: checked only when every member agrees */
+function syncAll(){
+  const picks = S.names.map((_,p) => {
+    const el = document.querySelector(`input[name=v${p}]:checked`);
+    return el ? el.value : null;
+  });
+  const unanimous = picks[0] !== null && picks.every(v => v === picks[0]);
+  document.querySelectorAll('input[name=vAll]').forEach(el => {
+    el.checked = unanimous && el.value === picks[0];
+  });
+}
+function checkComplete(btnId){
+  syncAll();
+  let all = true;
+  S.names.forEach((_,p) => { if (!document.querySelector(`input[name=v${p}]:checked`)) all = false; });
+  $(btnId).disabled = !all;
+}
+function readBallot(){
+  return S.names.map((_,p) => {
+    const el = document.querySelector(`input[name=v${p}]:checked`);
+    return el ? +el.value : 0;
+  });
+}
+
+function recordVote(){
+  const lev = LEVERS[S.cur], ballot = readBallot();
+  const counts={}; ballot.forEach(v=>counts[v]=(counts[v]||0)+1);
+  let best=-1,bestN=-1,tied=[];
+  Object.keys(counts).forEach(k=>{const c=counts[k];
+    if(c>bestN){bestN=c;best=+k;tied=[+k];} else if(c===bestN) tied.push(+k);});
+  let tieNote="";
+  if(tied.length>1){
+    const cp = ballot[S.chair];
+    if(tied.includes(cp)){ best=cp; tieNote="Tied. The Chair decides."; }
+    else { best=tied.reduce((a,b)=>Math.abs(b-S.pos[S.cur])<Math.abs(a-S.pos[S.cur])?b:a);
+           tieNote="Tied, and the Chair voted for neither. The option nearest current policy carries."; }
+  }
+  S.picks[S.cur] = best;
+  S.qVotes.push({lever:lev.key, ballot, enacted:best});
+
+  const split = Object.keys(counts).sort((a,b)=>counts[b]-counts[a]).map(k=>counts[k]).join("\u2013");
+  S.lastEnacted = {
+    name: lev.name,
+    label: lev.rungs[best].label,
+    changed: best !== S.pos[S.cur],
+    split, tieNote
+  };
+  show("scPolicy",false);
+  nextPolicy();
+}
+
+function updateDash(){
+  $("dQ").textContent = S.q;
+  $("dGdp").textContent = fmt(S.gdp);
+  let n=0; (S.picks||S.pos).forEach((p,i)=>{ if(p!==S.pos[i]) n++; });
+  $("dCost").textContent = "$" + n*CONFIG.CHANGE_COST + "B";
+  const done = S.history.length;
+  const m = $("dMandate");
+  if (done === 0){ m.textContent="\u2014"; m.className="val"; }
+  else {
+    const gap = (S.gdp/mandateAt(done) - 1)*100;
+    m.textContent = (gap>=0?"+":"\u2212") + Math.abs(gap).toFixed(1) + "%";
+    m.className = "val " + (gap>=0?"up":"down");
+  }
+  const d=$("dDamage");
+  if(S.damage>0){ d.classList.remove("hidden");
+    d.textContent=`Credit is still impaired. ${S.damage} more quarter${S.damage>1?"s":""} of weak growth.`; }
+  else d.classList.add("hidden");
+}
+
+/* ================= RESOLUTION ================= */
+function resolveQuarter(){
+  show("scAgenda",false);
+  let cost=0, changed=[];
+  S.picks.forEach((p,i)=>{ if(p!==S.pos[i]){ cost+=CONFIG.CHANGE_COST; changed.push(LEVERS[i].key); } });
+  S.pos = S.picks.slice();
+
+  show("scResolve",true); show("crashWrap",false); show("resNext",false);
+  if (S.lastEnacted){
+    const e=S.lastEnacted;
+    $("dieLabel").innerHTML = `<span style="color:var(--gold)">${e.name} \u2192 ${e.label}</span><br>d20`;
+  } else $("dieLabel").textContent = "d20";
+  S.lastEnacted = null;
+  $("verdict").textContent=""; $("narrative").textContent="";
+  const roll = 1+Math.floor(Math.random()*20);
+  animateDie(roll, ()=>applyRoll(roll,cost,changed));
+}
+function animateDie(final,done){
+  const el=$("die"); let t=0;
+  const iv=setInterval(()=>{ el.textContent=1+Math.floor(Math.random()*20);
+    if(++t>16){ clearInterval(iv); el.textContent=final; setTimeout(done,400); } },55);
+}
+function narrate(outcome, roll){
+  const flat = {
+    "Boom":"Construction records again. Nobody is asking whether this can continue.",
+    "Good quarter":"Strong growth. Your critics are quiet for now.",
+    "Normal quarter":"An unremarkable quarter, which is its own kind of achievement.",
+    "Weak quarter":"Growth slowed. Nothing broke, but nobody is celebrating.",
+    "Dip":"A soft patch. Barely worth a headline.",
+    "Correction":"Prices fell in several regions. Some lenders are in trouble, but the banks are not."
+  };
+  if (flat[outcome]) return flat[outcome];
+
+  // a crash: say what pulled the trigger, then what made it a crash
+  const loanFixed = S.pos[0] >= 2, gradesFixed = S.pos[1] >= 3;
+  let trigger;
+  if (!loanFixed && !gradesFixed)
+    trigger = "Loans that should never have been written were bundled, graded safe, and sold across the country.";
+  else if (!loanFixed && gradesFixed)
+    trigger = "The grades were honest, and they said the loans were weak. Buyers bought anyway.";
+  else if (loanFixed && !gradesFixed)
+    trigger = "The loans were sound. The grades were bought, and buyers paid for what they were told rather than what was there.";
+  else
+    trigger = "Prices fell, as prices sometimes do. Nothing in the loans or the grades was wrong.";
+
+  let amp;
+  if (LEVERS[2].rungs[S.pos[2]].mag >= 32)
+    amp = "The banks were carrying thirty dollars of borrowed money for every one of their own. A modest loss emptied the cushion, nobody knew who was still solvent, and nobody lent.";
+  else
+    amp = "The cushion the rules required was far thinner than what the banks actually held called for. They were solvent on paper and not in fact.";
+
+  const lead = roll === 1 ? "Everything that could go wrong did, at once. " : "";
+  return lead + trigger + " " + amp;
+}
+
+function applyRoll(roll,cost,changed){
+  const risk=riskTotal(), mag=magTotal(), before=S.gdp;
+  let outcome,pct,dmg=0,crash=false;
+  if (roll <= cutoff()){
+    const e=effect(mag);
+    const sev = [1.0, 0.65, 0.45, 0.32, 0.22, 0.15][roll-1] ?? 0.15;
+    outcome=e.name; pct=e.pct*sev; crash=e.crash;
+    dmg = Math.round(e.damage*sev);
+    if (roll===1 && e.crash) outcome="Crash \u2014 worst case";
+  } else {
+    let b=growthRate(); if(S.damage>0) b*=0.3;
+    // every face is a different quarter: multiplier runs from lo at a 2 to hi at a 20,
+    // and hi falls as intervention rises, so the best quarter a cautious Board can have
+    // is a smaller one
+    const g  = growthRate();
+    const hi = g>=0.90 ? 1.60 : g>=0.70 ? 1.50 : g>=0.50 ? 1.35 : 1.20;
+    const lo = 0.30;
+    const mult = lo + (hi-lo) * (roll-1)/19;
+    pct = b*mult/100;
+    outcome = roll>=19 ? "Boom" : roll>=14 ? "Good quarter" : roll>=8 ? "Normal quarter" : "Weak quarter";
+  }
+  S.gdp = S.gdp*(1+pct) - cost;
+  if(S.damage>0) S.damage--;
+  if(dmg) S.damage = dmg;
+
+  const d=S.gdp-before;
+  $("dDelta").textContent=(d>=0?"+":"\u2212")+"$"+fmt(Math.abs(d))+"B";
+  $("dDelta").className="val "+(d>=0?"up":"down");
+  const v=$("verdict"); v.textContent=outcome;
+  v.style.color = pct<0?"var(--red)":(roll>=14?"var(--green)":"var(--fg)");
+  $("narrative").textContent = narrate(outcome, roll);
+
+  S.history.push({q:S.q, changed:changed.join("+")||"none", cost, roll, outcome:outcome.replace(" \u2014 worst case",""),
+                  gdp:Math.round(S.gdp), crashChoice:""});
+  S.votes.push({q:S.q, levers:S.qVotes});
+  updateDash(); renderRecord();
+
+  if(crash){ S.pendingCrash={lost:Math.abs(before*pct)}; openCrashVote(); }
+  else showAfterRoll();
+}
+function openCrashVote(){
+  $("cOpts").innerHTML = CRASH_OPTIONS.map(o=>
+    `<li><span class="lab">${o.label}</span><span class="sub">${o.sub}</span></li>`).join("");
+  buildGrid("cGrid", CRASH_OPTIONS.map((o,i)=>`${i+1}. ${o.label}`), "cRecord");
+  show("crashWrap",true);
+}
+function recordCrashVote(){
+  const ballot = readBallot();
+  const counts={}; ballot.forEach(v=>counts[v]=(counts[v]||0)+1);
+  let best=-1,bestN=-1,tied=[];
+  Object.keys(counts).forEach(k=>{const c=counts[k];
+    if(c>bestN){bestN=c;best=+k;tied=[+k];} else if(c===bestN) tied.push(+k);});
+  if(tied.length>1) best = tied.includes(ballot[S.chair]) ? ballot[S.chair] : tied[0];
+
+  const o=CRASH_OPTIONS[best];
+  S.bailouts = S.bailouts||0;
+  // each rescue costs the public more and makes the banks bolder
+  const share = o.fiscalShare ? Math.min(0.95, o.fiscalShare + 0.15*S.bailouts) : 0;
+  const fiscal = o.fiscalShare ? S.pendingCrash.lost*share : (o.fiscal||0);
+  S.gdp += S.pendingCrash.lost*o.recover - fiscal;
+  if(o.damage!==null) S.damage=o.damage;
+  S.riskMod = (S.riskMod||0) + Math.round(o.riskAdd/25); S.magMod+=o.magAdd;
+  if(o.key==="BAIL"){ S.magMod += 10; S.bailouts++; }
+  if(o.cautious) S.cautiousUntil = S.q + o.cautious + 1;   // next N quarters
+  if(o.key==="BAIL") S.bailed=true;
+  S.pendingCrash=null;
+
+  const h=S.history[S.history.length-1];
+  h.crashChoice=o.key; h.gdp=Math.round(S.gdp);
+  S.votes[S.votes.length-1].crash={ballot, enacted:o.key};
+
+  show("crashWrap",false);
+  $("narrative").textContent += "  The Board voted to " + o.label.toLowerCase() + ".";
+  updateDash(); renderRecord(); showAfterRoll();
+}
+function showAfterRoll(){
+  const last = S.q >= CONFIG.QUARTERS;
+  show("resNext", !last); show("resFinal", last);
+}
+function advanceQuarter(){
+  S.q++; show("scResolve",false);
+  S.picks=S.pos.slice(); S.qVotes=[]; S.lastEnacted=null;
+  updateDash();
+}
+function maintainAndRoll(){ advanceQuarter(); resolveQuarter(); }
+function changeAndPick(){ advanceQuarter(); openAgenda(); showPicker(); }
+function renderRecord(){
+  $("recBody").innerHTML = S.history.map(h=>
+    `<tr><td>${h.q}</td><td>${h.changed}${h.crashChoice?" &rarr; "+h.crashChoice:""}</td>
+     <td class="num">${h.roll}</td><td>${h.outcome}</td><td class="num">${fmt(h.gdp)}</td></tr>`).join("");
+}
+
+/* ================= END ================= */
+function finish(){
+  let leftover=0;
+  if(S.damage>0){ leftover=S.gdp*0.012*S.damage; S.gdp-=leftover; }
+  show("dash",false); show("scRecord",false); show("scResolve",false); show("scEnd",true);
+  $("fGdp").textContent=fmt(S.gdp);
+  const d=S.gdp-CONFIG.START_GDP;
+  $("fDelta").textContent=(d>=0?"+":"\u2212")+"$"+fmt(Math.abs(d))+"B";
+  $("fDelta").className="val "+(d>=0?"up":"down");
+  const tgt=mandateAt(CONFIG.QUARTERS);
+  const gap=(S.gdp/tgt-1)*100;
+  let n=`<div style="font-size:1.05rem"><b>Against the 2% mandate: `+
+        `<span class="${gap>=0?'up':'down'}">${gap>=0?"+":"\u2212"}${Math.abs(gap).toFixed(1)}%</span></b>`+
+        `<span class="note"> (mandate target $${fmt(tgt)}B)</span></div>`;
+  if(leftover>0) n+=`<div class="warn">Your term ended with Weillland still in recession. A further $${fmt(leftover)}B was lost after you left office.</div>`;
+  if(S.bailed)   n+=`<div class="warn">You bailed out the banks. Weillland's banks now expect it.</div>`;
+
+  n+=`<div style="margin-top:10px">Ending policy:`+
+     LEVERS.map((l,i)=>`<br>&nbsp;&nbsp;${l.name}: <b>${l.rungs[S.pos[i]].label}</b>`).join("")+`</div>`;
+  $("fNotes").innerHTML=n;
+  const code = buildCode();
+  $("runcode").textContent = code;
+  renderProjection();
+  renderPolitics();
+
+  if (CONFIG.FORM_URL && CONFIG.FIELD_CODE){
+    const url = CONFIG.FORM_URL + "?usp=pp_url&" + CONFIG.FIELD_CODE + "=" + encodeURIComponent(code);
+    $("formLink").href = url;
+    if (url.length > 1900){
+      $("runcode").classList.remove("hidden");
+      $("formHint").textContent = "If the form opens empty, paste this in:";
+      $("formHint").classList.remove("hidden");
+    }
+  }
+  renderProjection();
+  renderPolitics();
+
+  if (CONFIG.FORM_URL){
+    const a = $("formLink"), hint = $("formHint");
+    if (CONFIG.FIELD_CODE){
+      let url = CONFIG.FORM_URL + "?usp=pp_url&" +
+                CONFIG.FIELD_CODE + "=" + encodeURIComponent(code);
+      if (CONFIG.FIELD_NAMES)
+        url += "&" + CONFIG.FIELD_NAMES + "=" + encodeURIComponent(S.names.join(", "));
+      a.href = url;
+      if (url.length > 1900){
+        hint.textContent = "Long run. If the form opens without the code, use Copy code and paste it in.";
+        hint.classList.remove("hidden");
+      }
+    } else {
+      a.href = CONFIG.FORM_URL;
+      hint.textContent = "Copy the code first, then paste it into the form. Sign in with your U-M account.";
+      hint.classList.remove("hidden");
+    }
+    a.classList.remove("hidden");
+  }
+}
+/* ---- ten-year projection from the ending policy ---- */
+function projectRun(Q){
+  const faces = Math.max(1, Math.min(6, FACES[S.pos[0]][S.pos[1]] + (S.riskMod||0)));
+  const mag   = Math.max(0, S.magMod + LEVERS[2].rungs[S.pos[2]].mag + capMag());
+  const g     = growthRate();
+  const hi    = g>=0.90 ? 1.60 : g>=0.70 ? 1.50 : g>=0.50 ? 1.35 : 1.20;
+  const SEV   = [1.0,0.65,0.45,0.32,0.22,0.15];
+  let gdp = S.gdp, dam = 0, crashes = 0, corrections = 0;
+  for (let t=0; t<Q; t++){
+    const roll = 1 + Math.floor(Math.random()*20);
+    if (roll <= faces){
+      const s = SEV[roll-1];
+      gdp *= 1 - 0.028*(mag/100)*s;
+      if (dam>0) dam--; dam = Math.round(mag/25*s);
+      if (mag >= 40) crashes++; else corrections++;
+    } else {
+      let b = g; if (dam>0) b *= 0.3;
+      gdp *= 1 + b*(0.30 + (hi-0.30)*(roll-1)/19)/100;
+      if (dam>0) dam--;
+    }
+  }
+  return {gdp, crashes, corrections};
+}
+function renderProjection(){
+  const N = 1000, Q = 40, out = [];
+  let total = 0, corr = 0;
+  for (let i=0;i<N;i++){ const r = projectRun(Q); out.push(r.gdp); total += r.crashes; corr += r.corrections; }
+  out.sort((a,b)=>a-b);
+  const med = out[N/2|0], p10 = out[N*0.1|0], p90 = out[N*0.9|0];
+  const tgt = S.gdp * Math.pow(1+CONFIG.MANDATE_Q, Q);
+  const perDecade = total/N, corrDecade = corr/N;
+  $("pCount").textContent = perDecade.toFixed(1);
+  $("pCorr").textContent  = corrDecade.toFixed(1);
+  let rate;
+  if (perDecade < 0.05)      rate = "Bank failures are effectively off the table under this policy.";
+  else if (perDecade < 0.75) rate = "Roughly one crash every " + Math.round(10/perDecade) + " years.";
+  else                       rate = "Roughly one crash every " + (10/perDecade).toFixed(1) + " years.";
+  $("pCrash").textContent = rate;
+  $("pMedian").textContent = "$" + fmt(med) + "B";
+  $("pRange").textContent  = "Bad decade: $" + fmt(p10) + "B. Good decade: $" + fmt(p90) + "B.";
+  const gap = (med/tgt - 1)*100;
+  $("pVsMandate").innerHTML = "Against the 2% mandate over the same decade: <span class='" +
+    (gap>=0?"up":"down") + "'>" + (gap>=0?"+":"\u2212") + Math.abs(gap).toFixed(1) + "%</span>";
+}
+
+/* ---- political consequences, conditional on what they did ---- */
+function renderPolitics(){
+  const g = growthRate();
+  const crashed = S.history.some(h => h.outcome.startsWith("Crash"));
+  const choices = S.history.map(h => h.crashChoice).filter(Boolean);
+  const lines = [];
+
+  if (choices.includes("BAIL"))
+    lines.push("You spent public money to rescue the banks. Whatever else you did, this is what you will be remembered for. The people whose houses were foreclosed on will not forget who got helped and who did not.");
+  if (choices.includes("FAIL"))
+    lines.push("You let the banks fail. The recession that followed has your name on it. Your defenders say it would have been worse the other way; nobody can prove that.");
+  if (choices.includes("MERGE"))
+    lines.push("Weillland now has fewer, larger banks. They know they are too big to fail, and so does everyone else.");
+  if (choices.includes("GUAR"))
+    lines.push("You protected depositors and let everything else sort itself out. It was cheap and popular, and it fixed nothing.");
+
+  if (g < 0.50)
+    lines.push("You regulated aggressively. The industry fought every step, and slow growth is the story your opponents tell about your term. Whether the crash you prevented was ever going to happen is a question nobody can settle.");
+  else if (g >= 0.90)
+    lines.push("You deregulated. While it lasted it was the best economy in a generation, and the people who made money during it remember you fondly.");
+  else if (!crashed)
+    lines.push("Nothing dramatic happened on your watch. That may be the highest praise a central banker can receive, and it is not the kind anyone remembers.");
+  else
+    lines.push("You regulated, and it crashed anyway. Your critics say the regulation was pointless. Your defenders say it was why the crash was survivable. Both are looking at the same numbers.");
+
+  $("fPolitics").innerHTML = lines.map(l => "<p style='margin:.4em 0'>" + l + "</p>").join("");
+}
+
+function buildCode(){
+  const out=["WLD3","NAMES="+S.names.join("/")+" CHAIR="+S.names[S.chair],
+             "FINAL="+Math.round(S.gdp)];
+  S.history.forEach((h,i)=>{
+    const vy=S.votes[i];
+    const lv=(vy.levers||[]).map(l=>l.lever+"["+l.ballot.join("")+"]="+l.enacted).join(" ");
+    let line="Q"+h.q+(lv?" "+lv:" nochange")+" roll="+h.roll+" "+h.outcome.replace(/ /g,"-")+" gdp="+h.gdp;
+    if(vy.crash) line+=" CRASH["+vy.crash.ballot.join("")+"]="+vy.crash.enacted;
+    out.push(line);
+  });
+  return out.join(" | ");
+}
+</script>
+</body>
+</html>
