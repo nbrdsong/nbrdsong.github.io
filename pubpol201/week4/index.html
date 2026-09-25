@@ -1,0 +1,1054 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Weillland</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Public+Sans:wght@400;600;700;800&family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,600;1,8..60,400&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --night:#0B1622; --panel:#11233A; --line:#223A55;
+    --ink:#E6EDF3; --mute:#9FB1C4; --maize:#FFCB05; --lettuce:#9CC46B; --alarm:#EC7A63;
+    --sans:"Public Sans", system-ui, -apple-system, "Segoe UI", Roboto, Arial, sans-serif;
+    --serif:"Source Serif 4", Georgia, "Times New Roman", serif;
+  }
+  *{box-sizing:border-box}
+  html,body{height:100%}
+  body{margin:0;background:var(--night);color:var(--ink);font-family:var(--sans);
+       display:grid;grid-template-rows:auto 1fr auto;min-height:100vh}
+
+  .bar{display:flex;justify-content:space-between;align-items:center;gap:1rem;
+       padding:.8rem clamp(1rem,3vw,2.5rem);border-bottom:1px solid var(--line)}
+  .bar.off{display:none}
+  .bar .left{display:flex;gap:.6rem}
+  .ghost{background:none;border:1px solid var(--line);color:var(--mute);cursor:pointer;
+         font:600 .95rem var(--sans);padding:.45rem .95rem;border-radius:999px}
+  .ghost:hover{color:var(--ink);border-color:var(--mute)}
+  .ghost[hidden]{display:none}
+  .meters{display:flex;gap:clamp(1rem,2.8vw,2.5rem)}
+  .m{display:flex;flex-direction:column;align-items:flex-end;line-height:1.15}
+  .ml{font-size:.85rem;color:var(--mute)}
+  .mv{font-weight:800;font-size:clamp(1.1rem,1.9vw,1.65rem);font-variant-numeric:tabular-nums}
+  .delta{font-weight:700;font-size:clamp(.85rem,1.2vw,1.05rem);font-variant-numeric:tabular-nums}
+  .delta.bad{color:var(--alarm)} .delta.good{color:var(--lettuce)}
+
+  #stage{padding:clamp(1.2rem,4vw,3.25rem) clamp(1rem,5vw,4.5rem);overflow:auto;outline:none}
+  #stage > section{max-width:1200px}
+
+  .who{margin:0 0 clamp(1rem,2.5vw,2rem)}
+  .who-top{display:flex;align-items:center;gap:1rem;flex-wrap:wrap}
+  .person{margin:0;color:var(--maize);font-weight:800;letter-spacing:-.015em;line-height:1.05;
+          font-size:clamp(2rem,4.2vw,3.6rem);outline:none}
+  .namein{font:inherit;color:var(--maize);background:transparent;border:none;border-bottom:3px solid var(--mute);
+          padding:0 .1em;margin:0;width:6ch;min-width:5ch;outline:none;border-radius:0}
+  .namein:focus{border-bottom-color:var(--maize)}
+  .namein::placeholder{color:var(--line)}
+  .org{margin:.15rem 0 0;color:var(--mute);font-size:clamp(.95rem,1.35vw,1.2rem)}
+
+  .scene{font-family:var(--serif);font-size:clamp(1.3rem,2.35vw,2.2rem);line-height:1.45;
+         max-width:34em;margin:0 0 clamp(1.2rem,3vw,2.4rem)}
+
+  .scene p{margin:0 0 .7em} .scene p:last-child{margin-bottom:0}
+
+  .doors{display:grid;grid-template-columns:1fr 1fr;gap:clamp(.8rem,2vw,1.6rem)}
+  .door{text-align:left;background:var(--panel);border:2px solid var(--line);border-radius:14px;
+        color:var(--ink);font-family:var(--sans);cursor:pointer;padding:clamp(1rem,2vw,1.6rem);
+        display:grid;grid-template-columns:auto 1fr;column-gap:1rem;row-gap:.4rem;align-content:start}
+  .door:hover{border-color:var(--maize)}
+  .k{grid-row:span 2;font-weight:800;font-size:clamp(1.7rem,3vw,2.7rem);color:var(--maize);line-height:1}
+  .door-label{font-weight:700;font-size:clamp(1.15rem,1.95vw,1.8rem);line-height:1.2}
+  .door-sub{color:var(--mute);font-size:clamp(.95rem,1.4vw,1.25rem);line-height:1.4}
+
+  .picked{display:flex;gap:.9rem;align-items:baseline;margin:0 0 1rem;
+          font-weight:700;font-size:clamp(1.2rem,2.1vw,1.9rem);color:var(--maize)}
+  .picked .k{font-size:inherit}
+
+  .primary{background:var(--maize);color:var(--night);border:none;border-radius:10px;cursor:pointer;
+           font:800 clamp(1rem,1.6vw,1.35rem) var(--sans);padding:.8rem 1.7rem}
+  .primary:hover{filter:brightness(1.08)}
+  .door:focus-visible,.primary:focus-visible,.ghost:focus-visible{outline:3px solid var(--ink);outline-offset:3px}
+
+  .act{color:var(--maize);font-weight:700;font-size:clamp(1.1rem,1.9vw,1.65rem);margin:0 0 .35rem}
+  .ctitle{font-size:clamp(2.6rem,7vw,6rem);font-weight:800;letter-spacing:-.025em;line-height:1;margin:0 0 1.1rem;outline:none}
+  .ctext{font-family:var(--serif);font-size:clamp(1.3rem,2.35vw,2.15rem);line-height:1.45;max-width:32em;margin:0 0 2rem}
+
+  .intro{padding-top:6vh}
+  .setup{font-family:var(--serif);font-size:clamp(1.5rem,3vw,2.6rem);line-height:1.45;max-width:30em;margin:0 0 1.2rem;outline:none}
+  .intro .primary{margin-top:1.6rem}
+  .opts{display:flex;flex-wrap:wrap;gap:1.2rem;align-items:center;margin-top:1.2rem}
+  .opts label{display:flex;align-items:center;gap:.55rem;font-weight:600;font-size:1.1rem}
+  .opts input[type=checkbox]{width:1.2rem;height:1.2rem;accent-color:var(--maize)}
+  .hint{color:var(--mute);font-size:1rem;margin:.9rem 0 0}
+
+  .epi{border-top:1px solid var(--line);padding:.6rem clamp(1rem,3vw,2.5rem)}
+  .epi.off{display:none}
+  .epi-in{display:flex;align-items:flex-end;gap:1rem;height:clamp(46px,8vh,78px)}
+  .epi-in.big{height:clamp(150px,30vh,300px);margin:0 0 1.6rem}
+  .epi-l{color:var(--mute);font-size:.9rem;white-space:nowrap;align-self:center}
+  .epi-bars{display:flex;align-items:flex-end;gap:3px;height:100%;flex:1;border-bottom:1px solid var(--line)}
+  .b{width:clamp(14px,2.6vw,40px);height:var(--h);background:var(--lettuce);border-radius:3px 3px 0 0}
+  .epi-in.big .b{width:clamp(26px,5vw,72px)}
+  .b.sk{opacity:.45}
+  .b.new{animation:grow .8s ease-out}
+  .b2{width:clamp(26px,5vw,72px);height:var(--h);background:rgba(156,196,107,.25);border-radius:3px 3px 0 0;
+      display:flex;align-items:flex-end}
+  .bk{width:100%;height:var(--k);background:var(--lettuce);border-radius:3px 3px 0 0}
+  .legend{display:flex;gap:1.6rem;color:var(--mute);font-size:clamp(.9rem,1.3vw,1.1rem);margin:-.8rem 0 1.4rem}
+  .legend i{display:inline-block;width:.9em;height:.9em;border-radius:2px;margin-right:.45em;vertical-align:-.1em}
+  .legend .c{background:var(--lettuce)} .legend .a{background:rgba(156,196,107,.25)}
+  @keyframes grow{from{height:0}}
+  .epi-none{color:var(--mute);font-size:.9rem;align-self:center}
+
+  .tallyline{font-family:var(--serif);font-size:clamp(1.3rem,2.35vw,2.15rem);line-height:1.4;margin:.2rem 0}
+  .tallyline b{font-family:var(--sans);font-weight:800;color:var(--maize)}
+  .tally .primary{margin-top:1.6rem}
+
+  .exhibits{font-family:var(--serif);font-size:clamp(1.05rem,1.65vw,1.5rem);line-height:1.4;
+            columns:2 26em;column-gap:3rem;padding-left:1.5em;margin:0 0 2rem}
+  .exhibits li{margin:0 0 .75rem;break-inside:avoid}
+  .exhibits li::marker{color:var(--maize);font-family:var(--sans);font-weight:700}
+
+  .count{color:var(--mute);margin:0 0 .25rem;font-size:clamp(.95rem,1.3vw,1.15rem)}
+  .dq{font-size:clamp(1.6rem,3.1vw,2.7rem);font-weight:800;letter-spacing:-.015em;margin:0;outline:none}
+  .pair{display:grid;grid-template-columns:1fr 1fr;gap:clamp(1rem,3vw,2.5rem);margin:1.4rem 0 2rem}
+  .took{border-left:4px solid var(--maize);padding-left:1.2rem}
+  .other{border-left:4px solid var(--line);padding-left:1.2rem}
+  .h{color:var(--mute);font-size:clamp(.95rem,1.35vw,1.2rem);margin:0 0 .3rem}
+  .pair .door-label{display:block}
+  .dr{font-family:var(--serif);font-size:clamp(1.05rem,1.75vw,1.55rem);line-height:1.45;margin:.5rem 0}
+  .dr p{margin:0 0 .55em} .dr p:last-child{margin-bottom:0}
+  .hs{font-family:var(--serif);font-style:italic;color:var(--mute);font-size:clamp(1rem,1.55vw,1.35rem);line-height:1.4;margin:.8rem 0 0}
+  .hs span{font-family:var(--sans);font-style:normal;font-weight:700;color:var(--ink)}
+
+  .ledger{display:grid;grid-template-columns:repeat(auto-fill,minmax(21rem,1fr));gap:1.6rem 3rem;margin:.6rem 0 2.2rem}
+  .lg h3{margin:0;font-size:clamp(1.15rem,1.8vw,1.6rem);font-weight:800}
+  .lg .played{color:var(--mute);font-size:clamp(.9rem,1.2vw,1.05rem);margin:.15rem 0 .5rem}
+  .lg ul{list-style:none;margin:0;padding:0;font-family:var(--serif);font-size:clamp(1rem,1.5vw,1.3rem);line-height:1.4}
+  .lg li{display:flex;gap:.55rem;margin:.2rem 0}
+  .lg .sg{font-family:var(--sans);font-weight:800;width:.9em;flex:none}
+  .lg .g .sg{color:var(--lettuce)} .lg .l .sg{color:var(--alarm)}
+  .prompts{font-family:var(--serif);font-size:clamp(1.2rem,2.1vw,1.85rem);line-height:1.45;max-width:36em;padding-left:1.2em;margin:0 0 2rem}
+  .prompts li{margin:0 0 .8rem}
+  .foot{color:var(--mute);font-size:.95rem;margin-top:2.2rem}
+
+  @media (max-width:760px){ .doors,.pair{grid-template-columns:1fr} .ml{font-size:.75rem} }
+  @media (prefers-reduced-motion:reduce){ .b.new{animation:none} }
+</style>
+</head>
+<body>
+
+<header class="bar off" id="bar">
+  <div class="left">
+    <button class="ghost" id="backBtn" type="button">Back</button>
+  </div>
+  <div class="meters" id="meters" aria-live="polite"></div>
+</header>
+<main id="stage" tabindex="-1"></main>
+<footer class="epi off" id="epi" aria-hidden="true"></footer>
+
+<script>
+/* =====================================================================
+   STORY
+   Every choice node has two options. Text fields can be plain strings or
+   functions of the state (s); s.f holds flags set by earlier choices.
+   fx changes the three meters and sets flags. An option's `next` overrides
+   the node's `next`, which is how a branch adds a node.
+   `who` is the heading, with {name} filled in at the decision; `anon` is used
+   if no name is typed. A {who} in a hindsight line becomes that heading.
+   `result` can be a list of paragraphs: first what happens to the person
+   deciding, then what happens to everyone else. `ledger` entries are
+   [player, +1 or -1, text] and feed the gains-and-losses tally at the end.
+   `carry` marks a recurring role: its name blank starts filled with whoever
+   played that role last.
+   ===================================================================== */
+const STORY = {
+  title: { type:"title", next:"n1" },
+
+  n1: {
+    type:"choice", who:"Senator {name}", anon:"The Senator", player:"senator", carry:"senator", org:"Senate Agriculture Committee",
+    q:"Delay the requirement again?",
+    text:"Current law requires every company that imports fresh produce to keep records of where it came from and where it went. The requirement has already been delayed once. Distributors are asking for another delay.",
+    options:[
+      { label:"Delay it again", sub:"Distributors avoid the cost for now.",
+        result:[ "Distributors thank you publicly. Their trade association hosts a fundraiser for your campaign. Voters don’t notice.",
+                 "Importers avoid the cost of new systems." ],
+        ledger:[ ["senator", +1, "Praise from distributors"], ["senator", +1, "A campaign fundraiser"],
+                 ["industry", +1, "Importers avoid the cost of new record-keeping systems"] ],
+        hindsight:"{who} delayed the record-keeping requirement that would have let investigators trace the cilantro in days.",
+        fx:{ set:{trace:false} } },
+      { label:"Keep the current deadline", sub:"Companies must comply now.",
+        result:[ "Distributors cancel a planned fundraiser. Their trade association runs ads calling you out of touch.",
+                 "Two small importers close rather than pay for new systems." ],
+        ledger:[ ["senator", -1, "A canceled fundraiser"], ["senator", -1, "Attack ads from the distributors’ trade association"],
+                 ["industry", -1, "Two small importers close"] ],
+        hindsight:"{who} forced costly new rules on small importers, closing two, and the outbreak happened anyway.",
+        fx:{ losses:60, set:{trace:true} } }
+    ],
+    next:"n2"
+  },
+
+  n2: {
+    type:"choice", who:"President {name}", anon:"The President", player:"president", org:"President of Weillland",
+    q:"Cut the agency’s staff?",
+    text:[ "You’re preparing your budget proposal. The legislature usually passes it largely as written.",
+           "You campaigned on cutting wasteful spending. Cutting spending is popular with voters.",
+           "The Food Safety Agency inspects food and investigates outbreaks of foodborne illness. Cutting a fifth of its staff would save $400 million a year. It would also mean fewer inspectors and investigators." ],
+    options:[
+      { label:"Cut the agency’s staff by a fifth", sub:"Saves $400 million a year.",
+        result:[ "Your budget touts $400 million in savings. Commentators praise your discipline. Few voters notice which agency was cut.",
+                 "The agency loses a fifth of its staff. Its outbreak investigation team shrinks to two people." ],
+        ledger:[ ["president", +1, "$400 million in savings to announce"], ["president", +1, "Praise for fiscal discipline"],
+                 ["agency", -1, "Loses a fifth of its staff"] ],
+        hindsight:"{who} cut the Food Safety Agency’s staff by a fifth, leaving two investigators to trace the outbreak.",
+        fx:{ set:{team:"small"} } },
+      { label:"Keep the agency’s current staff", sub:"No savings from this agency.",
+        result:[ "Your budget shows no savings from the agency. Budget hawks in your own party say you’re protecting bureaucrats.",
+                 "The agency keeps its staff, including a full outbreak investigation team." ],
+        ledger:[ ["president", -1, "Criticized by budget hawks for protecting bureaucrats"],
+                 ["agency", +1, "Keeps its full staff"] ],
+        hindsight:"{who} spent $400 million a year on an agency that still couldn’t stop the outbreak.",
+        fx:{ set:{team:"full"} } }
+    ],
+    next:"n3"
+  },
+
+  n3: {
+    type:"choice", who:"{name}, a resident", anon:"A resident", player:"public", org:"",
+    q:"Go to urgent care?",
+    text:"It’s July. You’ve had severe diarrhea for three days. It isn’t getting better. Urgent care means a four-hour wait and a $75 copay.",
+    options:[
+      { label:"Go to urgent care", sub:"Four hours and $75.",
+        result:[ "You wait four hours and pay the $75 copay.",
+                 "The doctor takes a stool sample." ],
+        ledger:[ ["public", -1, "Four hours at urgent care and a $75 copay"] ],
+        fx:{ sick:400, set:{counted:true} } },
+      { label:"Stay home and wait it out", sub:"Most people with symptoms like yours never see a doctor.",
+        result:[ "You save the copay. You’re sick for three more weeks.",
+                 "Your case is never reported." ],
+        ledger:[ ["public", +1, "Saved the copay"], ["public", -1, "Sick for three more weeks"] ],
+        fx:{ sick:400, set:{counted:false} } }
+    ],
+    next:"ndoc"
+  },
+
+  ndoc: {
+    type:"choice", who:"Dr. {name}", anon:"The doctor", player:"doctor", org:"Urgent care physician",
+    q:"Test for parasites?",
+    text:[ "You’re a doctor at an urgent care clinic. This month you’ve seen more patients than usual with bad diarrhea.",
+           "Most stomach illness clears up on its own. The standard stool test doesn’t check for parasites. A parasite panel does. It costs more, and insurers often deny it." ],
+    options:[
+      { label:"Order parasite panels for these patients", sub:"Finds the cause, if there is one.",
+        result:[ "Insurers deny a third of the claims. Patients complain about the bills.",
+                 "Several tests find a parasitic infection. Those patients recover quickly with treatment. The lab reports each positive result to the state health department." ],
+        ledger:[ ["doctor", +1, "Diagnosed the cause"], ["doctor", -1, "Denied claims and billing complaints"],
+                 ["public", +1, "Diagnosed patients get treated"] ],
+        fx:{ sick:500, set:{tested:true} } },
+      { label:"Treat the symptoms and send them home", sub:"Standard care for most stomach illness.",
+        result:[ "Visits stay short and cheap.",
+                 "Some patients come back a week later, still sick. No tests are run, so nothing is reported to the state." ],
+        ledger:[ ["doctor", +1, "Shorter, cheaper visits"], ["doctor", -1, "Patients come back still sick"] ],
+        fx:{ sick:500, set:{tested:false} } }
+    ],
+    next:"n4"
+  },
+
+  n4: {
+    type:"choice",
+    who:"Commissioner {name}", anon:"The state health commissioner", player:"state", org:"State health department",
+    q:"Alert doctors?",
+    text: s => [ "Your department tracks diseases reported by doctors and labs. It also investigates outbreaks in the state.",
+      (s.f.tested
+        ? "Labs have reported several dozen cases of a parasitic infection. Clinics are seeing more stomach illness than usual."
+        : "Emergency rooms are seeing more stomach illness than usual. Few patients are being tested, so you have only a handful of confirmed cases of a parasitic infection.")
+      + " Patient interviews don’t point to a common food yet." ],
+    options:[
+      { label:"Alert doctors to test for the parasite", sub:"You’ll find more cases. The outbreak becomes public.",
+        result:[ "Your state now reports more cases than anywhere else. The governor asks why your numbers look so bad.",
+                 "Doctors across the state start testing. Confirmed cases rise from dozens to several hundred in a week." ],
+        hindsight:"{who} caused public alarm before anyone knew the source.",
+        culprit:{ what:"the early public alert in the hardest-hit state" },
+        ledger:[ ["state", -1, "The state’s numbers look worst in the country"], ["public", +1, "More patients get diagnosed and treated"] ],
+        fx:{ sick:600, trust:-5, set:{alert:true} } },
+      { label:"Keep monitoring", sub:"No public alarm while you gather more data.",
+        result:[ "There are no headlines. The governor is glad things look calm.",
+                 "Cases rise slowly for two weeks. By the time the increase is clear, cases have appeared in four other states." ],
+        hindsight:"{who} waited two weeks while the outbreak spread to four other states.",
+        culprit:{ what:"the two weeks of routine monitoring in the hardest-hit state" },
+        ledger:[ ["state", +1, "No headlines"], ["public", -1, "Cases go uncounted"] ],
+        fx: s => ({ sick: s.f.tested ? 2000 : 2600, set:{alert:false} }) }
+    ],
+    next:"nfl"
+  },
+
+  nfl: {
+    type:"choice", who:"{name}, influencer", anon:"An influencer", player:"influencer", org:"Two million followers",
+    q:"What do you post?",
+    text:[ "Last week you got sick after eating a salad. You’re still recovering.",
+           "Rumors about the outbreak are everywhere online. Officials haven’t said what’s causing it." ],
+    options:[
+      { label:"Post a video blaming the lettuce", sub:"It will spread fast. You don’t actually know what made you sick.",
+        result:[ "The video gets eight million views. A brand offers you a sponsorship deal.",
+                 "Lettuce sales fall. The comments fill with people asking why the government isn’t doing anything. More sick people now say they ate lettuce." ],
+        ledger:[ ["influencer", +1, "Eight million views"], ["influencer", +1, "A sponsorship deal"],
+                 ["industry", -1, "Lettuce sales fall"], ["agency", -1, "Blamed online for doing nothing"] ],
+        fx:{ sick:300, trust:-10, losses:40, set:{rumor:true} } },
+      { label:"Post a warning to see a doctor", sub:"Accurate and useful. It won’t spread far.",
+        result:[ "The post gets modest views. The algorithm buries it, and no brands call.",
+                 "Some sick followers see a doctor and get tested." ],
+        ledger:[ ["influencer", -1, "A post the algorithm buried"], ["public", +1, "Sick followers see a doctor"] ],
+        fx:{ sick:300, set:{psa:true} } }
+    ],
+    next:"n5"
+  },
+
+  n5: {
+    type:"choice", who:"Dr. {name}", anon:"The lead investigator", player:"agency", org:"Lead investigator, Weillland Food Safety Agency",
+    q:"Cilantro or lettuce first?",
+    text: s => [ (s.f.team === "small" ? "Your investigation team is two people." : "Your investigation team is fully staffed.")
+        + " Patient interviews point to lettuce, cilantro, or green onions. You can trace one at a time.",
+      "Cilantro has caused outbreaks of this parasite before. It comes from a few suppliers, so it’s quick to trace.",
+      (s.f.rumor ? "Lettuce comes up in far more interviews, especially since a viral video blamed it."
+                 : "Lettuce comes up in more interviews.") + " But almost everyone eats lettuce, and it comes from hundreds of suppliers." ],
+    options:[
+      { label:"Trace cilantro first", sub:"It has a track record, and it’s quick to trace.",
+        result: s => [ "Your team starts tracing cilantro. It comes from a handful of importers.",
+                       s.f.team === "small" ? "With two people, it will take about two weeks." : "It should take about a week." ],
+        hindsight: s => "{who} went straight to cilantro but still took " + (s.f.team === "small" ? "two weeks" : "a week") + " to find a pattern.",
+        culprit:{ what:"how long the cilantro trace took" },
+        fx: s => ({ sick: s.f.team === "small" ? 2400 : 1300, set:{suspect:"cilantro"} }) },
+      { label:"Trace lettuce first", sub:"It comes up more often, but the trace is long.",
+        result: s => [ "Your team starts tracing lettuce. It comes from hundreds of suppliers.",
+                       s.f.team === "small" ? "With two people, it will take about five weeks." : "It will take about three weeks." ],
+        hindsight: s => "{who} spent " + (s.f.team === "small" ? "five weeks" : "three weeks")
+          + " on lettuce, though cilantro had caused outbreaks of this parasite before.",
+        culprit:{ what:"the decision to trace lettuce before cilantro" },
+        fx: s => ({ sick: s.f.team === "small" ? 5200 : 3200, losses:40, set:{suspect:"lettuce"} }) }
+    ],
+    next:"nj1"
+  },
+
+  nj1: {
+    type:"choice", who:"{name}, reporter", anon:"A reporter", player:"press", carry:"reporter", org:"Health reporter, national newspaper",
+    q:"Publish the leak?",
+    text: s => [ "A source inside the Food Safety Agency says investigators are tracing " + s.f.suspect + ". Nothing has been confirmed.",
+                 "A rival outlet is chasing the same story." ],
+    options:[
+      { label:"Publish the story now", sub:"A scoop that warns readers. If the lead is wrong, you hurt an industry.",
+        result: s => [ "Your story leads the news. Your editor is thrilled. The agency is furious about the leak.",
+          s.f.suspect === "cilantro" ? "People stop eating cilantro while the trace finishes."
+                                     : "Lettuce sales fall by a third. People keep eating cilantro." ],
+        ledger: s => [ ["press", +1, "A front-page scoop"], ["agency", -1, "Its investigation leaked to the press"] ]
+          .concat(s.f.suspect === "cilantro" ? [ ["public", +1, "Readers avoid cilantro while the trace finishes"] ]
+                                             : [ ["industry", -1, "Lettuce sales fall by a third"] ]),
+        fx: s => s.f.suspect === "cilantro" ? { sick:200, set:{leaked:true} }
+                                            : { sick:600, losses:40, trust:-5, set:{leaked:true} } },
+      { label:"Wait for confirmation", sub:"Accurate. A rival might beat you to it.",
+        result: s => [ "No one else gets the story. You publish once the agency confirms the source.",
+          s.f.suspect === "cilantro" ? "People keep eating cilantro while the trace continues."
+                                     : "Lettuce growers stay out of the news." ],
+        ledger: s => [ ["press", +1, "An accurate story"] ]
+          .concat(s.f.suspect === "cilantro" ? [ ["public", -1, "People keep eating cilantro during the trace"] ]
+                                             : [ ["industry", +1, "Lettuce growers stay out of the news"] ]),
+        fx:{ sick:600, set:{leaked:false} } }
+    ],
+    // growers only ask to be cleared if lettuce was publicly blamed
+    next: s => (s.f.suspect === "lettuce" && (s.f.leaked || s.f.rumor)) ? "n5b" : "n6"
+  },
+
+  n5b: {
+    type:"choice", who:"Director {name}", anon:"The agency director", office:"director", player:"agency", carry:"director", org:"Weillland Food Safety Agency",
+    q:"Announce that lettuce is clear?",
+    text: s => "After " + (s.f.team === "small" ? "five weeks" : "three weeks")
+      + ", the lettuce trace comes back clean. Lettuce growers want the agency to say so publicly. Their sales have dropped sharply.",
+    options:[
+      { label:"Announce that lettuce is not the source", sub:"Growers recover. The agency admits it followed the wrong lead.",
+        result:[ "Headlines focus on the agency’s wrong lead.",
+                 "Lettuce sales recover within a month." ],
+        hindsight:"{who} publicly admitted the agency had pursued the wrong food.",
+        ledger:[ ["agency", -1, "Headlines about its wrong lead"], ["industry", +1, "Lettuce sales recover"] ],
+        fx:{ trust:-10, losses:-20 } },
+      { label:"Make no announcement", sub:"The mistake stays quiet. Growers’ sales stay down.",
+        result:[ "The agency moves on without comment. The mistake gets little coverage.",
+                 "Lettuce growers lose most of the season’s sales." ],
+        hindsight:"{who} left an uninvolved industry under suspicion.",
+        ledger:[ ["agency", +1, "Its mistake stays out of the news"], ["industry", -1, "Lettuce growers lose most of a season"] ],
+        fx:{ losses:80 } }
+    ],
+    next:"n6"
+  },
+
+  n6: {
+    type:"choice", who:"Director {name}", anon:"The agency director", office:"director", player:"agency", carry:"director", org:"Weillland Food Safety Agency",
+    q:"Warn the public now, or wait?",
+    text: s => [ s.f.suspect === "lettuce"
+        ? "The lettuce trace came back clean. Investigators interviewed patients again, and many had eaten cilantro without remembering it."
+        : "The cilantro trace found a pattern.",
+      "Several clusters of cases ate at restaurants in the same national taco chain. Cilantro is the leading suspect. You haven’t found a supplier or a contaminated shipment yet." ],
+    options:[
+      { label:"Warn the public and name the chain", sub:"Fewer people get sick. If you’re wrong, you’ve hurt a company.",
+        result: s => [ "The chain’s lawyers call within the hour.",
+          (s.trust >= 50 ? "The chain’s sales fall 40 percent, and new cases begin to slow."
+                         : "Many people ignore the warning. The chain’s sales dip, and cases keep coming.")
+          + " Its statement mentions “gastrointestinal discomfort” but never says diarrhea." ],
+        hindsight:"{who} named a restaurant chain before identifying a contaminated shipment.",
+        culprit:{ what:"naming {chain} before a supplier was identified" },
+        ledger:[ ["agency", -1, "Threatened with a lawsuit by {chain}"], ["soltaco", -1, "Sales fall 40 percent"],
+                 ["public", +1, "Fewer people get sick"] ],
+        fx: s => ({ sick: s.trust >= 50 ? 1000 : 1600, losses:150, trust:10, set:{warned:"early"} }) },
+      { label:"Wait until you find the supplier", sub:"You’ll be sure. More people eat at the chain in the meantime.",
+        result:[ "Nine days later, you find the supplier. Your announcement is precise and well supported.",
+                 "New cases are reported every day while you wait." ],
+        hindsight:"{who} knew about the {chain} clusters for nine days before warning the public.",
+        culprit:{ what:"the nine days before the public was warned" },
+        ledger:[ ["agency", +1, "A precise, well-supported announcement"], ["public", -1, "Nine more days of exposure"] ],
+        fx:{ sick:2600, trust:-10, set:{warned:"late"} } }
+    ],
+    next:"n7"
+  },
+
+  n7: {
+    type:"choice", who:"{name}, CEO of {chain}", anon:"The CEO of {chain}", player:"soltaco", org:"National taco chain",
+    q:"Pull the cilantro?",
+    text: s => [ (s.f.warned === "early"
+        ? "The agency has publicly named your chain."
+        : "The agency has asked about your cilantro supply. It hasn’t said anything publicly."),
+      "All of your cilantro comes from one supplier. Nothing has been confirmed." ],
+    options:[
+      { label:"Pull cilantro from every restaurant", sub:"The menu changes overnight. Customers may see it as an admission.",
+        result:[ "Salsa and pico de gallo disappear from every {chain} by morning. Customers complain.",
+                 "New cases linked to the chain stop within a week." ],
+        hindsight:"{chain} didn’t pull its cilantro until hundreds of customers were sick.",
+        ledger:[ ["soltaco", -1, "Customer complaints about a stripped-down menu"], ["public", +1, "Cases linked to the chain stop"] ],
+        fx:{ sick:400, losses:80, set:{pulled:true} } },
+      { label:"Keep serving and stand by your supplier", sub:"Protects sales while the investigation continues.",
+        result:[ "Your statement says your food is safe. It cites your supplier’s inspection record. Sales hold steady.",
+                 "Cases linked to the chain continue." ],
+        hindsight:"{chain} kept serving the cilantro and told customers its food was safe.",
+        ledger:[ ["soltaco", +1, "Sales hold steady"], ["public", -1, "Cases linked to the chain continue"] ],
+        fx: s => ({ sick: s.f.warned === "early" ? 900 : 2000, losses:20, trust: s.f.warned === "early" ? -5 : 0, set:{pulled:false} }) }
+    ],
+    next:"n8"
+  },
+
+  n8: {
+    type:"choice", who:"{name}, CEO of {supplier}", anon:"The CEO of {supplier}", player:"meridian", org:"Produce importer, supplier to {chain}",
+    q:"Hand over the records?",
+    text: s => [ "Your company supplies cilantro to {chain}. The agency has requested your shipping records. Nothing has been confirmed.",
+      s.f.trace
+        ? "Under the record-keeping requirement, the records are in a standard electronic format."
+        : "With the requirement delayed, the records are a mix of paper invoices and spreadsheets from different distributors." ],
+    options:[
+      { label:"Hand over the records now", sub:"Speeds the investigation. Your lawyers advise against it.",
+        result: s => [ "Your lawyers warn that the records will be used against you in lawsuits.",
+          s.f.trace
+            ? "Investigators find the contaminated cilantro in three days. It came from one farm over one week."
+            : "Investigators spend two weeks matching invoices. Then they find it: cilantro from one farm over one week." ],
+        hindsight:"The company’s records showed contaminated cilantro shipped for a full week before anyone stopped it.",
+        ledger:[ ["meridian", -1, "Records that will be used against it in lawsuits"], ["public", +1, "A faster trace"] ],
+        fx: s => ({ sick: s.f.trace ? 400 : 2000, set:{records:"fast"} }) },
+      { label:"Have your lawyers review them first", sub:"Protects the company. Delays the investigation.",
+        result: s => [ "Your lawyers review every page. The company’s legal exposure is limited.",
+          s.f.trace
+            ? "The review takes two weeks. Once the records arrive, investigators find the contaminated cilantro in a day."
+            : "The review takes two weeks. Matching the paper invoices takes two more." ],
+        hindsight:"The company’s lawyers held the records for two weeks while the outbreak continued.",
+        ledger:[ ["meridian", +1, "Limited legal exposure"], ["public", -1, "Two more weeks before the source is found"] ],
+        fx: s => ({ sick: s.f.trace ? 2000 : 4000, set:{records:"slow"} }) }
+    ],
+    next:"n9"
+  },
+
+  n9: {
+    type:"choice",
+    who:"Senator {name}", anon:"The Senator", player:"senator", carry:"senator", org:"Senate Agriculture Committee",
+    q:"Call an emergency hearing?",
+    text:"Cases are rising. Reporters and other senators are asking what your committee is doing.",
+    options:[
+      { label:"Call an emergency hearing with the agency director", sub:"You look like you’re in charge. The director spends a week preparing to testify.",
+        result:[ "The hearing is widely covered. You look like you’re in charge.",
+                 "The agency director spends five days preparing and a full day testifying instead of running the response." ],
+        hindsight:"{who} pulled the agency director away from the response for a week.",
+        ledger:[ ["senator", +1, "Wide coverage as the senator in charge"], ["agency", -1, "The director loses a week to the hearing"] ],
+        fx:{ sick:1000, trust:-10, set:{hearingNow:true} } },
+      { label:"Wait until the outbreak is contained", sub:"The agency keeps working. You look like you’re doing nothing.",
+        result:[ "Editorials criticize your committee’s silence. A rival senator says you’re asleep at the wheel.",
+                 "The agency stays focused on the response." ],
+        hindsight:"{who}’s committee said nothing during the largest outbreak in Weillland’s history.",
+        ledger:[ ["senator", -1, "Criticized for doing nothing"], ["agency", +1, "Stays focused on the response"] ],
+        fx:{ set:{hearingNow:false} } }
+    ],
+    next:"n10"
+  },
+
+  n10: {
+    type:"choice", who:"Director {name}", anon:"The agency director", office:"director", player:"agency", carry:"director", org:"Weillland Food Safety Agency",
+    q:"Voluntary or mandatory recall?",
+    text:[ "Investigators have traced the outbreak to cilantro that {supplier} imported from one farm.",
+           "The agency can ask the company to recall it. It can also order a recall. It has rarely done that, and the company would likely sue." ],
+    options:[
+      { label:"Ask for a voluntary recall", sub:"No fight. The company decides how much to recall.",
+        result:[ "{supplier} cooperates. There’s no fight.",
+                 "The company announces a recall “out of an abundance of caution.” It covers only the lots investigators have confirmed. Some salsa made with cilantro from the same week stays on shelves." ],
+        hindsight:"{who} let the company responsible decide the scope of its own recall.",
+        culprit:{ what:"letting the company set the scope of its own recall" },
+        ledger:[ ["agency", +1, "A cooperative company and no court fight"], ["public", -1, "Some suspect salsa stays on shelves"] ],
+        fx:{ sick:500, losses:100, trust:-5, set:{recall:"voluntary"} } },
+      { label:"Order a mandatory recall", sub:"Everything from the farm comes off shelves. Expect a lawsuit.",
+        result:[ "{supplier} sues the same day.",
+                 "Everything from the farm is off shelves within 48 hours." ],
+        hindsight:"{who} used a rarely exercised power and ended up in court.",
+        ledger:[ ["agency", -1, "Sued by {supplier}"], ["meridian", -1, "Loses everything from the farm"],
+                 ["public", +1, "Everything from the farm comes off shelves"] ],
+        fx:{ losses:300, trust:5, set:{recall:"mandatory"} },
+        next:"n10b" }
+    ],
+    next:"n10c"
+  },
+
+  n10b: {
+    type:"choice", who:"{name}, the agency’s general counsel", anon:"The agency’s general counsel", player:"agency", org:"Weillland Food Safety Agency",
+    q:"Settle or fight?",
+    text:"{supplier} argues the recall covers cilantro that was never shown to be contaminated. The company will drop its lawsuit if the agency limits the recall to tested lots.",
+    options:[
+      { label:"Settle and narrow the recall", sub:"The lawsuit goes away. Untested cilantro returns to shelves.",
+        result:[ "The lawsuit is dropped.",
+                 "Untested cilantro returns to stores. No more contamination is found." ],
+        hindsight:"The agency backed down under pressure from a company it regulates.",
+        ledger:[ ["agency", +1, "The lawsuit goes away"], ["meridian", +1, "Untested cilantro goes back on sale"] ],
+        fx:{ losses:-100, trust:-5 } },
+      { label:"Fight the lawsuit", sub:"The recall stands. The case takes months and money.",
+        result:[ "The case runs into next year. It uses a third of the agency’s legal budget.",
+                 "The recall stands." ],
+        hindsight:"The agency spent heavily in court defending a recall broader than its evidence.",
+        ledger:[ ["agency", -1, "A third of its legal budget spent in court"] ],
+        fx:{ losses:50 } }
+    ],
+    next:"n10c"
+  },
+
+  n10c: {
+    type:"choice",
+    who:"{name}, a resident", anon:"A resident", player:"public", org:"A regular {chain} customer",
+    q:"Go back to {chain}?",
+    text:"The recall is complete. The agency says the contaminated cilantro is gone. {chain} is offering three tacos for a dollar to bring customers back.",
+    options:[
+      { label:"Go back", sub:"You believe the agency.",
+        result: s => [ "You get three tacos for a dollar. Nothing happens to you.",
+          s.trust >= 50
+            ? "Most customers return. Sales at {chain} recover within a month."
+            : "Few customers return. Public trust in the agency is low, and sales stay down." ],
+        ledger: s => s.trust >= 50 ? [ ["soltaco", +1, "Customers return"] ] : [ ["soltaco", -1, "Customers stay away"] ],
+        fx: s => ({ losses: s.trust >= 50 ? -80 : -20 }) },
+      { label:"Not yet", sub:"You’ll wait a while longer.",
+        result:[ "You eat somewhere else.",
+                 "Most customers stay away. {chain} closes 200 locations and lays off 4,000 employees." ],
+        ledger:[ ["soltaco", -1, "Closes 200 locations"], ["public", -1, "4,000 {chain} employees lose their jobs"] ],
+        fx:{ losses:150 } }
+    ],
+    next:"tally"
+  },
+
+  tally: { type:"tally", next:"nj2" },
+
+  nj2: {
+    type:"choice", who:"{name}, reporter", anon:"A reporter", player:"press", carry:"reporter", org:"Health reporter, national newspaper",
+    q:"Which story do you write?",
+    text: s => [ "The outbreak is over. Your editor wants the big story.",
+      "One angle is a person. " + cap(s.f.culprit.who) + " made the call that looks worst now: " + s.f.culprit.what + ".",
+      "The other angle is the system: " + (systemFactors(s).length ? joinList(systemFactors(s)) : "delays at every step") + ". That story would take months to report." ],
+    options:[
+      { label:"Write about the official", sub:"A story with a face. It will be widely shared.",
+        result: s => [ "Your story is the most-read piece of the month.",
+                       cap(s.f.culprit.who) + " becomes the face of the outbreak." ],
+        ledger: s => [ ["press", +1, "The most-read story of the month"],
+                       [s.f.culprit.player, -1, cap(s.f.culprit.who) + " becomes the face of the outbreak"] ],
+        fx:{ set:{frame:"person"} } },
+      { label:"Investigate the system", sub:"Months of records requests. Fewer readers.",
+        result: s => [ "The story takes three months of records requests. It gets a fraction of the readers.",
+                       "It documents " + (systemFactors(s).length ? joinList(systemFactors(s)) : "delays at every step") + "." ],
+        ledger:[ ["press", -1, "Three months of work for a fraction of the readers"], ["public", +1, "A detailed account of what went wrong"] ],
+        fx:{ set:{frame:"system"} } }
+    ],
+    next:"hearing"
+  },
+
+
+  hearing: { type:"hearing", next:"n11" },
+
+  n11: {
+    type:"choice", who:"Chair {name}", anon:"The committee chair", player:"chair", org:"Senate Oversight Committee",
+    q: s => "Recommend removing " + s.f.culprit.who + "?",
+    text: s => (s.f.frame === "person" ? "Coverage has focused on " + s.f.culprit.who + ". "
+               : s.f.frame === "system" ? "Coverage has focused on failures across the system. " : "")
+      + "Testimony keeps returning to one decision: " + s.f.culprit.what + ". Members want someone held accountable.",
+    options:[
+      { label: s => "Recommend removing " + s.f.culprit.who, sub:"Someone is held accountable. The agency loses experienced staff.",
+        result: s => [ "You get credit for holding someone accountable. Polls show strong approval.",
+                       cap(s.f.culprit.who) + " resigns under pressure. The agency loses one of its most experienced people." ],
+        ledger:[ ["chair", +1, "Credit for holding someone accountable"] ],
+        fx: s => ({ trust: s.f.frame === "person" ? 15 : 10, set:{ removed:s.f.culprit.who, directorRemoved: s.f.culprit.office === "director" } }) },
+      { label:"Commission an independent review", sub:"Looks at the agency’s structure and staffing instead of individuals.",
+        result: s => [ "Critics say your committee let everyone off the hook.", reviewText(s) ],
+        ledger:[ ["chair", -1, "Criticized for letting everyone off the hook"], ["agency", +1, "An independent review of its structure and staffing"] ],
+        fx: s => ({ trust: s.f.frame === "system" ? 5 : s.f.frame === "person" ? -10 : -5, set:{ removed:null } }) }
+    ],
+    next:"n12"
+  },
+
+  n12: {
+    type:"choice", who:"Senator {name}", anon:"The Senator", player:"senator", carry:"senator", org:"Senate Agriculture Committee",
+    q:"A testing mandate, or more capacity?",
+    text: s => [ "The hearing is over. Your committee is expected to pass a bill.",
+      (s.f.team === "small" || !s.f.trace || s.f.records === "slow" || s.f.suspect === "lettuce")
+        ? "Testimony showed investigators couldn’t trace the cilantro quickly."
+        : "Testimony showed the outbreak spread before anyone knew its source." ],
+    options:[
+      { label:"Require testing of all imported produce", sub:"A new law with a signing ceremony. It doesn’t fund anyone to enforce it.",
+        result:[ "The bill passes with a signing ceremony. You’re praised for acting decisively.",
+                 "Some importers pay for testing and raise their prices. Others skip it. Shoppers can’t tell the difference, so they buy the cheaper produce. With no one enforcing the rule, the importers who comply lose business." ],
+        ledger:[ ["senator", +1, "A signing ceremony and praise for acting decisively"],
+                 ["industry", -1, "Importers that test lose business to those that don’t"],
+                 ["public", -1, "A testing rule many importers ignore"] ],
+        fx:{ losses:120 } },
+      { label: s => (s.f.team === "small" ? "Restore the agency’s staff" : "Fund more investigators") + (s.f.trace ? "" : " and end the records delay"),
+        sub:"Fixes what slowed the response. Few voters will notice.",
+        result: s => [ "The bill passes with little coverage." + (s.f.trace ? "" : " Distributors are angry the delay is over."),
+          (s.f.team === "small" ? "The agency gets its staff back." : "The agency hires forty investigators.")
+          + (s.f.trace ? "" : " The records requirement finally takes effect.") + " The next outbreak is traced in six days." ],
+        ledger: s => [ ["senator", -1, "Little credit for the bill"],
+                       ["agency", +1, s.f.team === "small" ? "Its staff restored" : "Forty new investigators"],
+                       ["public", +1, "Future outbreaks traced faster"] ]
+          .concat(s.f.trace ? [] : [ ["senator", -1, "Distributors angry that the delay is over"],
+                                     ["industry", -1, "Distributors must finally comply with record-keeping"] ]),
+        fx:{ losses:40 } }
+    ],
+    next:"n13"
+  },
+
+  n13: {
+    type:"choice",
+    who: s => s.f.directorRemoved ? "Acting Director {name}" : "Director {name}",
+    anon: s => s.f.directorRemoved ? "The acting agency director" : "The agency director", player:"agency",
+    carry: s => s.f.directorRemoved ? "acting" : "director", org:"Weillland Food Safety Agency",
+    q:"When should the agency warn the public?",
+    text:"The agency needs a policy for future outbreaks. How much evidence should it have before warning the public?",
+    options:[
+      { label:"Warn at the first credible signal", sub:"Fewer illnesses. More false alarms.",
+        result:[ "Next spring, the agency warns the public about tomatoes early. It turns out to be peppers.",
+                 "Tomato growers lose much of their season." ],
+        ledger:[ ["agency", -1, "A false alarm about tomatoes"], ["industry", -1, "Tomato growers lose a season"] ] },
+      { label:"Warn only with confirmed evidence", sub:"Fewer false alarms. Slower warnings.",
+        result:[ "Industry groups praise the agency’s caution.",
+                 "Next spring’s outbreak runs three weeks before the agency warns the public." ],
+        ledger:[ ["agency", +1, "Praise from industry groups"], ["public", -1, "Slower warnings in the next outbreak"] ] }
+    ],
+    next:"ledger"
+  },
+
+  ledger: { type:"ledger" }
+};
+
+function cap(t){ return t.charAt(0).toUpperCase() + t.slice(1); }
+
+function reviewText(s){
+  const f = s.f, found = [];
+  if (f.team === "small")    found.push("The investigation team had been cut to two people.");
+  if (!f.trace)              found.push("The record-keeping requirement had been delayed.");
+  if (f.records === "slow")  found.push("Shipping records took weeks to obtain.");
+  if (f.hearingNow)          found.push("A Senate hearing took the director away from the response.");
+  if (f.counted === false)   found.push("Most sick people never saw a doctor.");
+  if (f.tested === false)    found.push("Doctors sent patients home without testing.");
+  return "The review takes a year. " + (found.length ? found.join(" ") : "It finds no single cause.") + " No one is removed.";
+}
+function systemFactors(s){
+  const f = s.f, out = [];
+  if (f.team === "small")    out.push("staff cuts at the agency");
+  if (!f.trace)              out.push("a delayed record-keeping rule");
+  if (f.records === "slow")  out.push("shipping records that took weeks to get");
+  if (f.tested === false || f.counted === false) out.push("sick people who were never tested");
+  return out;
+}
+function joinList(a){
+  return a.length < 3 ? a.join(" and ") : a.slice(0, -1).join(", ") + ", and " + a[a.length - 1];
+}
+
+/* =====================================================================
+   ENGINE
+   ===================================================================== */
+const EPI_MAX = 5200;       // tallest possible bar of actual cases
+const EPI_MAX_K = 2600;     // tallest possible bar of confirmed cases
+const PLAYERS = [
+  ["president", "The President"], ["senator", "The Senator"], ["chair", "The oversight committee chair"], ["agency", "The Food Safety Agency"],
+  ["state", "The state health department"], ["doctor", "The doctor"], ["soltaco", "{chain}"], ["meridian", "{supplier}"], ["influencer", "The influencer"], ["press", "The press"],
+  ["industry", "Other businesses"], ["public", "The public"]
+];
+// companies a student names at their own decision: token -> [fallback name, generic phrase, blank's placeholder]
+const ORGS = {
+  chain:    ["Sol Taco", "the chain", "restaurant"],
+  supplier: ["Meridian Fresh", "the supplier", "company"]
+};
+const ORG_RE = /(\{name\}|\{chain\}|\{supplier\})/;
+const paras = x => (Array.isArray(x) ? x : String(x).split(/\n\n/));
+const val   = (v, s) => (typeof v === "function" ? v(s) : v);
+const fmt   = n => Math.round(n).toLocaleString("en-US");
+const clone = o => JSON.parse(JSON.stringify(o));
+const esc   = t => String(t).replace(/[&<>"]/g, c => ({ "&":"&amp;", "<":"&lt;", ">":"&gt;", '"':"&quot;" }[c]));
+
+function fresh(){
+  return { id:"title", phase:"node", s:{ sick:0, known:0, trust:60, losses:0, f:{} },
+           decisions:[], bars:[], door:0, delta:null, pending:"", pendingOrg:{}, last:{} };
+}
+let G = fresh();
+const hist = [];
+const snapshot = () => hist.push(clone(G));
+
+// the heading for a decision: "Senator Maya", or the anonymous form if no name was typed
+function heading(node, s, name){
+  return name ? val(node.who, s).replace("{name}", esc(name)) : val(node.anon, s);
+}
+const lower1 = t => t.charAt(0).toLowerCase() + t.slice(1);
+function hindsightFor(d){
+  const node = STORY[d.id], o = node.options[d.pick];
+  return o.hindsight ? val(o.hindsight, d.snap).replace("{who}", heading(node, d.snap, d.name)) : null;
+}
+
+// Share of new illnesses that get confirmed: the share of sick people who see a doctor
+// (the resident's choice) times the share of those visits tested for the parasite
+// (the doctor's choice, or nearly all of them once the state alerts doctors).
+function detectRate(f){
+  const seek = (f.counted ? 0.5 : 0.25) + (f.psa ? 0.1 : 0);
+  const test = f.alert ? 0.9 : (f.tested ? 0.5 : 0.2);
+  return seek * test;
+}
+
+// fx moves the hidden true count (sick); the confirmed count (known) follows from it
+function applyFx(s, fx){
+  const d = { sick:0, known:0, trust:0, losses:0 };
+  if (!fx) return d;
+  const e = val(fx, s);
+  if (e.set) Object.assign(s.f, e.set);
+  d.sick = e.sick || 0; d.trust = e.trust || 0; d.losses = e.losses || 0;
+  d.known = Math.round(d.sick * detectRate(s.f));
+  s.sick   = Math.max(0, s.sick + d.sick);
+  s.known  = Math.max(0, s.known + d.known);
+  s.trust  = Math.max(0, Math.min(100, s.trust + d.trust));
+  s.losses = Math.max(0, s.losses + d.losses);
+  return d;
+}
+
+function findCulprit(){
+  let best = null, most = -1;
+  for (const d of G.decisions){
+    const node = STORY[d.id], o = node.options[d.pick];
+    if (o.culprit && d.delta.sick > most){
+      most = d.delta.sick;
+      const hd = heading(node, d.snap, d.name);
+      best = { what:o.culprit.what, who: d.name ? hd : lower1(hd), office: node.office || "", player: node.player };
+    }
+  }
+  return best || { who:"the agency director", what:"the agency’s overall response", office:"director", player:"agency" };
+}
+
+// every player's gains and losses, from the choices made (pure)
+function ledgerRows(){
+  const rows = {};
+  PLAYERS.forEach(([k]) => rows[k] = { names:[], items:[] });
+  const add = (k, sign, text) => { if (rows[k]) rows[k].items.push({ sign, text }); };
+  for (const d of G.decisions){
+    const node = STORY[d.id], o = node.options[d.pick];
+    if (node.player && d.name && !rows[node.player].names.includes(d.name)) rows[node.player].names.push(d.name);
+    (val(o.ledger, d.snap) || []).forEach(([k, sign, text]) => add(k, sign, text));
+    if (o.hindsight && node.player) add(node.player, -1, "Criticized at the hearing");
+  }
+  const s = G.s;
+  if (s.sick > 0) add("public", -1, fmt(s.sick) + " people sick (" + fmt(s.known) + " confirmed), " + fmt(Math.round(s.sick * 0.02)) + " hospitalized");
+  if (s.f.removed && s.f.culprit) add(s.f.culprit.player, -1, cap(s.f.removed) + " resigned under pressure");
+  // merge repeats into one line with a count
+  PLAYERS.forEach(([k]) => {
+    const seen = new Map();
+    rows[k].items.forEach(it => {
+      const key = it.sign + it.text;
+      if (seen.has(key)) seen.get(key).n++; else seen.set(key, { ...it, n:1 });
+    });
+    rows[k].items = [...seen.values()].sort((a, b) => b.sign - a.sign);
+  });
+  return rows;
+}
+
+function go(id){
+  G.delta = null;
+  if ((id === "nj2" || id === "hearing") && !G.s.f.culprit) G.s.f.culprit = findCulprit();
+  const node = STORY[id];
+  if (node && node.type === "choice"){             // a returning role starts with its last player's name
+    const c = val(node.carry, G.s);
+    G.pending = c ? (G.last[c] || "") : "";
+  }
+  G.id = id; G.phase = "node";
+  render();
+}
+
+function pick(i){
+  const node = STORY[G.id];
+  if (node.type !== "choice" || G.phase !== "node") return;
+  snapshot();
+  const tpl = val(node.who, G.s);
+  for (const k in ORGS)
+    if (tpl.includes("{" + k + "}") && !G.s.f[k]) G.s.f[k] = (G.pendingOrg[k] || "").trim() || ORGS[k][0];
+  G.pendingOrg = {};
+  const opt = node.options[i];
+  const snap = clone(G.s);
+  const name = (G.pending || "").trim();
+  const d = applyFx(G.s, opt.fx);
+  if (d.sick > 0) G.bars.push({ v:d.sick, k:d.known });
+  G.decisions.push({ id:G.id, pick:i, snap, delta:d, name });
+  const carry = val(node.carry, snap);
+  if (carry && name) G.last[carry] = name;
+  G.pending = "";
+  G.phase = "result"; G.delta = d;
+  render();
+}
+
+function cont(){
+  const node = STORY[G.id];
+  if (node.type === "title" || node.type === "ledger") return;
+  if (node.type === "choice"){
+    if (G.phase !== "result") return;
+    snapshot();
+    const last = G.decisions[G.decisions.length - 1];
+    go(val(node.options[last.pick].next || node.next, G.s));
+    return;
+  }
+  snapshot();
+  go(node.next);
+}
+
+function back(){ if (!hist.length) return; G = hist.pop(); render(); }
+
+/* =====================================================================
+   SCREENS (pure: each returns an HTML string)
+   ===================================================================== */
+function orgHTML(node, s){ const o = val(node.org, s); return o ? `<p class="org">${o}</p>` : ""; }
+
+function whoHTML(node, s, name, editable){
+  if (!editable){
+    return `<div class="who"><h2 class="person" tabindex="-1">${heading(node, s, name)}</h2>
+      ${orgHTML(node, s)}</div>`;
+  }
+  const box = (id, v, ph, label) => `<input class="namein" id="${id}" type="text" autocomplete="off" spellcheck="false"
+      placeholder="${ph}" aria-label="${label}" value="${esc(v || "")}" style="width:${Math.max(ph.length, (v || "").length) + 1}ch">`;
+  const parts = val(node.who, s).split(ORG_RE).map(p => {
+    if (p === "{name}") return box("namein", G.pending, "name", "Name of the person deciding");
+    const k = p.slice(1, -1);
+    if (ORGS[k] && p === "{" + k + "}") return s.f[k] ? p : box("org-" + k, G.pendingOrg[k], ORGS[k][2], "Name of the " + ORGS[k][2]);
+    return p;
+  }).join("");
+  return `<div class="who"><h2 class="person">${parts}</h2>
+    ${orgHTML(node, s)}</div>`;
+}
+
+function choiceHTML(node){
+  const s = G.s;
+  const opts = node.options.map((o, i) =>
+    `<button class="door" type="button" data-pick="${i}"><span class="k">${"AB"[i]}</span>
+       <span class="door-label">${val(o.label, s)}</span><span class="door-sub">${val(o.sub, s)}</span></button>`).join("");
+  return `<section>${whoHTML(node, s, G.pending, true)}
+    <div class="scene">${paras(val(node.text, s)).map(p => `<p>${p}</p>`).join("")}</div><div class="doors">${opts}</div></section>`;
+}
+
+function resultHTML(node){
+  const d = G.decisions[G.decisions.length - 1], o = node.options[d.pick];
+  return `<section>${whoHTML(node, d.snap, d.name, false)}
+    <p class="picked"><span class="k">${"AB"[d.pick]}</span><span>${val(o.label, d.snap)}</span></p>
+    <div class="scene">${paras(val(o.result, d.snap)).map(p => `<p>${p}</p>`).join("")}</div>
+    <button class="primary" type="button" data-cont>Continue</button></section>`;
+}
+
+function tallyHTML(){
+  const s = G.s, hosp = Math.round(s.sick * 0.02);
+  return `<section class="tally"><h1 class="ctitle" tabindex="-1">The outbreak is over.</h1>
+    ${epiHTML(true)}
+    <div class="legend"><span><i class="c"></i>Confirmed</span><span><i class="a"></i>Actual</span></div>
+    <p class="tallyline">Officials confirmed <b>${fmt(s.known)}</b> cases.</p>
+    <p class="tallyline">About <b>${fmt(s.sick)}</b> people actually got sick. <b>${fmt(hosp)}</b> were hospitalized.</p>
+    <p class="tallyline">Industry losses came to <b>$${fmt(s.losses)} million</b>.</p>
+    <p class="tallyline"><b>${fmt(s.trust)}%</b> of the public trusts the agency.</p>
+    <button class="primary" type="button" data-cont>Continue</button></section>`;
+}
+
+function hearingHTML(){
+  const lines = G.decisions.map(hindsightFor).filter(Boolean);
+  return `<section><h1 class="ctitle" tabindex="-1">The hearing</h1>
+    <p class="ctext">Three months later, the Senate holds hearings. Committee staff present a timeline of the response.</p>
+    <ol class="exhibits">${lines.map(l => `<li>${l}</li>`).join("")}</ol>
+    <button class="primary" type="button" data-cont>Continue</button></section>`;
+}
+
+function ledgerHTML(){
+  const rows = ledgerRows();
+  const cards = PLAYERS.filter(([k]) => rows[k].items.length).map(([k, label]) => {
+    const r = rows[k];
+    if (k === "senator" && r.names.length > 1) label = "The senators";
+    const items = r.items.map(it => `<li class="${it.sign > 0 ? "g" : "l"}"><span class="sg">${it.sign > 0 ? "+" : "\u2212"}</span>
+      <span>${it.text}${it.n > 1 ? " (" + it.n + ")" : ""}</span></li>`).join("");
+    return `<div class="lg"><h3>${label}</h3>${r.names.length ? `<p class="played">${r.names.map(esc).join(", ")}</p>` : ""}<ul>${items}</ul></div>`;
+  }).join("");
+  return `<section><h1 class="ctitle" tabindex="-1">Gains and losses</h1>
+    <div class="ledger">${cards}</div>
+    <button class="primary" type="button" id="download">Download results</button>
+    <button class="ghost" type="button" id="restart" style="margin-left:.6rem">Start over</button>
+    <p class="foot">Loosely based on the 2026 Cyclospora outbreak.</p></section>`;
+}
+
+function titleHTML(){
+  return `<section class="intro">
+    <p class="setup" tabindex="-1">Weillland is a large industrialized nation.</p>
+    <p class="setup">One branch of government writes laws, another branch executes those laws, not unlike the United States.</p>
+    <button class="primary" type="button" id="begin">Begin</button></section>`;
+}
+
+function epiHTML(big){
+  const newest = G.phase === "result" && G.delta && G.delta.sick > 0;
+  const bars = G.bars.map((b, i) => {
+    if (big){   // the reveal: actual cases behind confirmed ones
+      const h = Math.max(4, Math.min(100, b.v / EPI_MAX * 100));
+      const k = b.v ? Math.max(2, b.k / b.v * 100) : 0;
+      return `<span class="b2" style="--h:${h}%"><span class="bk" style="--k:${k}%"></span></span>`;
+    }
+    const h = Math.max(4, Math.min(100, b.k / EPI_MAX_K * 100));
+    const cls = "b" + (newest && i === G.bars.length - 1 ? " new" : "");
+    return `<span class="${cls}" style="--h:${h}%"></span>`;
+  }).join("");
+  return `<div class="epi-in${big ? " big" : ""}"><span class="epi-l">${big ? "Cases" : "Confirmed cases"}</span>
+    <div class="epi-bars">${bars || `<span class="epi-none">No cases yet</span>`}</div></div>`;
+}
+
+function metersHTML(){
+  const s = G.s, d = G.delta;
+  const tag = (v, bad, pre, suf) => (d && v)
+    ? `<span class="delta ${bad ? "bad" : "good"}">${v > 0 ? "+" : "\u2212"}${pre}${fmt(Math.abs(v))}${suf}</span>` : "";
+  return `
+    <div class="m"><span class="ml">Confirmed cases</span><span class="mv">${fmt(s.known)}</span>${tag(d && d.known, d && d.known > 0, "", "")}</div>
+    <div class="m"><span class="ml">Trust in the agency</span><span class="mv">${fmt(s.trust)}%</span>${tag(d && d.trust, d && d.trust < 0, "", "")}</div>
+    <div class="m"><span class="ml">Industry losses</span><span class="mv">$${fmt(s.losses)}M</span>${tag(d && d.losses, d && d.losses > 0, "$", "M")}</div>`;
+}
+
+function screenHTML(){
+  const node = STORY[G.id];
+  let stage = "", bar = true, epi = true;
+  switch (node.type){
+    case "title":   stage = titleHTML(); bar = false; epi = false; break;
+    case "choice":  stage = G.phase === "node" ? choiceHTML(node) : resultHTML(node); break;
+    case "tally":   stage = tallyHTML(); epi = false; break;
+    case "hearing": stage = hearingHTML(); break;
+    case "ledger":  stage = ledgerHTML(); break;
+  }
+  for (const k in ORGS) stage = stage.split("{" + k + "}").join(esc(G.s.f[k] || ORGS[k][1]));
+  return { stage, meters:metersHTML(), epi:epiHTML(false), bar, showEpi:epi };
+}
+
+/* =====================================================================
+   UI
+   ===================================================================== */
+function render(){
+  if (typeof document === "undefined") return;
+  const v = screenHTML();
+  const stage = document.getElementById("stage");
+  stage.innerHTML = v.stage;
+  document.getElementById("meters").innerHTML = v.meters;
+  document.getElementById("epi").innerHTML = v.epi;
+  document.getElementById("bar").classList.toggle("off", !v.bar);
+  document.getElementById("epi").classList.toggle("off", !v.showEpi);
+  document.getElementById("backBtn").hidden = !hist.length;
+  stage.scrollTop = 0;
+  const boxes = [...stage.querySelectorAll(".namein")];
+  if (boxes.length){
+    boxes.forEach((b, i) => {
+      b.addEventListener("input", () => {
+        if (b.id.startsWith("org-")) G.pendingOrg[b.id.slice(4)] = b.value; else G.pending = b.value;
+        b.style.width = Math.max(b.placeholder.length, b.value.length) + 1 + "ch";
+      });
+      b.addEventListener("keydown", e => {
+        if (e.key === "Enter" || e.key === "Escape"){
+          e.preventDefault();
+          if (e.key === "Enter" && boxes[i + 1]) boxes[i + 1].focus(); else stage.focus({ preventScroll:true });
+        }
+      });
+    });
+    boxes[0].focus({ preventScroll:true });
+    boxes[0].select();
+    return;
+  }
+  const h = stage.querySelector("[tabindex='-1']");
+  (h || stage).focus({ preventScroll:true });
+}
+
+// ---- results export: one row per decision, with the game's final numbers on every row ----
+function csvCell(v){ return '"' + String(v == null ? "" : v).replace(/"/g, '""') + '"'; }
+function fillOrgs(t){ for (const k in ORGS) t = String(t).split("{" + k + "}").join(G.s.f[k] || ORGS[k][0]); return t; }
+function localStamp(d, sep){
+  const p = n => String(n).padStart(2, "0");
+  return d.getFullYear() + "-" + p(d.getMonth() + 1) + "-" + p(d.getDate()) + sep + p(d.getHours()) + (sep === " " ? ":" : "") + p(d.getMinutes());
+}
+function resultsCSV(when){
+  const s = G.s, t = localStamp(when || new Date(), " ");
+  const head = ["order", "question", "role", "name", "choice", "choice_label", "chain", "supplier",
+                "actual_cases", "confirmed_cases", "trust_pct", "industry_losses_millions", "played_at"];
+  const rows = G.decisions.map((d, i) => {
+    const node = STORY[d.id], o = node.options[d.pick];
+    const role = d.name ? val(node.who, d.snap).replace("{name}", d.name) : val(node.anon, d.snap);
+    return [i + 1, fillOrgs(val(node.q, d.snap)), fillOrgs(role), d.name, "AB"[d.pick], fillOrgs(val(o.label, d.snap)),
+            s.f.chain || "", s.f.supplier || "", s.sick, s.known, s.trust, s.losses, t];
+  });
+  return [head, ...rows].map(r => r.map(csvCell).join(",")).join("\n") + "\n";
+}
+function downloadResults(){
+  const now = new Date();
+  const blob = new Blob([resultsCSV(now)], { type:"text/csv;charset=utf-8" });
+  const a = document.createElement("a");
+  a.href = URL.createObjectURL(blob);
+  a.download = "weillland-outbreak-" + localStamp(now, "-") + ".csv";
+  document.body.appendChild(a); a.click(); a.remove();
+  setTimeout(() => URL.revokeObjectURL(a.href), 1000);
+  G.downloaded = true;
+}
+
+function begin(){ snapshot(); go(STORY.title.next); }
+
+function restart(){
+  if (!G.downloaded && G.decisions.length && !confirm("Start a new game? This game’s results haven’t been downloaded.")) return;
+  G = fresh(); hist.length = 0; render();
+}
+
+if (typeof document !== "undefined"){
+  document.getElementById("stage").addEventListener("click", e => {
+    const t = e.target.closest("button"); if (!t) return;
+    if (t.dataset.pick !== undefined) pick(+t.dataset.pick);
+    else if (t.hasAttribute("data-cont")) cont();
+    else if (t.id === "begin") begin();
+    else if (t.id === "restart") restart();
+    else if (t.id === "download") downloadResults();
+  });
+  document.getElementById("backBtn").addEventListener("click", back);
+
+  document.addEventListener("keydown", e => {
+    if (e.target && e.target.tagName === "INPUT") return;
+    const node = STORY[G.id], k = e.key;
+    if (k === "Backspace" || k === "ArrowLeft" || k === "PageUp"){ back(); e.preventDefault(); return; }
+    if (node.type === "choice" && G.phase === "node"){
+      if (k === "a" || k === "A" || k === "1"){ pick(0); e.preventDefault(); }
+      else if (k === "b" || k === "B" || k === "2"){ pick(1); e.preventDefault(); }
+      return;
+    }
+    if (k === "Enter" || k === " " || k === "ArrowRight" || k === "PageDown"){
+      if (node.type === "title") begin(); else cont();
+      e.preventDefault();
+    }
+  });
+
+  render();
+}
+</script>
+</body>
+</html>
