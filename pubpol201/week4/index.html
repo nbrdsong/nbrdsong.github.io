@@ -466,11 +466,12 @@ const STORY = {
     q:"Call an emergency hearing?",
     text:"Cases are rising. Reporters and other senators are asking what your committee is doing.",
     options:[
-      { label:"Call an emergency hearing with the agency director", sub:"You look like you’re in charge. The director spends a week preparing to testify.",
-        result:[ "The hearing is widely covered. You look like you’re in charge.",
-                 "The agency director spends five days preparing and a full day testifying instead of running the response." ],
-        hindsight:"{who} pulled the agency director away from the response for a week.",
-        ledger:[ ["senator", +1, "Wide coverage as the senator in charge"], ["agency", -1, "The director loses a week to the hearing"] ],
+      { label: s => "Call an emergency hearing with " + dirRef(s),
+        sub: s => "You look like you’re in charge. " + cap(dirRef(s)) + " spends a week preparing to testify.",
+        result: s => [ "The hearing is widely covered. You look like you’re in charge.",
+                       cap(dirRef(s)) + " spends five days preparing and a full day testifying instead of running the response." ],
+        hindsight: s => "{who} pulled " + dirRef(s) + " away from the response for a week.",
+        ledger: s => [ ["senator", +1, "Wide coverage as the senator in charge"], ["agency", -1, cap(dirRef(s)) + " loses a week to the hearing"] ],
         fx:{ sick:1000, trust:-10, set:{hearingNow:true} } },
       { label:"Wait until the outbreak is contained", sub:"The agency keeps working. You look like you’re doing nothing.",
         result:[ "Editorials criticize your committee’s silence. A rival senator says you’re asleep at the wheel.",
@@ -651,13 +652,14 @@ const STORY = {
 };
 
 function cap(t){ return t.charAt(0).toUpperCase() + t.slice(1); }
+const dirRef = s => s.f.dirName ? "Director " + esc(s.f.dirName) : "the agency director";
 
 function reviewText(s){
   const f = s.f, found = [];
   if (f.team === "small")    found.push("The investigation team had been cut to two people.");
   if (!f.trace)              found.push("The record-keeping requirement had been delayed.");
   if (f.records === "slow")  found.push("Shipping records took weeks to obtain.");
-  if (f.hearingNow)          found.push("A Senate hearing took the director away from the response.");
+  if (f.hearingNow)          found.push("A Senate hearing took " + dirRef(s) + " away from the response.");
   if (f.counted === false)   found.push("Most sick people never saw a doctor.");
   if (f.tested === false)    found.push("Doctors sent patients home without testing.");
   return "The review takes a year. " + (found.length ? found.join(" ") : "It finds no single cause.") + " No one is removed.";
@@ -748,7 +750,7 @@ function findCulprit(){
       best = { what:o.culprit.what, who: d.name ? hd : lower1(hd), office: node.office || "", player: node.player };
     }
   }
-  return best || { who:"the agency director", what:"the agency’s overall response", office:"director", player:"agency" };
+  return best || { who:dirRef(G.s), what:"the agency’s overall response", office:"director", player:"agency" };
 }
 
 // every player's gains and losses, from the choices made (pure)
@@ -805,6 +807,7 @@ function pick(i){
   G.decisions.push({ id:G.id, pick:i, snap, delta:d, name });
   const carry = val(node.carry, snap);
   if (carry && name) G.last[carry] = name;
+  if (carry === "director" && name) G.s.f.dirName = name;
   G.pending = "";
   G.phase = "result"; G.delta = d;
   render();
