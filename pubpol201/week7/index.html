@@ -34,38 +34,46 @@
   textarea{min-height:15rem;resize:vertical;font-family:var(--serif);font-size:1.05rem;line-height:1.6}
   input:focus, textarea:focus, button:focus-visible{outline:2px solid var(--maize);outline-offset:2px}
 
+  /* group line, shown on every screen after the names */
+  .who{margin:0 0 2rem;color:var(--dim);font-size:.95rem}
+  .linkish{margin-left:.6rem;padding:0;background:none;border:none;color:var(--link);text-decoration:underline;font-size:.95rem}
+
   /* names screen: one person per row */
   .namerow{display:flex;gap:.5rem;margin-bottom:.5rem}
   .namerow input{flex:1;min-width:0}
   .startrow{margin-top:1.75rem}
 
-  /* question screen */
-  .who{margin:0 0 2rem;color:var(--dim);font-size:.95rem}
-  .linkish{margin-left:.6rem;padding:0;background:none;border:none;color:var(--link);text-decoration:underline;font-size:.95rem}
-  .step{margin:0 0 .25rem;color:var(--dim)}
+  /* waiting screens: before the first draft, and after each submission */
+  .big{margin:0 0 .75rem;font-size:2.4rem;line-height:1.1}
+  .lead{margin:0 0 1.5rem;font-size:1.15rem}
+  .check{margin:0 0 1.75rem;padding:.9rem 1rem;border:1px solid var(--line);border-radius:6px;color:var(--dim)}
+  .check a{color:var(--link)}
+  .hint{margin:.6rem 0 0;color:var(--faint);font-size:.92rem;text-align:right}
 
-  /* the draft, set as a memo from junior staff */
+  /* question screen */
+  .step{margin:0 0 .25rem;color:var(--dim)}
   .memo{margin:0 0 1.75rem;padding:.2rem 0 .2rem 1rem;border-left:3px solid var(--line)}
   .memo dl{display:grid;grid-template-columns:max-content 1fr;gap:.1rem .75rem;margin:0 0 .8rem;font-size:.92rem}
   .memo dt{color:var(--faint)}
   .memo dd{margin:0;color:var(--dim)}
   .memo p{margin:0;white-space:pre-wrap;font-family:var(--serif);font-size:1.05rem;line-height:1.65;color:var(--dim)}
-
   .counts{margin:.4rem 0 1.1rem;color:var(--faint);font-size:.92rem}
+
   .row{display:flex;flex-wrap:wrap;gap:.75rem;align-items:center}
   .spacer{flex:1}
   button{padding:.6rem 1.1rem;border-radius:6px;font:inherit;cursor:pointer}
   .primary{background:var(--maize);color:var(--bg);border:none;font-weight:700}
+  .row .primary{margin-left:auto}   /* stays on the right even when the row wraps on a phone */
   .quiet{background:transparent;color:var(--link);border:1px solid var(--line)}
-  button:disabled{opacity:.35;cursor:default}
 
   .status{min-height:1.5rem;margin-top:1rem}
   .status.warn{color:var(--warn)}
-  .status a{color:var(--link)}
   .testlink{margin-top:.5rem;padding:.6rem .75rem;background:var(--field);border:1px solid var(--line);
             border-radius:6px;color:var(--link);font-size:.8rem;word-break:break-all}
 
-  nav{margin-top:2.5rem;padding-top:1.25rem;border-top:1px solid var(--line)}
+  /* start over: small and out of the way, and it asks before clearing anything */
+  .foot{margin-top:4rem;padding-top:1rem;border-top:1px solid var(--line);text-align:center}
+  .foot button{padding:0;background:none;border:none;color:var(--faint);font-size:.85rem;text-decoration:underline}
 </style>
 </head>
 <body>
@@ -73,22 +81,33 @@
   <p class="office">Executive Office of the President, Weillland</p>
   <h1>Draft review</h1>
 
-  <!-- first screen: who's in the group -->
+  <p class="who hidden" id="who"><span id="whoList"></span><button type="button" class="linkish" id="changeNames">Change names</button></p>
+
+  <!-- 1. who's in the group -->
   <section id="namesScreen" class="hidden">
     <h2>Who's in your group?</h2>
     <div id="nameRows"></div>
     <button type="button" class="quiet" id="addRow">Add another person</button>
     <div class="row startrow">
       <span class="spacer"></span>
-      <button type="button" class="primary" id="start">Start</button>
+      <button type="button" class="primary" id="saveNames">Continue</button>
     </div>
     <div class="status" id="namesStatus" role="status"></div>
   </section>
 
-  <!-- then one question at a time -->
-  <section id="questionScreen" class="hidden">
-    <p class="who"><span id="whoList"></span><button type="button" class="linkish" id="changeNames">Change names</button></p>
+  <!-- 2. wait for everyone before the first draft -->
+  <section id="readyScreen" class="hidden">
+    <h2 class="big">You're set</h2>
+    <p class="lead" id="readyText"></p>
+    <div class="row">
+      <span class="spacer"></span>
+      <button type="button" class="primary" id="begin">Start question 1</button>
+    </div>
+    <p class="hint">Don't start until the class does.</p>
+  </section>
 
+  <!-- 3. one draft at a time -->
+  <section id="questionScreen" class="hidden">
     <p class="step" id="step"></p>
     <h2 id="prompt"></h2>
 
@@ -111,21 +130,31 @@
       <button type="button" class="primary" id="submit">Submit edit</button>
     </div>
     <div class="status" id="status" role="status"></div>
-
-    <nav class="row">
-      <button type="button" class="quiet" id="back">Previous question</button>
-      <span class="spacer"></span>
-      <button type="button" class="quiet" id="next">Next question</button>
-    </nav>
   </section>
+
+  <!-- 4. after each submission: hold for the class discussion -->
+  <section id="holdScreen" class="hidden">
+    <h2 class="big">Hold here</h2>
+    <p class="lead" id="holdText"></p>
+    <div class="check" id="holdCheck"></div>
+    <div class="row">
+      <button type="button" class="quiet" id="backToEdit">Back to our edit</button>
+      <span class="spacer"></span>
+      <button type="button" class="primary" id="continue"></button>
+    </div>
+    <p class="hint" id="continueHint">Don't continue until the class moves on.</p>
+  </section>
+  <footer class="foot">
+    <button type="button" id="startOver">Reset this page</button>
+  </footer>
 </main>
 
 <script>
 /* ================= SETUP ================= */
-/* The Google Form needs three questions: group members (short answer), question number
-   (short answer), and edited draft (paragraph). Paste the form's address (ending in
-   /viewform) and the three field IDs from its pre-filled link below. Until FORM_URL is
-   real, Submit shows the link it would open instead of opening it. */
+/* The Google Form has three questions: group members (short answer), question number
+   (short answer), and edited draft (paragraph). FORM_URL and the field IDs come from its
+   pre-filled link. If FORM_URL contains PLACEHOLDER, Submit shows the link it would open
+   instead of opening it. Adding ?reset to the page address clears what a browser remembers. */
 const CONFIG = {
   FORM_URL:       "https://docs.google.com/forms/d/e/1FAIpQLSegDSDB0DPiGQkbYCY4x_D8ea0Va8I4BuYaOVxAFY24NIufeA/viewform",
   FIELD_NAMES:    "entry.1378306077",
@@ -139,50 +168,88 @@ const QUESTIONS = [
   {
     subject: "Bubble",
     prompt:  "Define \"bubble\" and explain its relevance to the Great Depression.",
-    draft:   "The term bubble is defined by experts in economics and other professions and academic traditions as an increase in the prices of assets that all kinds of businesses are not able to justify. [Placeholder draft.]"
+    draft:   "A bubble is basically when the prices of assets go higher than what the prospects of the businesses can justify, which happens because buyers expect that they will be able to resell to someone else at a higher price. In the late 1920s this was the case with stocks, which went up a lot due to excitement about radio and the car. In an attempt to stop this, interest rates were raised by the Fed, and borrowing became more costly, so there was less spending, which probably caused the recession that began in the summer of 1929. Then, in October 1929, there was the crash, where about a third of stock value was lost. Since not many people owned stocks, the effect was not so much lost savings but more so uncertainty, which led to purchases being delayed and the recession getting worse."
   },
   {
-    subject: "[Subject 2]",
-    prompt:  "[Question 2 prompt]",
-    draft:   "[Question 2 draft]"
+    subject: "Bank run",
+    prompt:  "Define \"bank run\" and explain its relevance to the Great Depression.",
+    draft:   "When it comes to bank runs, what happens is that large numbers of depositors all go to withdraw their funds at the same time, all at once, driven by the fear that the bank will not be able to repay them. The thing is, most deposits have been lent out and are not held as cash, so even a healthy bank is not able to pay everyone back on the same day, meaning the run can actually cause the failure that was feared. There were waves of these between 1930 and 1933, and one-fifth of US banks were forced to close, which deepened the 1929 recession into a four-year depression. Credit was cut off and the money supply was shrunk by the failures, causing deflation. This kind of run was eventually ended by federal deposit insurance, which was adopted in 1933 and 1934."
   },
   {
-    subject: "[Subject 3]",
-    prompt:  "[Question 3 prompt]",
-    draft:   "[Question 3 draft]"
+    subject: "The Dust Bowl",
+    prompt:  "True, false, or uncertain? Explain your answer. \"The Dust Bowl was a major cause of the Great Depression.\"",
+    draft:   "The Dust Bowl, which was a severe drought that hit farming in the 1930s, was obviously a really terrible event for many people, especially farmers. However, it mostly came after 1933. At this in history point, the decline that had been happening from 1929 to 1933 had already occurred in the past. Also, it only struck one region, and agriculture only made up about 10% of US GDP anyway. On the other hand, there is arguments to be had that it maybe made things worse. So, who knows. In addition to this, the Depression is understood by economists to have been a collapse in demand rather than a supply shock like a drought would be. For these reasons, the statement can be said to be false."
+  },
+  {
+    subject: "The 1929 crash",
+    prompt:  "Few Americans owned stock in 1929. Why did the crash hurt the economy anyway?",
+    draft:   "It is important to note that not very many Americans actually owned stock in 1929, so one might assume that the crash would not have had much of an effect, but this is not really the case. The crash was reported on constantly by the fake news lamestream media, which meant that even people with no stonks were made to feel unsure about what would happen next, and this uncertainty was in a sense worse than pessimism, since a glass half full kind of person might still buy a cheaper car, whereas an uncertain person would tend to wait. As a result of this sitution, spending was reduced and the recession that had already started in the summer of 1929 was made deeper. So it was uncertainty, not really lost wealth."
+  },
+  {
+    subject: "The 1929 recession",
+    prompt:  "What started the recession in 1929, and how did that action reduce spending?",
+    draft:   "Ok bestie, no cap, the recession in 1929 was lowkey started by the Fed, who were giving major ick about the stock market bubble, because stock prices were going up way too fast and it was giving delulu, not sustainable. So to stop this, interest rates were raised by the Fed (bet), and borrowing money got hella expensive fr fr. When borrowing is that pricey, businesses are not down to borrow to expand, and consumers are not down to borrow for houses and cars, which is a huge L for spending and honestly mid behavior. Spending went down, the economy got cooked, it was giving full skibidi toilet Ohio energy, and the recession started in the summer of 1929, before the crash even happened, which is lowkey wild. The Fed really said touch grass to the whole economy, periodt."
   }
 ];
 
 /* ================= PAGE ================= */
 const $ = id => document.getElementById(id);
 const STORE = "draft-review";
-let cur = 0;
-// kept in the browser so a reload doesn't lose work; edits[i] = { draft, text }
-let saved = { members: [], edits: {} };
+const SCREENS = { names: "namesScreen", ready: "readyScreen", question: "questionScreen", hold: "holdScreen" };
+const TEST = CONFIG.FORM_URL.includes("PLACEHOLDER");
+
+// what this browser remembers, so a reload lands where the group left off.
+// edits[i] = { draft, text }; prev = where Change names should return to
+let saved = { members: [], edits: {}, stage: "names", cur: 0, lastUrl: "", prev: null };
 
 function load(){
   try {
     const s = JSON.parse(localStorage.getItem(STORE));
-    if (s && typeof s === "object") {
-      saved = { members: Array.isArray(s.members) ? s.members : [], edits: s.edits || {} };
-    }
+    if (s && typeof s === "object") saved = Object.assign(saved, s);
   } catch (e) {}
+  if (!Array.isArray(saved.members)) saved.members = [];
+  if (!saved.edits || typeof saved.edits !== "object") saved.edits = {};
+  if (!SCREENS[saved.stage] || !saved.members.length) saved.stage = "names";
+  saved.cur = clampQ(Number(saved.cur) || 0);
 }
 function persist(){
   try { localStorage.setItem(STORE, JSON.stringify(saved)); } catch (e) {}
 }
 
+const clampQ = i => Math.max(0, Math.min(QUESTIONS.length - 1, i));
 // what goes into the form's names field: "Ana Lee, Ben Ortiz"
 const groupNames = () => saved.members.map(m => (m.first + " " + m.last).trim()).filter(Boolean).join(", ");
 const words = t => (t.trim().match(/\S+/g) || []).length;
-const esc = t => t.replace(/[&<>"']/g, c => ({ "&":"&amp;", "<":"&lt;", ">":"&gt;", "\"":"&quot;", "'":"&#39;" }[c]));
+const esc = t => String(t).replace(/[&<>"']/g, c => ({ "&":"&amp;", "<":"&lt;", ">":"&gt;", "\"":"&quot;", "'":"&#39;" }[c]));
 
 function setStatus(id, html, warn){
   $(id).innerHTML = html;
   $(id).className = "status" + (warn ? " warn" : "");
 }
 
-/* ---------- names screen ---------- */
+/* ---------- moving between screens ---------- */
+function go(stage, i){
+  saved.stage = stage;
+  if (i !== undefined) saved.cur = clampQ(i);
+  persist();
+  render();
+}
+
+function render(){
+  Object.values(SCREENS).forEach(id => $(id).classList.add("hidden"));
+  $(SCREENS[saved.stage]).classList.remove("hidden");
+  $("who").classList.toggle("hidden", saved.stage === "names");
+  $("whoList").textContent = "Group: " + groupNames();
+
+  if (saved.stage === "names")    renderNames();
+  if (saved.stage === "ready")    $("readyText").textContent = "You'll edit " + QUESTIONS.length +
+                                    " drafts, one at a time. Wait here until we start the first one together.";
+  if (saved.stage === "question") renderQuestion();
+  if (saved.stage === "hold")     renderHold();
+  window.scrollTo(0, 0);
+}
+
+/* ---------- 1. names ---------- */
 function addRow(first, last){
   const row = document.createElement("div");
   row.className = "namerow";
@@ -194,114 +261,128 @@ function addRow(first, last){
   return row;
 }
 
-function showNames(){
+function renderNames(){
   $("nameRows").innerHTML = "";
   saved.members.forEach(m => addRow(m.first, m.last));
   for (let i = saved.members.length; i < CONFIG.NAME_ROWS; i++) addRow();
   setStatus("namesStatus", "");
-  $("questionScreen").classList.add("hidden");
-  $("namesScreen").classList.remove("hidden");
-  window.scrollTo(0, 0);
 }
 
-function startQuestions(){
+function saveNames(){
   const members = [];
   document.querySelectorAll("#nameRows .namerow").forEach(r => {
     const first = r.querySelector(".first").value.trim();
     const last  = r.querySelector(".last").value.trim();
     if (first || last) members.push({ first, last });
   });
-  if (!members.length) { setStatus("namesStatus", "Enter at least one name to start.", true); return; }
+  if (!members.length) { setStatus("namesStatus", "Enter at least one name to continue.", true); return; }
   saved.members = members;
-  persist();
-  $("namesScreen").classList.add("hidden");
-  $("questionScreen").classList.remove("hidden");
-  show(cur);
+  const back = saved.prev;
+  saved.prev = null;
+  if (back && SCREENS[back.stage] && back.stage !== "names") go(back.stage, back.cur);
+  else go("ready");
 }
 
-/* ---------- question screen ---------- */
+/* ---------- 3. questions ---------- */
 function counts(){
-  $("counts").textContent = "Draft: " + words(QUESTIONS[cur].draft) + " words. Yours: " +
+  $("counts").textContent = "Draft: " + words(QUESTIONS[saved.cur].draft) + " words. Yours: " +
                             words($("edit").value) + " words.";
 }
 function remember(){
-  saved.edits[cur] = { draft: QUESTIONS[cur].draft, text: $("edit").value };
+  saved.edits[saved.cur] = { draft: QUESTIONS[saved.cur].draft, text: $("edit").value };
   persist();
 }
 
-function show(i){
-  cur = Math.max(0, Math.min(QUESTIONS.length - 1, i));
-  const q = QUESTIONS[cur];
-  $("whoList").textContent = "Group: " + groupNames();
-  $("step").textContent    = "Question " + (cur + 1) + " of " + QUESTIONS.length;
+function renderQuestion(){
+  const q = QUESTIONS[saved.cur];
+  $("step").textContent    = "Question " + (saved.cur + 1) + " of " + QUESTIONS.length;
   $("prompt").textContent  = q.prompt;
   $("subject").textContent = q.subject;
   $("draft").textContent   = q.draft;
-
   // pick up where the group left off, unless the draft has changed since
-  const e = saved.edits[cur];
+  const e = saved.edits[saved.cur];
   $("edit").value = (e && e.draft === q.draft) ? e.text : q.draft;
-
-  $("back").disabled = cur === 0;
-  $("next").disabled = cur === QUESTIONS.length - 1;
   setStatus("status", "");
   counts();
-  history.replaceState(null, "", "#q" + (cur + 1));
-  window.scrollTo(0, 0);
 }
 
 function submitEdit(){
   remember();
   const names = groupNames();
   const text  = $("edit").value.trim();
-  if (!names) { showNames(); return; }
+  if (!names) { saved.prev = { stage: "question", cur: saved.cur }; go("names"); return; }
   if (!text)  { setStatus("status", "The edit box is empty. Start over from the draft to get it back.", true); return; }
-  if (text === QUESTIONS[cur].draft.trim()) { setStatus("status", "This is still the original draft. Edit it before submitting.", true); return; }
+  if (text === QUESTIONS[saved.cur].draft.trim()) { setStatus("status", "This is still the original draft. Edit it before submitting.", true); return; }
 
-  const url = CONFIG.FORM_URL + "?usp=pp_url" +
+  saved.lastUrl = CONFIG.FORM_URL + "?usp=pp_url" +
     "&" + CONFIG.FIELD_NAMES    + "=" + encodeURIComponent(names) +
-    "&" + CONFIG.FIELD_QUESTION + "=" + encodeURIComponent(String(cur + 1)) +
+    "&" + CONFIG.FIELD_QUESTION + "=" + encodeURIComponent(String(saved.cur + 1)) +
     "&" + CONFIG.FIELD_EDIT     + "=" + encodeURIComponent(text);
 
-  if (CONFIG.FORM_URL.includes("PLACEHOLDER")) {
-    setStatus("status", "Test mode: no form is connected yet. Submit would open this link:" +
-                        "<div class='testlink'>" + esc(url) + "</div>");
-    return;
+  if (!TEST) {
+    const w = window.open(saved.lastUrl, "_blank");
+    if (w) w.opener = null;
   }
+  go("hold");
+}
 
-  const w = window.open(url, "_blank");
-  if (w) w.opener = null;
-  setStatus("status", "The form opened in a new tab with your edit filled in. <b>Click Submit there</b> to send it. " +
-                      "No new tab? <a href='" + esc(url) + "' target='_blank' rel='noopener'>Open the form</a>.");
+/* ---------- 4. hold ---------- */
+function renderHold(){
+  const last = saved.cur === QUESTIONS.length - 1;
+  const url  = saved.lastUrl;
+  $("holdText").textContent = last
+    ? "That was the last draft. We'll discuss every group's edit as a class."
+    : "We'll discuss every group's edit as a class before moving on.";
+  if (TEST) {
+    $("holdCheck").innerHTML = "Test mode: no form is connected yet. Submit would have opened this link:" +
+                               "<div class='testlink'>" + esc(url) + "</div>";
+  } else {
+    $("holdCheck").innerHTML = "Make sure someone clicked <b>Submit</b> in the form that opened." +
+      (url ? " No form? <a href='" + esc(url) + "' target='_blank' rel='noopener'>Open it again</a>." : "");
+  }
+  $("continue").textContent = "Continue to question " + (saved.cur + 2);
+  $("continue").classList.toggle("hidden", last);
+  $("continueHint").classList.toggle("hidden", last);
 }
 
 /* ---------- wiring ---------- */
 $("addRow").addEventListener("click", () => addRow().querySelector(".first").focus());
-$("start").addEventListener("click", startQuestions);
-$("nameRows").addEventListener("keydown", ev => { if (ev.key === "Enter") startQuestions(); });
+$("saveNames").addEventListener("click", saveNames);
+$("nameRows").addEventListener("keydown", ev => { if (ev.key === "Enter") saveNames(); });
 $("nameRows").addEventListener("input", () => setStatus("namesStatus", ""));
-$("changeNames").addEventListener("click", () => { remember(); showNames(); });
+$("changeNames").addEventListener("click", () => {
+  if (saved.stage === "question") remember();
+  saved.prev = { stage: saved.stage, cur: saved.cur };
+  go("names");
+});
+
+$("begin").addEventListener("click", () => go("question", 0));
 
 $("edit").addEventListener("input", () => { counts(); remember(); });
 $("reset").addEventListener("click", () => {
-  if ($("edit").value !== QUESTIONS[cur].draft && !confirm("Replace your edit with the original draft?")) return;
-  $("edit").value = QUESTIONS[cur].draft;
+  if ($("edit").value !== QUESTIONS[saved.cur].draft && !confirm("Replace your edit with the original draft?")) return;
+  $("edit").value = QUESTIONS[saved.cur].draft;
   counts(); remember(); setStatus("status", "");
 });
 $("submit").addEventListener("click", submitEdit);
-$("back").addEventListener("click", () => { remember(); show(cur - 1); });
-$("next").addEventListener("click", () => { remember(); show(cur + 1); });
 
-// start on the names screen, or go straight to the questions if this browser already has the group's names
-load();
-const fromLink = location.hash.match(/^#q(\d+)$/);
-cur = fromLink ? Math.max(0, Math.min(QUESTIONS.length - 1, Number(fromLink[1]) - 1)) : 0;
-if (saved.members.length) {
-  $("questionScreen").classList.remove("hidden");
-  show(cur);
-} else {
-  showNames();
+$("backToEdit").addEventListener("click", () => go("question", saved.cur));
+$("continue").addEventListener("click", () => go("question", saved.cur + 1));
+
+$("startOver").addEventListener("click", () => {
+  if (!confirm("Start over? This clears your group's names and every edit saved on this device.")) return;
+  try { localStorage.removeItem(STORE); } catch (e) {}
+  saved = { members: [], edits: {}, stage: "names", cur: 0, lastUrl: "", prev: null };
+  render();
+});
+
+// ?reset on the address starts this browser over from the names screen
+if (new URLSearchParams(location.search).has("reset")) {
+  try { localStorage.removeItem(STORE); } catch (e) {}
+  history.replaceState(null, "", location.pathname);
 }
+load();
+render();
 </script>
 </body>
 </html>
