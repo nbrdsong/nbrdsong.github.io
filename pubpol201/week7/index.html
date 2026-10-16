@@ -1,0 +1,307 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex">
+<title>Draft review</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Source+Sans+3:wght@400;600;700&family=Source+Serif+4:opsz,wght@8..60,400;8..60,600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#0B1622; --field:#08111B; --line:#24394F;
+    --text:#E6EDF3; --dim:#A9B7C6; --faint:#7F92A5;
+    --maize:#FFCB05; --link:#6FB3F2; --warn:#E8A33D;
+    --sans:"Source Sans 3", -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif;
+    --serif:"Source Serif 4", Georgia, "Times New Roman", serif;
+  }
+  *{box-sizing:border-box}
+  html{color-scheme:dark}
+  body{margin:0;background:var(--bg);color:var(--text);font:17px/1.5 var(--sans)}
+  main{max-width:46rem;margin:0 auto;padding:1.5rem 1.25rem 3rem}
+  .hidden{display:none !important}
+
+  .office{margin:0;color:var(--faint);font-size:.95rem}
+  h1{margin:.1rem 0 1.75rem;font-size:2rem;line-height:1.15;color:var(--maize)}
+  h2{margin:0 0 1.25rem;font-size:1.3rem;line-height:1.3}
+  label{display:block;margin-bottom:.35rem;font-weight:600}
+
+  input[type=text], textarea{
+    width:100%;padding:.65rem .75rem;background:var(--field);color:var(--text);
+    border:1px solid var(--line);border-radius:6px;font-size:16px}
+  input[type=text]{font-family:var(--sans)}
+  textarea{min-height:15rem;resize:vertical;font-family:var(--serif);font-size:1.05rem;line-height:1.6}
+  input:focus, textarea:focus, button:focus-visible{outline:2px solid var(--maize);outline-offset:2px}
+
+  /* names screen: one person per row */
+  .namerow{display:flex;gap:.5rem;margin-bottom:.5rem}
+  .namerow input{flex:1;min-width:0}
+  .startrow{margin-top:1.75rem}
+
+  /* question screen */
+  .who{margin:0 0 2rem;color:var(--dim);font-size:.95rem}
+  .linkish{margin-left:.6rem;padding:0;background:none;border:none;color:var(--link);text-decoration:underline;font-size:.95rem}
+  .step{margin:0 0 .25rem;color:var(--dim)}
+
+  /* the draft, set as a memo from junior staff */
+  .memo{margin:0 0 1.75rem;padding:.2rem 0 .2rem 1rem;border-left:3px solid var(--line)}
+  .memo dl{display:grid;grid-template-columns:max-content 1fr;gap:.1rem .75rem;margin:0 0 .8rem;font-size:.92rem}
+  .memo dt{color:var(--faint)}
+  .memo dd{margin:0;color:var(--dim)}
+  .memo p{margin:0;white-space:pre-wrap;font-family:var(--serif);font-size:1.05rem;line-height:1.65;color:var(--dim)}
+
+  .counts{margin:.4rem 0 1.1rem;color:var(--faint);font-size:.92rem}
+  .row{display:flex;flex-wrap:wrap;gap:.75rem;align-items:center}
+  .spacer{flex:1}
+  button{padding:.6rem 1.1rem;border-radius:6px;font:inherit;cursor:pointer}
+  .primary{background:var(--maize);color:var(--bg);border:none;font-weight:700}
+  .quiet{background:transparent;color:var(--link);border:1px solid var(--line)}
+  button:disabled{opacity:.35;cursor:default}
+
+  .status{min-height:1.5rem;margin-top:1rem}
+  .status.warn{color:var(--warn)}
+  .status a{color:var(--link)}
+  .testlink{margin-top:.5rem;padding:.6rem .75rem;background:var(--field);border:1px solid var(--line);
+            border-radius:6px;color:var(--link);font-size:.8rem;word-break:break-all}
+
+  nav{margin-top:2.5rem;padding-top:1.25rem;border-top:1px solid var(--line)}
+</style>
+</head>
+<body>
+<main>
+  <p class="office">Executive Office of the President, Weillland</p>
+  <h1>Draft review</h1>
+
+  <!-- first screen: who's in the group -->
+  <section id="namesScreen" class="hidden">
+    <h2>Who's in your group?</h2>
+    <div id="nameRows"></div>
+    <button type="button" class="quiet" id="addRow">Add another person</button>
+    <div class="row startrow">
+      <span class="spacer"></span>
+      <button type="button" class="primary" id="start">Start</button>
+    </div>
+    <div class="status" id="namesStatus" role="status"></div>
+  </section>
+
+  <!-- then one question at a time -->
+  <section id="questionScreen" class="hidden">
+    <p class="who"><span id="whoList"></span><button type="button" class="linkish" id="changeNames">Change names</button></p>
+
+    <p class="step" id="step"></p>
+    <h2 id="prompt"></h2>
+
+    <div class="memo">
+      <dl>
+        <dt>To</dt><dd>The President</dd>
+        <dt>From</dt><dd>Junior policy staff</dd>
+        <dt>Subject</dt><dd id="subject"></dd>
+      </dl>
+      <p id="draft"></p>
+    </div>
+
+    <label for="edit">Your edit</label>
+    <textarea id="edit" spellcheck="true"></textarea>
+    <p class="counts" id="counts"></p>
+
+    <div class="row">
+      <button type="button" class="quiet" id="reset">Start over from the draft</button>
+      <span class="spacer"></span>
+      <button type="button" class="primary" id="submit">Submit edit</button>
+    </div>
+    <div class="status" id="status" role="status"></div>
+
+    <nav class="row">
+      <button type="button" class="quiet" id="back">Previous question</button>
+      <span class="spacer"></span>
+      <button type="button" class="quiet" id="next">Next question</button>
+    </nav>
+  </section>
+</main>
+
+<script>
+/* ================= SETUP ================= */
+/* The Google Form needs three questions: group members (short answer), question number
+   (short answer), and edited draft (paragraph). Paste the form's address (ending in
+   /viewform) and the three field IDs from its pre-filled link below. Until FORM_URL is
+   real, Submit shows the link it would open instead of opening it. */
+const CONFIG = {
+  FORM_URL:       "https://docs.google.com/forms/d/e/1FAIpQLSegDSDB0DPiGQkbYCY4x_D8ea0Va8I4BuYaOVxAFY24NIufeA/viewform",
+  FIELD_NAMES:    "entry.1378306077",
+  FIELD_QUESTION: "entry.1577060064",
+  FIELD_EDIT:     "entry.2083470379",
+  NAME_ROWS:      4       // empty name rows on the first screen; groups can add more
+};
+
+/* One entry per question, in order. subject fills the memo's Subject line. */
+const QUESTIONS = [
+  {
+    subject: "Bubble",
+    prompt:  "Define \"bubble\" and explain its relevance to the Great Depression.",
+    draft:   "The term bubble is defined by experts in economics and other professions and academic traditions as an increase in the prices of assets that all kinds of businesses are not able to justify. [Placeholder draft.]"
+  },
+  {
+    subject: "[Subject 2]",
+    prompt:  "[Question 2 prompt]",
+    draft:   "[Question 2 draft]"
+  },
+  {
+    subject: "[Subject 3]",
+    prompt:  "[Question 3 prompt]",
+    draft:   "[Question 3 draft]"
+  }
+];
+
+/* ================= PAGE ================= */
+const $ = id => document.getElementById(id);
+const STORE = "draft-review";
+let cur = 0;
+// kept in the browser so a reload doesn't lose work; edits[i] = { draft, text }
+let saved = { members: [], edits: {} };
+
+function load(){
+  try {
+    const s = JSON.parse(localStorage.getItem(STORE));
+    if (s && typeof s === "object") {
+      saved = { members: Array.isArray(s.members) ? s.members : [], edits: s.edits || {} };
+    }
+  } catch (e) {}
+}
+function persist(){
+  try { localStorage.setItem(STORE, JSON.stringify(saved)); } catch (e) {}
+}
+
+// what goes into the form's names field: "Ana Lee, Ben Ortiz"
+const groupNames = () => saved.members.map(m => (m.first + " " + m.last).trim()).filter(Boolean).join(", ");
+const words = t => (t.trim().match(/\S+/g) || []).length;
+const esc = t => t.replace(/[&<>"']/g, c => ({ "&":"&amp;", "<":"&lt;", ">":"&gt;", "\"":"&quot;", "'":"&#39;" }[c]));
+
+function setStatus(id, html, warn){
+  $(id).innerHTML = html;
+  $(id).className = "status" + (warn ? " warn" : "");
+}
+
+/* ---------- names screen ---------- */
+function addRow(first, last){
+  const row = document.createElement("div");
+  row.className = "namerow";
+  row.innerHTML = '<input type="text" class="first" placeholder="First name" aria-label="First name" autocomplete="off">' +
+                  '<input type="text" class="last" placeholder="Last name" aria-label="Last name" autocomplete="off">';
+  row.querySelector(".first").value = first || "";
+  row.querySelector(".last").value  = last  || "";
+  $("nameRows").appendChild(row);
+  return row;
+}
+
+function showNames(){
+  $("nameRows").innerHTML = "";
+  saved.members.forEach(m => addRow(m.first, m.last));
+  for (let i = saved.members.length; i < CONFIG.NAME_ROWS; i++) addRow();
+  setStatus("namesStatus", "");
+  $("questionScreen").classList.add("hidden");
+  $("namesScreen").classList.remove("hidden");
+  window.scrollTo(0, 0);
+}
+
+function startQuestions(){
+  const members = [];
+  document.querySelectorAll("#nameRows .namerow").forEach(r => {
+    const first = r.querySelector(".first").value.trim();
+    const last  = r.querySelector(".last").value.trim();
+    if (first || last) members.push({ first, last });
+  });
+  if (!members.length) { setStatus("namesStatus", "Enter at least one name to start.", true); return; }
+  saved.members = members;
+  persist();
+  $("namesScreen").classList.add("hidden");
+  $("questionScreen").classList.remove("hidden");
+  show(cur);
+}
+
+/* ---------- question screen ---------- */
+function counts(){
+  $("counts").textContent = "Draft: " + words(QUESTIONS[cur].draft) + " words. Yours: " +
+                            words($("edit").value) + " words.";
+}
+function remember(){
+  saved.edits[cur] = { draft: QUESTIONS[cur].draft, text: $("edit").value };
+  persist();
+}
+
+function show(i){
+  cur = Math.max(0, Math.min(QUESTIONS.length - 1, i));
+  const q = QUESTIONS[cur];
+  $("whoList").textContent = "Group: " + groupNames();
+  $("step").textContent    = "Question " + (cur + 1) + " of " + QUESTIONS.length;
+  $("prompt").textContent  = q.prompt;
+  $("subject").textContent = q.subject;
+  $("draft").textContent   = q.draft;
+
+  // pick up where the group left off, unless the draft has changed since
+  const e = saved.edits[cur];
+  $("edit").value = (e && e.draft === q.draft) ? e.text : q.draft;
+
+  $("back").disabled = cur === 0;
+  $("next").disabled = cur === QUESTIONS.length - 1;
+  setStatus("status", "");
+  counts();
+  history.replaceState(null, "", "#q" + (cur + 1));
+  window.scrollTo(0, 0);
+}
+
+function submitEdit(){
+  remember();
+  const names = groupNames();
+  const text  = $("edit").value.trim();
+  if (!names) { showNames(); return; }
+  if (!text)  { setStatus("status", "The edit box is empty. Start over from the draft to get it back.", true); return; }
+  if (text === QUESTIONS[cur].draft.trim()) { setStatus("status", "This is still the original draft. Edit it before submitting.", true); return; }
+
+  const url = CONFIG.FORM_URL + "?usp=pp_url" +
+    "&" + CONFIG.FIELD_NAMES    + "=" + encodeURIComponent(names) +
+    "&" + CONFIG.FIELD_QUESTION + "=" + encodeURIComponent(String(cur + 1)) +
+    "&" + CONFIG.FIELD_EDIT     + "=" + encodeURIComponent(text);
+
+  if (CONFIG.FORM_URL.includes("PLACEHOLDER")) {
+    setStatus("status", "Test mode: no form is connected yet. Submit would open this link:" +
+                        "<div class='testlink'>" + esc(url) + "</div>");
+    return;
+  }
+
+  const w = window.open(url, "_blank");
+  if (w) w.opener = null;
+  setStatus("status", "The form opened in a new tab with your edit filled in. <b>Click Submit there</b> to send it. " +
+                      "No new tab? <a href='" + esc(url) + "' target='_blank' rel='noopener'>Open the form</a>.");
+}
+
+/* ---------- wiring ---------- */
+$("addRow").addEventListener("click", () => addRow().querySelector(".first").focus());
+$("start").addEventListener("click", startQuestions);
+$("nameRows").addEventListener("keydown", ev => { if (ev.key === "Enter") startQuestions(); });
+$("nameRows").addEventListener("input", () => setStatus("namesStatus", ""));
+$("changeNames").addEventListener("click", () => { remember(); showNames(); });
+
+$("edit").addEventListener("input", () => { counts(); remember(); });
+$("reset").addEventListener("click", () => {
+  if ($("edit").value !== QUESTIONS[cur].draft && !confirm("Replace your edit with the original draft?")) return;
+  $("edit").value = QUESTIONS[cur].draft;
+  counts(); remember(); setStatus("status", "");
+});
+$("submit").addEventListener("click", submitEdit);
+$("back").addEventListener("click", () => { remember(); show(cur - 1); });
+$("next").addEventListener("click", () => { remember(); show(cur + 1); });
+
+// start on the names screen, or go straight to the questions if this browser already has the group's names
+load();
+const fromLink = location.hash.match(/^#q(\d+)$/);
+cur = fromLink ? Math.max(0, Math.min(QUESTIONS.length - 1, Number(fromLink[1]) - 1)) : 0;
+if (saved.members.length) {
+  $("questionScreen").classList.remove("hidden");
+  show(cur);
+} else {
+  showNames();
+}
+</script>
+</body>
+</html>
