@@ -1,0 +1,1249 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Weillland School Reform</title>
+<style>
+  :root{
+    --bg:#0B1622; --fg:#E6EDF3; --dim:#BCCAD8; --faint:#8296A8;
+    --gold:#FFCB05; --blue:#6FB3F2; --green:#4FB477; --red:#E0745C;
+    --panel:#121F2E; --line:#22374d;
+  }
+  *{box-sizing:border-box}
+  body{margin:0 auto;max-width:980px;padding:18px;background:var(--bg);color:var(--fg);
+       font:16px/1.55 -apple-system,BlinkMacSystemFont,"Segoe UI",Helvetica,Arial,sans-serif}
+  h1{font-size:1.35rem;color:var(--gold);border-bottom:4px solid var(--gold);
+     display:inline-block;padding-bottom:.1em;margin:0 0 .5em}
+  h2{font-size:1.08rem;color:var(--gold);margin:0 0 .4em}
+  h3{font-size:.97rem;color:var(--gold);margin:1.4em 0 .35em}
+  .panel{background:var(--panel);border:1px solid var(--line);border-radius:10px;
+         padding:16px;margin:12px 0}
+  .hidden{display:none !important}
+  .note{color:var(--dim);font-size:.85rem}
+  .tiny{color:var(--faint);font-size:.78rem}
+  .body{color:#D4DFEA;font-size:.94rem}
+  .warn{color:var(--red)}
+  .good{color:var(--green)}
+  .bad{color:var(--red)}
+  .prompt{border-left:3px solid var(--blue);padding:10px 13px;margin:14px 0;
+          color:#D4DFEA;font-size:.9rem;background:#0d1a27}
+  textarea{width:100%;min-height:110px;background:#08111b;border:1px solid var(--line);
+           border-radius:6px;color:var(--fg);padding:10px;font:inherit;resize:vertical}
+  input[type=text]{padding:9px;background:#08111b;border:1px solid var(--line);
+       border-radius:6px;color:var(--fg);font-family:inherit;font-size:.95rem}
+  button{font-family:inherit;cursor:pointer}
+  .go{background:var(--gold);color:#0B1622;border:none;border-radius:8px;
+      padding:11px 20px;font-size:1rem;font-weight:700}
+  .go:disabled{opacity:.3;cursor:default}
+  .alt{background:transparent;color:var(--blue);border:1px solid var(--line)}
+  .big{display:block;width:100%;text-align:left;background:transparent;color:var(--fg);
+       border:1px solid var(--line);border-radius:8px;padding:12px 14px;margin:8px 0;font-size:.97rem}
+  .big:hover{border-color:var(--gold)}
+  .big b{color:var(--fg)} .big .sub{display:block;color:var(--dim);font-size:.87rem;margin-top:3px}
+  .big.current{border-color:var(--gold)}
+  .big.current b:after{content:" \00b7 in force";color:var(--gold);font-size:.78rem;font-weight:600}
+
+  .dash{display:flex;gap:14px;flex-wrap:wrap}
+  .stat{flex:1;min-width:100px}
+  .stat .label{color:var(--faint);font-size:.66rem;letter-spacing:.09em;text-transform:uppercase}
+  .stat .val{font-size:1.35rem;font-weight:700;font-variant-numeric:tabular-nums}
+  .gdp{color:var(--gold)} .up{color:var(--green)} .down{color:var(--red)}
+
+  .namerow{display:flex;gap:8px;margin-bottom:8px}
+  .namerow input{flex:1;min-width:0}
+
+  table.vote{width:100%;border-collapse:collapse;margin-top:10px;font-size:.86rem}
+  table.vote th,table.vote td{border-bottom:1px solid var(--line);padding:7px 5px;text-align:center}
+  table.vote th:first-child,table.vote td:first-child{text-align:left;color:var(--dim)}
+  table.vote th{color:var(--faint);font-size:.7rem;text-transform:uppercase;letter-spacing:.05em}
+  table.vote input{width:19px;height:19px;accent-color:var(--gold)}
+  table.vote tr.current td:first-child{border-left:3px solid var(--gold);}
+  table.vote tr.current b{color:var(--gold);}
+  table.vote .cost{display:block;color:var(--gold);font-size:.8rem;margin-top:3px;}
+  table.vote td:first-child b{display:block;color:var(--fg)}
+  table.vote td:first-child .sub{display:block;color:var(--dim);font-size:.8rem;margin-top:2px}
+
+  table.outcome,table.rec,table.evidence{width:100%;border-collapse:collapse;font-size:.86rem}
+  table.outcome th,table.outcome td,table.rec th,table.rec td,table.evidence th,table.evidence td{
+    text-align:left;padding:6px 7px;border-bottom:1px solid var(--line)}
+  table.outcome th,table.rec th,table.evidence th{color:var(--faint);font-size:.68rem;
+    text-transform:uppercase;letter-spacing:.05em}
+  table.outcome td.num,table.rec td.num{text-align:right;font-variant-numeric:tabular-nums}
+
+  .rung{border:1px solid var(--line);border-radius:8px;padding:10px 12px;margin:8px 0}
+  .rung.current{border-color:var(--gold)}
+  .rung b{color:var(--fg)} .rung .sub{display:block;color:var(--dim);font-size:.86rem;margin-top:3px}
+  .rung .cur{color:var(--gold);font-size:.78rem;font-weight:600;margin-left:.4em}
+
+  .debrief{font-size:.9rem;color:var(--dim)}
+  .debrief p{margin:.5em 0}
+  .trend-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(190px,1fr));gap:14px;margin:12px 0}
+  .trend-card{background:#0d1a27;border:1px solid var(--line);border-radius:8px;padding:10px}
+  .trend-card h4{margin:0 0 4px;font-size:.85rem;color:var(--gold)}
+  .trend-card .note{font-size:.72rem;color:var(--faint);margin:0 0 6px}
+  .trend-card svg{display:block;width:100%;height:100px}
+  .formbox{text-align:center;margin-top:16px}
+  code#codeBox{display:block;background:#08111b;border:1px solid var(--line);border-radius:6px;
+    padding:10px;color:var(--blue);font-size:.72rem;word-break:break-all;margin:10px 0;
+    max-height:180px;overflow:auto}
+  .status{min-height:1.4rem;margin-top:8px;color:var(--dim)}
+  .status.warn{color:var(--red)}
+  @media (max-width:700px){ .dash{gap:8px} .stat{min-width:80px} }
+</style>
+</head>
+<body>
+
+<h1>Weillland School Reform</h1>
+<div id="groupInfo" class="note"></div>
+<div id="meters" class="dash panel" style="margin-top:10px"></div>
+
+<!-- 1. NAMES -->
+<section id="namesScreen" class="panel hidden">
+  <h2>Who is on the committee?</h2>
+  <p class="note">Enter the names of the legislators in your group.</p>
+
+  <div id="nameRows" style="margin:10px 0 14px"></div>
+  <button class="go alt" type="button" onclick="addNameRow()" style="padding:7px 14px;font-size:.85rem">Add another</button>
+  <div style="margin-top:18px"><button class="go" type="button" onclick="saveNames()">Continue</button></div>
+  <div id="namesStatus" class="status" role="status"></div>
+</section>
+
+<!-- 2. CHAIR -->
+<section id="chairScreen" class="panel hidden">
+  <h2>Choose a Chair</h2>
+  <p class="note">Every policy is decided by a vote of the committee. If a vote is tied, the Chair decides.</p>
+  <div id="chairBtns" style="margin-top:12px"></div>
+</section>
+
+<!-- 3. BRIEFING -->
+<section id="briefScreen" class="panel hidden">
+  <h2>Where Weillland stands</h2>
+  <p class="body">The state of Weillland funds schools primarily through local property taxes (the state has no constitutionally mandated adequacy or equity requirements). School accountability operates as informational-only. No charter schools exist, and there is no voucher system.</p>
+  <p class="body">The Senate Education Committee will pass, at most, one reform per round. Each round represents one year. You will see outcomes, but the game includes hidden random shocks, so observed changes are noisy.</p>
+
+  <div class="prompt" style="margin-top:18px">
+    Each round: choose a reform area, then choose one lever. The committee votes. Majority enacts it; the Chair breaks ties. Then the next period’s metrics appear.
+  </div>
+  <button class="go" type="button" onclick="beginGame()">Begin round 1</button>
+</section>
+
+<!-- 4. ROUND -->
+<section id="roundScreen" class="panel hidden">
+  <h2 id="roundTitle"></h2>
+  <p class="note" id="roundPolicies"></p>
+  <p class="body">Choose one reform area for this round.</p>
+  <div id="areaBtns" style="margin-top:12px"></div>
+</section>
+
+<!-- 5. LEVER -->
+<section id="leverScreen" class="panel hidden">
+  <h2 id="leverTitle"></h2>
+  <p class="body" id="leverDesc"></p>
+
+  <h3>Vote</h3>
+  <div id="voteGrid"></div>
+  <div style="margin-top:14px">
+    <button class="go" id="recordBtn" type="button" onclick="recordVote()" disabled>Record the vote</button>
+  </div>
+  <div id="voteStatus" class="status" role="status"></div>
+</section>
+
+<!-- 6. OUTCOME -->
+<section id="outcomeScreen" class="panel hidden">
+  <h2 id="outcomeTitle"></h2>
+  <p class="body" id="outcomeText"></p>
+  <table class="outcome" id="outcomeTable"></table>
+  <p class="note" id="costLine"></p>
+  <div style="margin-top:14px">
+    <button class="go" type="button" onclick="nextRound()">Continue</button>
+  </div>
+</section>
+
+<!-- 7. FINAL -->
+<section id="finalScreen" class="panel hidden">
+  <h2>Final report</h2>
+  <p class="body" id="finalSummary"></p>
+
+  <div style="margin-top:10px">
+    <button class="go alt" type="button" onclick="rerunRandom()">Generate another random run</button>
+    <p class="note" style="margin-top:6px">Same policy choices, new hidden shocks.</p>
+  </div>
+
+  <h3>Trends</h3>
+  <div id="trendGrid" class="trend-grid"></div>
+
+  <h3>Your group’s narrative</h3>
+  <p class="note">These narratives are included in the prefilled record code sent to the Google Form.</p>
+
+  <label class="note" for="policyJustification">Why did your group choose these policy levers?</label>
+  <textarea id="policyJustification" placeholder="Explain the theory of action, assumptions, and tradeoffs behind your choices."></textarea>
+
+  <label class="note" for="observedResponse">What changes did you make based on observed outcomes, or why did you not change?</label>
+  <textarea id="observedResponse" placeholder="Describe any changes you made from period to period, or explain why you maintained the policy."></textarea>
+
+  <div style="margin-top:14px;text-align:center">
+    <button class="go" type="button" onclick="goDebrief()">Continue</button>
+  </div>
+</section>
+
+<!-- 8. DEBRIEF -->
+<section id="debriefScreen" class="panel hidden">
+  <h2>Debrief</h2>
+
+  <h3>What the game hid</h3>
+  <div class="debrief">
+    <p>Each policy sets a <strong>target level</strong> for each metric. The true underlying level does not jump instantly to that target; it adjusts gradually toward it each year at a fixed rate. Each year also adds a <strong>hidden random shock</strong>—a one-year bump or dip caused by something outside the policy, such as a new curriculum, a flu outbreak, or a change in the test. The noise is autocorrelated: a shock in one year tends to carry into the next, so observed changes can persist even when the true level is moving toward its target. You only saw the <strong>observed number</strong>, which mixes the adjustment path and the noise. So a rise or fall in the observed number does not by itself prove the policy caused it.</p>
+    <p>For example, if reading starts at 28% and a policy sets a target of 40%, the true level moves gradually toward 40%—not in a straight line—and observed scores bounce around that path because of noise. A 3-point observed rise could be partly adjustment and partly shock. Real researchers use comparison groups, multiple years, and quasi-experimental designs to separate policy effects from other factors.</p>
+  </div>
+
+  <div id="modelInternals" style="margin-top:12px">
+    <p class="note">This is the part policymakers cannot see: the model’s target level, the gradual adjustment path (latent), and the hidden shock. The observed number is what legislators see. Observed change is the adjustment toward the target plus noise, not a clean estimate of the policy effect.</p>
+    <p class="note">View the true trend and OLS estimate for:
+      <select id="modelMetric" onchange="renderModelFigure()">
+        <option value="math">Math proficiency</option>
+        <option value="reading">Reading proficiency</option>
+        <option value="gap">Achievement gap</option>
+        <option value="grad">Graduation rate</option>
+        <option value="college">College attendance</option>
+        <option value="fundingGap">Funding gap</option>
+        <option value="segregation">Segregation index</option>
+      </select>
+    </p>
+    <div id="modelFigure" class="trend-card"></div>
+  </div>
+
+  <h3>What the readings suggest</h3>
+  <table class="evidence">
+    <thead><tr><th>Reform</th><th>Evidence</th></tr></thead>
+    <tbody>
+      <tr><td>School finance</td>
+        <td>Additional spending generally improves test scores and educational attainment, especially for low-income students. Effects are often modest and depend on how money is allocated and implemented.</td></tr>
+      <tr><td>School accountability</td>
+        <td>Test-based accountability is associated with math gains, especially for disadvantaged students. Concerns include narrowed curriculum, teaching to the test, unrealistic proficiency targets, and pressure without support.</td></tr>
+      <tr><td>School choice</td>
+        <td>Charters on average perform similarly to traditional public schools, with stronger positive effects for urban low-income students. Vouchers and ESAs can produce negative achievement effects and increase segregation; accountability and oversight matter.</td></tr>
+    </tbody>
+  </table>
+
+  <h3>For your form</h3>
+  <div class="debrief">
+    <p>For each reform your group chose, describe its theory of action, key assumptions, potential concerns, and the evidence. Then explain which tradeoffs your group faced and what the game’s noise obscured.</p>
+  </div>
+
+  <div class="formbox">
+    <p class="note">Each student should submit their own form. The record code is prefilled and includes your narrative justifications.</p>
+    <a id="formLink" class="go" target="_blank" rel="noopener" style="display:inline-block;text-decoration:none;padding:13px 30px;border-radius:8px;font-size:1.05rem">Open form</a>
+    <button class="go alt" type="button" id="copyCode" style="margin-left:6px">Copy code</button>
+    <code id="codeBox"></code>
+    <div id="formHint" class="tiny hidden" style="margin-top:8px"></div>
+    <div style="margin-top:14px">
+      <button class="go alt" type="button" onclick="startOver()">Start over</button>
+    </div>
+  </div>
+</section>
+
+<script>
+/* ================= CONFIG ================= */
+const CONFIG = {
+  MAX_ROUNDS: 20,
+  YEARS_PER_ROUND: 1,
+  NOISE_RHO: 0.8,
+  ADJUST_RATE: 0.3,
+
+  // Replace these with your Google Form values.
+  FORM_URL: "https://docs.google.com/forms/d/e/1FAIpQLSfOCjV75Lvpb_cCg8nH87C3GFnb7MDLaq0gOEHgR5k9xLE9yg/viewform",
+  FIELD_CODE: "entry.577335199"
+};
+
+/* ================= METRICS ================= */
+const METRICS = {
+  math:       { label: "Math proficiency", unit: "%",  better: "up" },
+  reading:    { label: "Reading proficiency", unit: "%", better: "up" },
+  gap:        { label: "Achievement gap", unit: "pts", better: "down" },
+  grad:       { label: "Graduation rate", unit: "%",  better: "up" },
+  college:    { label: "College attendance", unit: "%", better: "up" },
+  fundingGap: { label: "Funding gap", unit: "$",  better: "down" },
+  segregation:{ label: "Segregation index", unit: "", better: "down" }
+};
+
+const BASELINE = {
+  math: 30, reading: 28, gap: 25, grad: 80,
+  college: 45, fundingGap: 8000, segregation: 65
+};
+const METRIC_KEYS = ["math","reading","gap","grad","college","fundingGap","segregation"];
+
+const BOUNDS = {
+  math: [0,100], reading: [0,100], gap: [0,60], grad: [0,100],
+  college: [0,100], fundingGap: [0,20000], segregation: [0,100]
+};
+
+const SHOCK_RANGES = {
+  math: 1.5, reading: 1.5, gap: 2, grad: 1, college: 1,
+  fundingGap: 800, segregation: 2
+};
+
+const BACKGROUND_TREND = {
+  math: 0,
+  reading: 0,
+  gap: 0,
+  grad: 0,
+  college: 0,
+  fundingGap: 0,
+  segregation: 0
+};
+
+/* ================= POLICY AREAS ================= */
+const AREAS = {
+  finance: {
+    name: "School finance",
+    desc: "How the state distributes funding across districts and students.",
+    levers: [
+      { label: "Local funding (property tax)",
+        sub: "No state tax cost, maximal local choice.",
+        effects: {}, cost: 0 },
+      { label: "Foundation formula, no weights",
+        sub: "State guarantees a base amount per pupil but adds no extra weights.",
+        effects: { math:1.5, reading:1.5, gap:-1.5, grad:0.5, college:0.5, fundingGap:-2500, segregation:0 },
+        cost: 120 },
+      { label: "Foundation formula, poverty weight",
+        sub: "Base guarantee plus extra funding for economically disadvantaged students.",
+        effects: { math:2, reading:2, gap:-2.5, grad:1, college:1, fundingGap:-3000, segregation:0 },
+        cost: 160 },
+      { label: "Foundation formula, comprehensive weights",
+        sub: "Base guarantee plus weights for poverty, disability, and English learners.",
+        effects: { math:2.5, reading:2.5, gap:-3, grad:1, college:1, fundingGap:-3500, segregation:0 },
+        cost: 220 },
+      { label: "Guaranteed tax base (GTB)",
+        sub: "Equalizes revenue for equal tax effort, but does not guarantee a minimum.",
+        effects: { math:1, reading:1, gap:-2, grad:0, college:0, fundingGap:-3000, segregation:0 },
+        cost: 100 },
+      { label: "Hybrid foundation + GTB, basic weights",
+        sub: "Guarantees a base, equalizes local revenue-raising capacity, and adds a poverty weight.",
+        effects: { math:3, reading:3, gap:-3.5, grad:1.5, college:1.5, fundingGap:-4500, segregation:0 },
+        cost: 260 },
+      { label: "Hybrid foundation + GTB, comprehensive weights",
+        sub: "Guarantees a base, equalizes local revenue-raising capacity, and adds poverty, disability, and English-learner weights.",
+        effects: { math:3.5, reading:3.5, gap:-4, grad:2, college:2, fundingGap:-5000, segregation:0 },
+        cost: 320 }
+    ]
+  },
+  accountability: {
+    name: "School accountability",
+    desc: "How the state measures and responds to school performance.",
+    levers: [
+      { label: "Information-only reporting",
+        sub: "Publish scores, no consequences.",
+        effects: {}, cost: 0 },
+      { label: "Test-based accountability with sanctions",
+        sub: "Annual tests and subgroup reporting. Schools that miss targets face improvement plans, sanctions, or restructuring; schools that meet targets may receive recognition or rewards.",
+        effects: { math:3, reading:1, gap:-1, grad:1, college:0, fundingGap:0, segregation:2 },
+        cost: 50 },
+      { label: "Test-based accountability plus support",
+        sub: "Sanctions paired with funding for teacher capacity and tutoring.",
+        effects: { math:4, reading:2, gap:-2, grad:2, college:1, fundingGap:0, segregation:1 },
+        cost: 150 },
+      { label: "Proficiency targets with consequences",
+        sub: "High-stakes targets; risk of narrowing curriculum and teaching to the test.",
+        effects: { math:2, reading:1, gap:0, grad:1, college:0, fundingGap:0, segregation:3 },
+        cost: 30 },
+      { label: "Information plus diagnostic assessments",
+        sub: "Low-stakes diagnostic data; less pressure, less immediate gain.",
+        effects: { math:1, reading:2, gap:-1, grad:1, college:0, fundingGap:0, segregation:0 },
+        cost: 80 }
+    ]
+  },
+  choice: {
+    name: "School choice",
+    desc: "How the state expands or limits alternatives to traditional public schools.",
+    levers: [
+      { label: "No choice / limited charters",
+        sub: "No charters, no vouchers.",
+        effects: {}, cost: 0 },
+      { label: "Expand charters with accountability",
+        sub: "More autonomous public schools, held accountable by authorizers.",
+        effects: { math:1, reading:1, gap:-1, grad:1, college:1, fundingGap:0, segregation:3 },
+        cost: 100 },
+      { label: "Voucher / education savings accounts",
+        sub: "Public funds for private schools; weak oversight.",
+        effects: { math:-2, reading:-2, gap:2, grad:0, college:-1, fundingGap:0, segregation:5 },
+        cost: 150 },
+      { label: "Cap charters and strengthen accountability",
+        sub: "Limit charter growth; focus on traditional public schools.",
+        effects: { math:0.5, reading:0.5, gap:0, grad:0, college:0, fundingGap:0, segregation:-1 },
+        cost: 20 },
+      { label: "Choice with transportation and oversight",
+        sub: "Charters/vouchers with oversight, transportation, and accountability.",
+        effects: { math:1.5, reading:1.5, gap:-1, grad:1, college:1, fundingGap:0, segregation:1 },
+        cost: 120 }
+    ]
+  }
+};
+
+/* ================= STATE ================= */
+let S = {
+  names: [],
+  chair: 0,
+  round: 1,
+  maxRounds: CONFIG.MAX_ROUNDS,
+  metrics: {
+    math: 30,
+    reading: 28,
+    gap: 25,
+    grad: 80,
+    college: 45,
+    fundingGap: 8000,
+    segregation: 65,
+    cost: 0
+  },
+  latent: {
+    math: 30,
+    reading: 28,
+    gap: 25,
+    grad: 80,
+    college: 45,
+    fundingGap: 8000,
+    segregation: 65
+  },
+  target: {
+    math: 30,
+    reading: 28,
+    gap: 25,
+    grad: 80,
+    college: 45,
+    fundingGap: 8000,
+    segregation: 65
+  },
+  noise: {
+    math: 0,
+    reading: 0,
+    gap: 0,
+    grad: 0,
+    college: 0,
+    fundingGap: 0,
+    segregation: 0
+  },
+  totalCost: 0,
+  status: { finance: 0, accountability: 0, choice: 0 },
+  currentArea: null,
+  lastOutcome: null,
+  history: [],
+  screen: "names"
+};
+
+/* ================= HELPERS ================= */
+const $ = id => document.getElementById(id);
+const esc = t => String(t).replace(/[&<>"]/g, c => ({ "&":"&amp;", "<":"&lt;", ">":"&gt;", '"':"&quot;" }[c]));
+const fmt0 = v => Math.round(v).toLocaleString("en-US");
+const fmt1 = v => v.toFixed(1);
+const clamp = (v, [lo, hi]) => Math.max(lo, Math.min(hi, v));
+const cleanText = t => String(t).replace(/\s+/g, " ").replace(/\|/g, "/").trim();
+
+function makeShock(prev) {
+  const sh = {};
+  for (const k of METRIC_KEYS) {
+    const eps = (Math.random() * 2 - 1) * SHOCK_RANGES[k];
+    sh[k] = (prev && prev[k] ? prev[k] : 0) * CONFIG.NOISE_RHO + eps;
+  }
+  return sh;
+}
+
+function fmtDelta(v, unit) {
+  if (Math.abs(v) < 0.05) return "0";
+  const sign = v > 0 ? "+" : "−";
+  const abs = Math.abs(v);
+  if (unit === "$") return sign + "$" + fmt0(abs);
+  if (unit === "pts") return sign + fmt1(abs) + " pts";
+  if (unit === "%") return sign + fmt1(abs) + "%";
+  return sign + fmt1(abs);
+}
+
+function displayValue(k, v) {
+  if (k === "fundingGap") return "$" + fmt0(v);
+  if (k === "gap") return fmt1(v) + " pts";
+  if (k === "segregation") return fmt1(v);
+  return fmt1(v) + "%";
+}
+
+/* ================= RENDER ================= */
+function renderMeters() {
+  if (["names","chair","brief","debrief"].includes(S.screen)) {
+    $("meters").innerHTML = "";
+    $("meters").classList.add("hidden");
+    return;
+  }
+  $("meters").classList.remove("hidden");
+  const m = S.metrics;
+  const stats = [
+    ["Math", m.math, "%"],
+    ["Reading", m.reading, "%"],
+    ["Gap", m.gap, "pts"],
+    ["Graduation", m.grad, "%"],
+    ["College", m.college, "%"],
+    ["Funding gap", m.fundingGap, "$"],
+    ["Segregation", m.segregation, ""],
+    ["Annual state cost", m.cost, "$M"]
+  ];
+  $("meters").innerHTML = stats.map(([label, val, unit]) => {
+    let v;
+    if (unit === "$") v = "$" + fmt0(val);
+    else if (unit === "$M") v = "$" + fmt0(val) + "M";
+    else if (unit === "pts") v = fmt1(val) + " pts";
+    else if (unit === "%") v = fmt1(val) + "%";
+    else v = fmt1(val);
+    return `<div class="stat"><div class="label">${label}</div><div class="val">${v}</div></div>`;
+  }).join("");
+}
+
+function renderGroupInfo() {
+  if (S.names.length) {
+    $("groupInfo").textContent = `${S.names.join(", ")} · Chair: ${S.names[S.chair]}`;
+  } else {
+    $("groupInfo").textContent = "";
+  }
+}
+
+function render() {
+  renderMeters();
+  renderGroupInfo();
+  ["namesScreen","chairScreen","briefScreen","roundScreen","leverScreen","outcomeScreen","finalScreen","debriefScreen"]
+    .forEach(id => $(id).classList.add("hidden"));
+  $(S.screen + "Screen").classList.remove("hidden");
+
+  if (S.screen === "names") renderNames();
+  if (S.screen === "chair") renderChair();
+  if (S.screen === "brief") renderBrief();
+  if (S.screen === "round") renderRound();
+  if (S.screen === "lever") renderLever();
+  if (S.screen === "outcome") renderOutcome();
+  if (S.screen === "final") renderFinal();
+  if (S.screen === "debrief") renderDebrief();
+}
+
+/* ================= NAMES ================= */
+function addNameRow(first, last) {
+  const row = document.createElement("div");
+  row.className = "namerow";
+  row.innerHTML = `<input type="text" class="fn" placeholder="First name" aria-label="First name" autocomplete="off">
+                   <input type="text" class="ln" placeholder="Last name" aria-label="Last name" autocomplete="off">`;
+  row.querySelector(".fn").value = first || "";
+  row.querySelector(".ln").value = last || "";
+  $("nameRows").appendChild(row);
+}
+
+function renderNames() {
+  $("nameRows").innerHTML = "";
+  S.names.forEach(n => {
+    const parts = n.split(" ");
+    addNameRow(parts[0], parts.slice(1).join(" "));
+  });
+  for (let i = S.names.length; i < 4; i++) addNameRow();
+  $("namesStatus").textContent = "";
+}
+
+function saveNames() {
+  const names = [];
+  document.querySelectorAll("#nameRows .namerow").forEach(r => {
+    const f = r.querySelector(".fn").value.trim();
+    const l = r.querySelector(".ln").value.trim();
+    if (f || l) names.push((f + " " + l).trim());
+  });
+  if (!names.length) {
+    $("namesStatus").textContent = "Enter at least one name.";
+    $("namesStatus").className = "status warn";
+    return;
+  }
+  S.names = names;
+  S.screen = "chair";
+  render();
+}
+
+/* ================= CHAIR ================= */
+function renderChair() {
+  const box = $("chairBtns");
+  box.innerHTML = "";
+  S.names.forEach((n, i) => {
+    const b = document.createElement("button");
+    b.className = "big";
+    b.textContent = n;
+    b.onclick = () => {
+      S.chair = i;
+      S.screen = "brief";
+      render();
+    };
+    box.appendChild(b);
+  });
+}
+
+function maintainCurrent() {
+  const before = { ...S.metrics };
+  const latentBefore = { ...S.latent };
+  const shock = makeShock(S.noise);
+  S.noise = { ...shock };
+  const diff = {};
+  for (const k of METRIC_KEYS) {
+    S.latent[k] = clamp(S.latent[k] + (S.target[k] - S.latent[k]) * CONFIG.ADJUST_RATE + BACKGROUND_TREND[k], BOUNDS[k]);
+    S.metrics[k] = clamp(S.latent[k] + shock[k], BOUNDS[k]);
+    diff[k] = S.metrics[k] - before[k];
+  }
+  const after = { ...S.metrics };
+  const latentAfter = { ...S.latent };
+  S.totalCost += S.metrics.cost;
+
+  S.history.push({
+    round: S.round,
+    area: "maintain",
+    curRung: null,
+    newRung: null,
+    ballot: [],
+    enacted: null,
+    before,
+    after,
+    latentBefore,
+    latentAfter,
+    diff,
+    shock,
+    costChange: 0,
+    annualCost: S.metrics.cost,
+    totalCost: S.totalCost
+  });
+
+  S.lastOutcome = { area: "maintain", curRung: null, newRung: null,
+                    before, after, diff, costChange: 0, annualCost: S.metrics.cost,
+                    totalCost: S.totalCost, round: S.round };
+  S.screen = "outcome";
+  render();
+}
+
+function maintainAllRemaining() {
+  while (S.round <= S.maxRounds) {
+    const before = { ...S.metrics };
+    const latentBefore = { ...S.latent };
+    const shock = makeShock(S.noise);
+    S.noise = { ...shock };
+    const diff = {};
+    for (const k of METRIC_KEYS) {
+      S.latent[k] = clamp(S.latent[k] + (S.target[k] - S.latent[k]) * CONFIG.ADJUST_RATE + BACKGROUND_TREND[k], BOUNDS[k]);
+      S.metrics[k] = clamp(S.latent[k] + shock[k], BOUNDS[k]);
+      diff[k] = S.metrics[k] - before[k];
+    }
+    const after = { ...S.metrics };
+    const latentAfter = { ...S.latent };
+    S.totalCost += S.metrics.cost;
+
+    S.history.push({
+      round: S.round,
+      area: "maintain",
+      curRung: null,
+      newRung: null,
+      ballot: [],
+      enacted: null,
+      before,
+      after,
+      latentBefore,
+      latentAfter,
+      diff,
+      shock,
+      costChange: 0,
+      annualCost: S.metrics.cost,
+      totalCost: S.totalCost
+    });
+
+    S.round++;
+  }
+
+  S.screen = "final";
+  render();
+}
+
+/* ================= BRIEF ================= */
+function renderBrief() {
+  // Header already shows baseline metrics.
+}
+
+function beginGame() {
+  S.round = 1;
+  S.screen = "round";
+  render();
+}
+
+/* ================= ROUND ================= */
+function renderRound() {
+  const startYear = (S.round - 1) * CONFIG.YEARS_PER_ROUND + 1;
+  const endYear = S.round * CONFIG.YEARS_PER_ROUND;
+  const yearLabel = CONFIG.YEARS_PER_ROUND === 1
+    ? `Year ${S.round}`
+    : `Years ${startYear}–${endYear}`;
+  $("roundTitle").textContent = `Round ${S.round} (${yearLabel})`;
+
+  $("roundPolicies").innerHTML = "Current policies:<br>" +
+    ["finance","accountability","choice"].map(a =>
+      `&nbsp;&nbsp;${AREAS[a].name}: <b style="color:var(--fg)">${AREAS[a].levers[S.status[a]].label}</b>`
+    ).join("<br>");
+
+  const box = $("areaBtns");
+  box.innerHTML = "";
+  ["finance","accountability","choice"].forEach(a => {
+    const b = document.createElement("button");
+    b.className = "big";
+    b.innerHTML = `<b>${AREAS[a].name}</b><span class="sub">Current: ${AREAS[a].levers[S.status[a]].label}</span>`;
+    b.onclick = () => {
+      S.currentArea = a;
+      S.screen = "lever";
+      render();
+    };
+    box.appendChild(b);
+  });
+
+  const maintain = document.createElement("button");
+  maintain.className = "big";
+  maintain.innerHTML = `<b>Maintain current policy</b><span class="sub">No reform this round.</span>`;
+  maintain.onclick = () => maintainCurrent();
+  box.appendChild(maintain);
+
+  if (S.round >= 2) {
+    const all = document.createElement("button");
+    all.className = "big";
+    all.innerHTML = `<b>Maintain current policy for all remaining rounds</b><span class="sub">Lock current policies and jump to the final report.</span>`;
+    all.onclick = () => maintainAllRemaining();
+    box.appendChild(all);
+  }
+}
+
+/* ================= LEVER ================= */
+function renderLever() {
+  const area = S.currentArea;
+  $("leverTitle").textContent = AREAS[area].name;
+  $("leverDesc").textContent = AREAS[area].desc;
+
+  buildGrid(area, "recordBtn");
+  $("voteStatus").textContent = "";
+}
+
+function buildGrid(area, recordBtnId) {
+  let h = "<table class='vote'><thead><tr><th></th>";
+  S.names.forEach(n => h += `<th>${esc(n.split(" ")[0])}</th>`);
+  h += "<th style='color:var(--gold)'>All</th></tr></thead><tbody>";
+
+  AREAS[area].levers.forEach((lev, ri) => {
+    const isCurrent = ri === S.status[area];
+    h += `<tr class="${isCurrent ? "current" : ""}"><td><b>${ri}. ${esc(lev.label)}</b>${isCurrent ? ' <span class="cur">IN FORCE</span>' : ''}<span class="sub">${esc(lev.sub)}</span><span class="cost">Annual state cost: $${fmt0(lev.cost)}M</span></td>`;
+    S.names.forEach((_, p) => {
+      h += `<td><input type="radio" name="v${p}" value="${ri}" onchange="checkComplete('${recordBtnId}')"></td>`;
+    });
+    h += `<td><input type="radio" name="vAll" value="${ri}" onchange="setAll(${ri},'${recordBtnId}')" style="accent-color:var(--gold)"></td>`;
+    h += "</tr>";
+  });
+
+  h += "</tbody></table><div class='tiny' style='margin-top:6px'>Use the All column when the committee agrees.</div>";
+  $("voteGrid").innerHTML = h;
+  $(recordBtnId).disabled = true;
+}
+
+function setAll(ri, btnId) {
+  S.names.forEach((_, p) => {
+    const el = document.querySelector(`input[name=v${p}][value="${ri}"]`);
+    if (el) el.checked = true;
+  });
+  syncAll();
+  checkComplete(btnId);
+}
+
+function syncAll() {
+  const picks = S.names.map((_, p) => {
+    const el = document.querySelector(`input[name=v${p}]:checked`);
+    return el ? el.value : null;
+  });
+  const unanimous = picks[0] !== null && picks.every(v => v === picks[0]);
+  document.querySelectorAll('input[name=vAll]').forEach(el => {
+    el.checked = unanimous && el.value === picks[0];
+  });
+}
+
+function checkComplete(btnId) {
+  syncAll();
+  let all = true;
+  S.names.forEach((_, p) => {
+    if (!document.querySelector(`input[name=v${p}]:checked`)) all = false;
+  });
+  $(btnId).disabled = !all;
+}
+
+function readBallot() {
+  return S.names.map((_, p) => {
+    const el = document.querySelector(`input[name=v${p}]:checked`);
+    return el ? +el.value : 0;
+  });
+}
+
+function decide(ballot, currentRung) {
+  const counts = {};
+  ballot.forEach(v => counts[v] = (counts[v] || 0) + 1);
+
+  let best = -1, bestN = -1, tied = [];
+  Object.keys(counts).forEach(k => {
+    const c = counts[k];
+    if (c > bestN) { bestN = c; best = +k; tied = [+k]; }
+    else if (c === bestN) tied.push(+k);
+  });
+
+  if (tied.length > 1) {
+    const chairVote = ballot[S.chair];
+    if (tied.includes(chairVote)) best = chairVote;
+    else {
+      best = tied.reduce((a, b) =>
+        Math.abs(b - currentRung) < Math.abs(a - currentRung) ? b : a
+      );
+    }
+  }
+  return best;
+}
+
+/* ================= ENACT ================= */
+function enact(area, newRung, ballot) {
+  const curRung = S.status[area];
+  const cur = AREAS[area].levers[curRung];
+  const next = AREAS[area].levers[newRung];
+  const before = { ...S.metrics };
+  const latentBefore = { ...S.latent };
+  const shock = makeShock(S.noise);
+  S.noise = { ...shock };
+
+  const diff = {};
+  for (const k of METRIC_KEYS) {
+    S.target[k] = clamp(BASELINE[k] + (next.effects[k] || 0), BOUNDS[k]);
+    S.latent[k] = clamp(S.latent[k] + (S.target[k] - S.latent[k]) * CONFIG.ADJUST_RATE + BACKGROUND_TREND[k], BOUNDS[k]);
+    S.metrics[k] = clamp(S.latent[k] + shock[k], BOUNDS[k]);
+    diff[k] = S.metrics[k] - before[k];
+  }
+
+  const costChange = next.cost - cur.cost;
+  S.metrics.cost = next.cost;
+  S.totalCost += next.cost;
+
+  S.status[area] = newRung;
+  const after = { ...S.metrics };
+  const latentAfter = { ...S.latent };
+
+  S.history.push({
+    round: S.round,
+    area,
+    curRung,
+    newRung,
+    ballot,
+    enacted: newRung,
+    before,
+    after,
+    latentBefore,
+    latentAfter,
+    diff,
+    shock,
+    costChange,
+    annualCost: next.cost,
+    totalCost: S.totalCost
+  });
+
+  return { area, curRung, newRung, before, after, diff, costChange,
+           annualCost: next.cost, totalCost: S.totalCost, round: S.round };
+}
+
+function recordVote() {
+  const area = S.currentArea;
+  const ballot = readBallot();
+  const curRung = S.status[area];
+  const enacted = decide(ballot, curRung);
+  const outcome = enact(area, enacted, ballot);
+
+  S.lastOutcome = outcome;
+  S.screen = "outcome";
+  render();
+}
+
+/* ================= OUTCOME ================= */
+function renderOutcome() {
+  const o = S.lastOutcome;
+  $("outcomeTitle").textContent = `Round ${o.round} outcome`;
+
+  if (o.area === "maintain") {
+    $("outcomeText").textContent = "Your group maintained the current policy. The next period’s metrics still shifted.";
+  } else {
+    const curLabel = AREAS[o.area].levers[o.curRung].label;
+    const newLabel = AREAS[o.area].levers[o.newRung].label;
+    if (o.curRung === o.newRung) {
+      $("outcomeText").textContent = `Your group kept the current policy in ${AREAS[o.area].name}. The next period’s metrics still shifted.`;
+    } else {
+      $("outcomeText").textContent = `Your group changed ${AREAS[o.area].name} from “${curLabel}” to “${newLabel}”. The next period’s metrics are below.`;
+    }
+  }
+
+  const rows = METRIC_KEYS.map(k => {
+    const before = o.before[k];
+    const after = o.after[k];
+    const d = after - before;
+    const better = METRICS[k].better;
+    const isGood = (better === "up" && d > 0) || (better === "down" && d < 0);
+    const cls = Math.abs(d) < 0.05 ? "" : (isGood ? "good" : "bad");
+    const deltaStr = fmtDelta(d, METRICS[k].unit);
+    return `<tr>
+      <td>${METRICS[k].label}</td>
+      <td class="num">${displayValue(k, before)}</td>
+      <td class="num">${displayValue(k, after)}</td>
+      <td class="num ${cls}">${deltaStr}</td>
+    </tr>`;
+  }).join("");
+
+  $("outcomeTable").innerHTML = `
+    <thead><tr><th>Metric</th><th>Before</th><th>After</th><th>Change</th></tr></thead>
+    <tbody>${rows}</tbody>`;
+
+  const c = o.costChange;
+  $("costLine").textContent = c === 0
+    ? `Annual state cost remains $${fmt0(o.after.cost)}M. Total state cost so far: $${fmt0(o.totalCost)}M.`
+    : `Annual state cost changes by ${c > 0 ? "+" : "−"}$${fmt0(Math.abs(c))}M, to $${fmt0(o.after.cost)}M. Total state cost so far: $${fmt0(o.totalCost)}M.`;
+}
+
+function nextRound() {
+  S.round++;
+  if (S.round > S.maxRounds) {
+    S.screen = "final";
+  } else {
+    S.screen = "round";
+  }
+  render();
+}
+
+/* ================= FINAL ================= */
+function olsLine(values) {
+  const n = values.length;
+  const xs = values.map((_, i) => i + 1);
+  const meanX = xs.reduce((a, b) => a + b, 0) / n;
+  const meanY = values.reduce((a, b) => a + b, 0) / n;
+  let num = 0, den = 0;
+  for (let i = 0; i < n; i++) {
+    num += (xs[i] - meanX) * (values[i] - meanY);
+    den += (xs[i] - meanX) ** 2;
+  }
+  const slope = den ? num / den : 0;
+  const intercept = meanY - slope * meanX;
+  return { slope, intercept };
+}
+
+function trendSVG(values, ols) {
+  const w = 180, h = 100, pad = 14;
+  const min = Math.min(...values);
+  const max = Math.max(...values);
+  const range = max - min || 1;
+  const denom = Math.max(1, values.length - 1);
+  const x = i => pad + (i / denom) * (w - 2 * pad);
+  const y = v => h - pad - ((v - min) / range) * (h - 2 * pad);
+
+  const pts = values.map((v, i) => `${x(i).toFixed(1)},${y(v).toFixed(1)}`).join(' ');
+  const y1 = y(ols.intercept + ols.slope * 1);
+  const y2 = y(ols.intercept + ols.slope * values.length);
+
+  const line = `<line x1="${x(0).toFixed(1)}" y1="${y1.toFixed(1)}" x2="${x(values.length - 1).toFixed(1)}" y2="${y2.toFixed(1)}" stroke="var(--gold)" stroke-width="1.5" stroke-dasharray="4 3" opacity=".8"/>`;
+  const dots = values.map((v, i) => `<circle cx="${x(i).toFixed(1)}" cy="${y(v).toFixed(1)}" r="2.5" fill="var(--blue)"/>`).join('');
+  const label = `<text x="${pad}" y="${h - 2}" font-size="8" fill="var(--faint)">${values.length} periods</text>`;
+
+  return `<svg viewBox="0 0 ${w} ${h}" role="img" aria-label="Trend over ${values.length} periods">${line}${dots}${label}</svg>`;
+}
+
+function renderTrends() {
+  const grid = $("trendGrid");
+  grid.innerHTML = "";
+  if (!S.history.length) {
+    grid.innerHTML = '<p class="note">No rounds yet.</p>';
+    return;
+  }
+
+  const cards = METRIC_KEYS.map(k => {
+    const values = S.history.map(h => h.after[k]);
+    const ols = olsLine(values);
+    const better = METRICS[k].better === "up" ? "higher is better" : "lower is better";
+    return `<div class="trend-card">
+      <h4>${METRICS[k].label}</h4>
+      <p class="note">${better}</p>
+      ${trendSVG(values, ols)}
+    </div>`;
+  });
+
+  const costValues = S.history.map(h => h.after.cost);
+  cards.push(`<div class="trend-card">
+    <h4>Annual state cost</h4>
+    <p class="note">lower is cheaper</p>
+    ${trendSVG(costValues, olsLine(costValues))}
+  </div>`);
+
+  grid.innerHTML = cards.join("");
+}
+
+function rerunRandom() {
+  const choices = S.history.map(h => ({
+    round: h.round,
+    area: h.area,
+    enacted: h.enacted,
+    ballot: h.ballot
+  }));
+
+  // Reset to the baseline metrics and policy status.
+  S.metrics = {
+    math: 30, reading: 28, gap: 25, grad: 80,
+    college: 45, fundingGap: 8000, segregation: 65, cost: 0
+  };
+  S.latent = {
+    math: 30, reading: 28, gap: 25, grad: 80,
+    college: 45, fundingGap: 8000, segregation: 65
+  };
+  S.target = {
+    math: 30, reading: 28, gap: 25, grad: 80,
+    college: 45, fundingGap: 8000, segregation: 65
+  };
+  S.noise = {
+    math: 0, reading: 0, gap: 0, grad: 0,
+    college: 0, fundingGap: 0, segregation: 0
+  };
+  S.totalCost = 0;
+  S.status = { finance: 0, accountability: 0, choice: 0 };
+
+  const newHistory = [];
+
+  for (const c of choices) {
+    const before = { ...S.metrics };
+    const latentBefore = { ...S.latent };
+    const shock = makeShock(S.noise);
+    S.noise = { ...shock };
+    const diff = {};
+    let costChange = 0;
+
+    if (c.area === "maintain") {
+      for (const k of METRIC_KEYS) {
+        S.latent[k] = clamp(S.latent[k] + (S.target[k] - S.latent[k]) * CONFIG.ADJUST_RATE + BACKGROUND_TREND[k], BOUNDS[k]);
+        S.metrics[k] = clamp(S.latent[k] + shock[k], BOUNDS[k]);
+        diff[k] = S.metrics[k] - before[k];
+      }
+      const after = { ...S.metrics };
+      const latentAfter = { ...S.latent };
+      S.totalCost += S.metrics.cost;
+      newHistory.push({
+        round: c.round,
+        area: "maintain",
+        curRung: null,
+        newRung: null,
+        ballot: c.ballot,
+        enacted: null,
+        before,
+        after,
+        latentBefore,
+        latentAfter,
+        diff,
+        shock,
+        costChange: 0,
+        annualCost: S.metrics.cost,
+        totalCost: S.totalCost
+      });
+    } else {
+      const area = c.area;
+      const curRung = S.status[area];
+      const newRung = c.enacted;
+      const cur = AREAS[area].levers[curRung];
+      const next = AREAS[area].levers[newRung];
+
+      for (const k of METRIC_KEYS) {
+        S.target[k] = clamp(BASELINE[k] + (next.effects[k] || 0), BOUNDS[k]);
+        S.latent[k] = clamp(S.latent[k] + (S.target[k] - S.latent[k]) * CONFIG.ADJUST_RATE + BACKGROUND_TREND[k], BOUNDS[k]);
+        S.metrics[k] = clamp(S.latent[k] + shock[k], BOUNDS[k]);
+        diff[k] = S.metrics[k] - before[k];
+      }
+
+      costChange = next.cost - cur.cost;
+      S.metrics.cost = next.cost;
+      S.totalCost += next.cost;
+      S.status[area] = newRung;
+
+      const after = { ...S.metrics };
+      const latentAfter = { ...S.latent };
+      newHistory.push({
+        round: c.round,
+        area,
+        curRung,
+        newRung,
+        ballot: c.ballot,
+        enacted: newRung,
+        before,
+        after,
+        latentBefore,
+        latentAfter,
+        diff,
+        shock,
+        costChange,
+        annualCost: next.cost,
+        totalCost: S.totalCost
+      });
+    }
+  }
+
+  S.history = newHistory;
+  S.round = S.maxRounds + 1;
+  S.screen = "final";
+  render();
+}
+
+function goDebrief() {
+  S.screen = "debrief";
+  render();
+}
+
+function renderFinal() {
+  const m = S.metrics;
+  $("finalSummary").innerHTML = `
+    After ${S.maxRounds * CONFIG.YEARS_PER_ROUND} years: math proficiency ${fmt1(m.math)}%,
+    reading proficiency ${fmt1(m.reading)}%, achievement gap ${fmt1(m.gap)} pts,
+    graduation ${fmt1(m.grad)}%, college attendance ${fmt1(m.college)}%,
+    funding gap $${fmt0(m.fundingGap)}, segregation ${fmt1(m.segregation)}.
+    Annual state cost: $${fmt0(m.cost)}M.
+    Total state cost over ${S.maxRounds * CONFIG.YEARS_PER_ROUND} years: $${fmt0(S.totalCost)}M.
+  `;
+
+  renderTrends();
+
+  $("policyJustification").value = "";
+  $("observedResponse").value = "";
+
+}
+
+function renderDebrief() {
+  renderModelFigure();
+  const code = buildCode();
+  $("codeBox").textContent = code;
+
+  if (CONFIG.FORM_URL && !CONFIG.FORM_URL.includes("PLACEHOLDER")) {
+    const url = CONFIG.FORM_URL + "?usp=pp_url&" +
+      CONFIG.FIELD_CODE + "=" + encodeURIComponent(code);
+    $("formLink").href = url;
+    $("formLink").textContent = "Open form";
+    $("formLink").classList.remove("hidden");
+    $("formHint").classList.add("hidden");
+  } else {
+    $("formLink").href = "#";
+    $("formLink").textContent = "Form not configured";
+    $("formHint").textContent = "Replace CONFIG.FORM_URL and FIELD_CODE in the script.";
+    $("formHint").classList.remove("hidden");
+  }
+}
+
+function modelSVG(trueChanges, observedChanges) {
+  const w = 720, h = 300, pad = 36;
+  const all = trueChanges.concat(observedChanges);
+  const min = Math.min(0, ...all);
+  const max = Math.max(0, ...all);
+  const range = max - min || 1;
+  const denom = Math.max(1, trueChanges.length - 1);
+  const x = i => pad + (i / denom) * (w - 2 * pad);
+  const y = v => h - pad - ((v - min) / range) * (h - 2 * pad);
+
+  const truePts = trueChanges.map((v, i) => `${x(i).toFixed(1)},${y(v).toFixed(1)}`).join(" ");
+  const ols = olsLine(observedChanges);
+  const y1 = y(ols.intercept + ols.slope * 1);
+  const y2 = y(ols.intercept + ols.slope * observedChanges.length);
+  const obsDots = observedChanges.map((v, i) => `<circle cx="${x(i).toFixed(1)}" cy="${y(v).toFixed(1)}" r="3" fill="var(--blue)"/>`).join("");
+  const zeroY = y(0).toFixed(1);
+
+  return `<svg viewBox="0 0 ${w} ${h}" style="height:260px" role="img" aria-label="True trend versus OLS estimate">
+    <line x1="${pad}" y1="${zeroY}" x2="${w - pad}" y2="${zeroY}" stroke="var(--line)" stroke-width="1"/>
+    <polyline points="${truePts}" fill="none" stroke="var(--gold)" stroke-width="2"/>
+    <line x1="${x(0).toFixed(1)}" y1="${y1.toFixed(1)}" x2="${x(observedChanges.length - 1).toFixed(1)}" y2="${y2.toFixed(1)}" stroke="var(--blue)" stroke-width="2" stroke-dasharray="5 4"/>
+    ${obsDots}
+    <text x="${pad}" y="${h - 6}" font-size="9" fill="var(--faint)">Round 1 to ${trueChanges.length}</text>
+    <text x="${w - pad - 140}" y="${pad + 10}" font-size="9" fill="var(--gold)">True trend</text>
+    <text x="${w - pad - 140}" y="${pad + 24}" font-size="9" fill="var(--blue)">OLS trend (observed)</text>
+  </svg>`;
+}
+
+function renderModelFigure() {
+  const k = $("modelMetric").value;
+  const trueChanges = S.history.map(h => h.latentAfter[k] - h.latentBefore[k]);
+  const observedChanges = S.history.map(h => h.after[k] - h.before[k]);
+  $("modelFigure").innerHTML = modelSVG(trueChanges, observedChanges);
+}
+
+function buildCode() {
+  const parts = [
+    "NTH",
+    "NAMES=" + S.names.join("/"),
+    "CHAIR=" + S.names[S.chair]
+  ];
+  S.history.forEach(h => {
+    if (h.area === "maintain") {
+      parts.push("R" + h.round + ":M:0");
+    } else {
+      parts.push("R" + h.round + ":" + h.area[0].toUpperCase() + ":" + h.enacted);
+    }
+  });
+  parts.push(
+    "JUSTIFY=" + cleanText($("policyJustification").value),
+    "RESPONSE=" + cleanText($("observedResponse").value),
+    "MATH=" + fmt1(S.metrics.math),
+    "READ=" + fmt1(S.metrics.reading),
+    "GAP=" + fmt1(S.metrics.gap),
+    "GRAD=" + fmt1(S.metrics.grad),
+    "COLL=" + fmt1(S.metrics.college),
+    "FUNDGAP=" + fmt0(S.metrics.fundingGap),
+    "SEG=" + fmt1(S.metrics.segregation),
+    "COST=" + fmt0(S.metrics.cost),
+    "TOTALCOST=" + fmt0(S.totalCost)
+  );
+  return parts.join("|");
+}
+
+/* ================= COPY / RESET ================= */
+function copyCode() {
+  const code = buildCode();
+  navigator.clipboard.writeText(code).then(() => {
+    $("formHint").textContent = "Code copied.";
+    $("formHint").classList.remove("hidden");
+  }).catch(() => {
+    $("formHint").textContent = "Could not copy. Select the code manually.";
+    $("formHint").classList.remove("hidden");
+  });
+}
+
+function startOver() {
+  if (!confirm("Start over? This clears the committee and all rounds.")) return;
+  S = {
+    names: [],
+    chair: 0,
+    round: 1,
+    maxRounds: CONFIG.MAX_ROUNDS,
+    metrics: {
+      math: 30, reading: 28, gap: 25, grad: 80,
+      college: 45, fundingGap: 8000, segregation: 65, cost: 0
+    },
+    latent: {
+      math: 30, reading: 28, gap: 25, grad: 80,
+      college: 45, fundingGap: 8000, segregation: 65
+    },
+    target: {
+      math: 30, reading: 28, gap: 25, grad: 80,
+      college: 45, fundingGap: 8000, segregation: 65
+    },
+    noise: {
+      math: 0, reading: 0, gap: 0, grad: 0,
+      college: 0, fundingGap: 0, segregation: 0
+    },
+    totalCost: 0,
+    status: { finance: 0, accountability: 0, choice: 0 },
+    currentArea: null,
+    lastOutcome: null,
+    history: [],
+    screen: "names"
+  };
+  render();
+}
+
+/* ================= WIRING ================= */
+$("copyCode").addEventListener("click", copyCode);
+
+render();
+</script>
+</body>
+</html>
