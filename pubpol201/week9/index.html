@@ -155,6 +155,10 @@
   <p class="body" id="outcomeText"></p>
   <table class="outcome" id="outcomeTable"></table>
   <p class="note" id="costLine"></p>
+
+  <h3>Trends so far</h3>
+  <div id="outcomeTrendGrid" class="trend-grid"></div>
+
   <div style="margin-top:14px">
     <button class="go" type="button" onclick="nextRound()">Continue</button>
   </div>
@@ -900,6 +904,8 @@ function renderOutcome() {
   $("costLine").textContent = c === 0
     ? `Annual state cost remains $${fmt0(o.after.cost)}M. Total state cost so far: $${fmt0(o.totalCost)}M.`
     : `Annual state cost changes by ${c > 0 ? "+" : "−"}$${fmt0(Math.abs(c))}M, to $${fmt0(o.after.cost)}M. Total state cost so far: $${fmt0(o.totalCost)}M.`;
+
+  renderOutcomeTrends();
 }
 
 function nextRound() {
@@ -948,6 +954,10 @@ function trendSVG(values, ols) {
   return `<svg viewBox="0 0 ${w} ${h}" role="img" aria-label="Trend over ${values.length} periods">${line}${dots}${label}</svg>`;
 }
 
+function observedSeries(k) {
+  return [BASELINE[k], ...S.history.map(h => h.after[k])];
+}
+
 function renderTrends() {
   const grid = $("trendGrid");
   grid.innerHTML = "";
@@ -957,7 +967,7 @@ function renderTrends() {
   }
 
   const cards = METRIC_KEYS.map(k => {
-    const values = S.history.map(h => h.after[k]);
+    const values = observedSeries(k);
     const ols = olsLine(values);
     const better = METRICS[k].better === "up" ? "higher is better" : "lower is better";
     return `<div class="trend-card">
@@ -967,7 +977,32 @@ function renderTrends() {
     </div>`;
   });
 
-  const costValues = S.history.map(h => h.after.cost);
+  const costValues = [0, ...S.history.map(h => h.after.cost)];
+  cards.push(`<div class="trend-card">
+    <h4>Annual state cost</h4>
+    <p class="note">lower is cheaper</p>
+    ${trendSVG(costValues, olsLine(costValues))}
+  </div>`);
+
+  grid.innerHTML = cards.join("");
+}
+
+function renderOutcomeTrends() {
+  const grid = $("outcomeTrendGrid");
+  grid.innerHTML = "";
+
+  const cards = METRIC_KEYS.map(k => {
+    const values = observedSeries(k);
+    const ols = olsLine(values);
+    const better = METRICS[k].better === "up" ? "higher is better" : "lower is better";
+    return `<div class="trend-card">
+      <h4>${METRICS[k].label}</h4>
+      <p class="note">${better}</p>
+      ${trendSVG(values, ols)}
+    </div>`;
+  });
+
+  const costValues = [0, ...S.history.map(h => h.after.cost)];
   cards.push(`<div class="trend-card">
     <h4>Annual state cost</h4>
     <p class="note">lower is cheaper</p>
